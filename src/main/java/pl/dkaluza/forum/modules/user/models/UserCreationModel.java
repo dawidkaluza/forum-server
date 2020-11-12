@@ -1,0 +1,33 @@
+package pl.dkaluza.forum.modules.user.models;
+
+import org.springframework.hateoas.RepresentationModel;
+
+public class UserCreationModel extends RepresentationModel<UserCreationModel> {
+    private String name;
+    private String email;
+    private String plainPassword;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPlainPassword() {
+        return plainPassword;
+    }
+
+    public void setPlainPassword(String plainPassword) {
+        this.plainPassword = plainPassword;
+    }
+}
