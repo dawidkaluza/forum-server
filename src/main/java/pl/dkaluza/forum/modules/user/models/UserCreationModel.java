@@ -1,7 +1,9 @@
 package pl.dkaluza.forum.modules.user.models;
 
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
+@Relation(itemRelation = "userCreation")
 public class UserCreationModel extends RepresentationModel<UserCreationModel> {
     private String name;
     private String email;

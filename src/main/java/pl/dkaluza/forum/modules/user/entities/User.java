@@ -2,7 +2,7 @@ package pl.dkaluza.forum.modules.user.entities;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

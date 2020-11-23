@@ -22,6 +22,7 @@ public class UserCreationMapper implements ObjectMapper<User, UserCreationModel>
     public User toObject(UserCreationModel model) {
         User user = new User();
         user.setName(model.getName());
+
         user.setEmail(model.getEmail());
         user.setEncodedPassword(
             passwordEncoder.encode(model.getPlainPassword())

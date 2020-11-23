@@ -1,26 +1,102 @@
 package pl.dkaluza.forum.modules.user.mapper;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Component;
+import pl.dkaluza.forum.api.user.UserController;
 import pl.dkaluza.forum.core.mappers.PagedModelMapper;
 import pl.dkaluza.forum.modules.user.entities.User;
+import pl.dkaluza.forum.modules.user.exceptions.EmailAlreadyExistException;
+import pl.dkaluza.forum.modules.user.models.UserCreationModel;
 import pl.dkaluza.forum.modules.user.models.UserModel;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @Component
 public class PagedUserMapper extends PagedModelMapper<User, UserModel> {
+    @Autowired
     public PagedUserMapper(UserMapper mapper) {
         super(mapper);
     }
 
     @Override
-    protected Iterable<Link> getLinks() {
-        return Collections.singleton(buildLinks());
+    protected Iterable<Link> getLinks(Page<User> page) {
+//        List<Link> links = buildPageLinks(page);
+//        links.add(buildSelfLink(page));
+//        return links;
+        return Collections.singleton(
+            buildSelfLink(page)
+        );
     }
 
-    private Link buildLinks() {
-        //TODO
-        return null;
+    private Link buildSelfLink(Page<User> page) {
+        try {
+            return linkTo(methodOn(UserController.class).findAll(Pageable.unpaged())).withSelfRel()
+                .andAffordance(
+                    afford(
+                        methodOn(UserController.class).create(new UserCreationModel())
+                    )
+                );
+        } catch (EmailAlreadyExistException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+//    PagedResourcesAssembler
+
+    private List<Link> buildPageLinks(Page<User> page) {
+        List<Link> links = new ArrayList<>();
+
+        if (page.getNumber() != 0) {
+            //TODO paste "size" if exists
+            links.add(
+                linkTo(methodOn(UserController.class).findAll(Pageable.unpaged())).withRel(IanaLinkRelations.FIRST)
+            );
+        }
+
+        if (page.getTotalPages() > 1) {
+            String uri = linkTo(methodOn(UserController.class).findAll(null))
+                .toUriComponentsBuilder()
+                .queryParam("page", page.getTotalPages() - 1)
+                .queryParam("size", page.getSize())
+                .build().toString();
+
+            links.add(
+                Link.of(uri, IanaLinkRelations.LAST)
+            );
+        }
+
+        if (page.hasPrevious()) {
+            String uri = linkTo(methodOn(UserController.class).findAll(null))
+                .toUriComponentsBuilder()
+                .queryParam("page", page.getNumber() - 1)
+                .queryParam("size", page.getSize())
+                .build().toString();
+
+            links.add(
+                Link.of(uri, IanaLinkRelations.PREV)
+            );
+        }
+
+        if (page.hasNext()) {
+            String uri = linkTo(methodOn(UserController.class).findAll(null))
+                .toUriComponentsBuilder()
+                .queryParam("page", page.getNumber() + 1)
+                .queryParam("size", page.getSize())
+                .build().toString();
+
+            links.add(
+                Link.of(uri, IanaLinkRelations.NEXT)
+            );
+        }
+
+        return links;
     }
 }

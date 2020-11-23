@@ -21,12 +21,12 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public PagedModel<UserModel> findAll(@PageableDefault Pageable pageable) {
+    public PagedModel<UserModel> findAll(Pageable pageable) {
         return userService.findAll(pageable);
     }
 
     @PostMapping("/user")
-    public UserModel create(UserCreationModel model) throws EmailAlreadyExistException {
+    public UserModel create(@RequestBody UserCreationModel model) throws EmailAlreadyExistException {
         return userService.create(model);
     }
 
@@ -36,7 +36,7 @@ public class UserController {
     }
 
     @PutMapping("/user")
-    public UserModel update(UserModel model) throws EntityNotFoundException {
+    public UserModel update(@RequestBody UserModel model) throws EntityNotFoundException {
         return userService.update(model);
     }
 

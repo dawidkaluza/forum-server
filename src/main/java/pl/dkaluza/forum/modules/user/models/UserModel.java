@@ -1,7 +1,9 @@
 package pl.dkaluza.forum.modules.user.models;
 
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
+@Relation(itemRelation = "user", collectionRelation = "users")
 public class UserModel extends RepresentationModel<UserModel> {
     private Long id;
     private String name;

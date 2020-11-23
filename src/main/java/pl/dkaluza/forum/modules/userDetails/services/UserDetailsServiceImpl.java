@@ -5,37 +5,39 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import pl.dkaluza.forum.core.exceptions.EntityNotFoundException;
-import pl.dkaluza.forum.modules.role.mappers.UserWithRolesMapper;
-import pl.dkaluza.forum.modules.role.models.UserWithRolesModel;
-import pl.dkaluza.forum.modules.role.servies.RoleService;
-import pl.dkaluza.forum.modules.user.models.UserModel;
-import pl.dkaluza.forum.modules.user.service.UserService;
+import pl.dkaluza.forum.modules.role.core.UserWithRoles;
+import pl.dkaluza.forum.modules.role.entities.UserRole;
+import pl.dkaluza.forum.modules.role.repository.UserRoleRepository;
+import pl.dkaluza.forum.modules.user.entities.User;
+import pl.dkaluza.forum.modules.user.repository.UserRepository;
 import pl.dkaluza.forum.modules.userDetails.data.UserDetailsImpl;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private final RoleService roleService;
-    private final UserService userService;
-    private final UserWithRolesMapper userWithRolesMapper;
+    private final UserRepository userRepository;
+    private final UserRoleRepository userRoleRepository;
 
     @Autowired
-    public UserDetailsServiceImpl(RoleService roleService, UserService userService, UserWithRolesMapper userWithRolesMapper) {
-        this.roleService = roleService;
-        this.userService = userService;
-        this.userWithRolesMapper = userWithRolesMapper;
+    public UserDetailsServiceImpl(UserRepository userRepository, UserRoleRepository userRoleRepository) {
+        this.userRepository = userRepository;
+        this.userRoleRepository = userRoleRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        try {
-            UserModel userModel = userService.findByEmail(email);
-            UserWithRolesModel userWithRolesModel = roleService.findUserRoles(userModel);
-            return UserDetailsImpl.ofUserWithRoles(
-                userWithRolesMapper.toObject(userWithRolesModel)
-            );
-        } catch (EntityNotFoundException e) {
-            throw new UsernameNotFoundException(e.getMessage(), e);
-        }
+        User user = userRepository
+            .findByEmail(email)
+            .orElseThrow(() -> new UsernameNotFoundException("Email not found in database"));
+
+        List<UserRole> userRoles = userRoleRepository.findAllByUserAndFetchRolesEagerly(user);
+        UserWithRoles userWithRoles = new UserWithRoles();
+        userWithRoles.setUser(user);
+        userWithRoles.setRoles(
+            userRoles.stream().map(UserRole::getRole).collect(Collectors.toList())
+        );
+        return UserDetailsImpl.ofUserWithRoles(userWithRoles);
     }
 }
