@@ -1,9 +1,10 @@
 package pl.dkaluza.forum.modules.user.exceptions;
 
-public class EmailAlreadyExistException extends Exception {
+import org.springframework.http.HttpStatus;
+import pl.dkaluza.forum.core.exceptions.ApiRequestException;
+
+public class EmailAlreadyExistException extends ApiRequestException {
     public EmailAlreadyExistException(String email) {
-        super(
-            String.format("Email %s already exists in database", email)
-        );
+        super(HttpStatus.CONFLICT, "Email " + email + " already exists");
     }
 }

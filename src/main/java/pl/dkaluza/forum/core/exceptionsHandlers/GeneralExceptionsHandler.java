@@ -1,17 +1,23 @@
-package pl.dkaluza.forum.api.general;
+package pl.dkaluza.forum.core.exceptionsHandlers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import pl.dkaluza.forum.core.exceptions.ApiRequestException;
 
 import java.sql.SQLException;
 
 @RestControllerAdvice
 public class GeneralExceptionsHandler extends ResponseEntityExceptionHandler {
+    @ExceptionHandler(ApiRequestException.class)
+    public ResponseEntity<?> apiRequestExceptionHandler(ApiRequestException e) {
+        return ResponseEntity.status(e.getStatus()).body(e.toErrorResponse());
+    }
+
     @ExceptionHandler(SQLException.class)
-    public ResponseEntity<?> sqlException(SQLException e) {
+    public ResponseEntity<?> sqlExceptionHandler(SQLException e) {
         e.printStackTrace();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }

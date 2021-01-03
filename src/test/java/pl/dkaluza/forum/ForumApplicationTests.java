@@ -27,9 +27,9 @@ class ForumApplicationTests {
     public void beforeEach(WebApplicationContext webAppContext, RestDocumentationContextProvider restDocumentation) {
         mockMvc = MockMvcBuilders.webAppContextSetup(webAppContext)
             .apply(documentationConfiguration(restDocumentation))
-            .alwaysDo(document(
-                "{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())
-            ))
+//            .alwaysDo(document(
+//                "{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())
+//            ))
             .build();
     }
 

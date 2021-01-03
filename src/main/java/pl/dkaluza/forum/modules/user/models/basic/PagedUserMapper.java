@@ -1,4 +1,4 @@
-package pl.dkaluza.forum.modules.user.mapper;
+package pl.dkaluza.forum.modules.user.models.basic;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -6,12 +6,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Component;
-import pl.dkaluza.forum.api.user.UserController;
 import pl.dkaluza.forum.core.mappers.PagedModelMapper;
+import pl.dkaluza.forum.modules.user.UserController;
 import pl.dkaluza.forum.modules.user.entities.User;
-import pl.dkaluza.forum.modules.user.exceptions.EmailAlreadyExistException;
-import pl.dkaluza.forum.modules.user.models.UserCreationModel;
-import pl.dkaluza.forum.modules.user.models.UserModel;
+import pl.dkaluza.forum.modules.user.models.create.UserCreationModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,9 +26,6 @@ public class PagedUserMapper extends PagedModelMapper<User, UserModel> {
 
     @Override
     protected Iterable<Link> getLinks(Page<User> page) {
-//        List<Link> links = buildPageLinks(page);
-//        links.add(buildSelfLink(page));
-//        return links;
         return Collections.singleton(
             buildSelfLink(page)
         );
@@ -44,12 +39,10 @@ public class PagedUserMapper extends PagedModelMapper<User, UserModel> {
                         methodOn(UserController.class).create(new UserCreationModel())
                     )
                 );
-        } catch (EmailAlreadyExistException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-
-//    PagedResourcesAssembler
 
     private List<Link> buildPageLinks(Page<User> page) {
         List<Link> links = new ArrayList<>();

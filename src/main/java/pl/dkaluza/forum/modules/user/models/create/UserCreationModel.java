@@ -1,4 +1,4 @@
-package pl.dkaluza.forum.modules.user.models;
+package pl.dkaluza.forum.modules.user.models.create;
 
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;

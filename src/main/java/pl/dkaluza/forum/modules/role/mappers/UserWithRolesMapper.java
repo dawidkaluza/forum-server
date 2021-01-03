@@ -8,7 +8,7 @@ import pl.dkaluza.forum.modules.role.core.UserWithRoles;
 import pl.dkaluza.forum.modules.role.entities.Role;
 import pl.dkaluza.forum.modules.role.models.RoleModel;
 import pl.dkaluza.forum.modules.role.models.UserWithRolesModel;
-import pl.dkaluza.forum.modules.user.mapper.UserMapper;
+import pl.dkaluza.forum.modules.user.models.basic.UserMapper;
 
 import java.util.ArrayList;
 import java.util.List;

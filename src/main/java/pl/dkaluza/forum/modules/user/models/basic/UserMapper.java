@@ -1,15 +1,14 @@
-package pl.dkaluza.forum.modules.user.mapper;
+package pl.dkaluza.forum.modules.user.models.basic;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Component;
-import pl.dkaluza.forum.api.user.UserController;
+import pl.dkaluza.forum.modules.user.UserController;
 import pl.dkaluza.forum.core.exceptions.EntityNotFoundException;
 import pl.dkaluza.forum.core.mappers.ModelAndObjectMapper;
 import pl.dkaluza.forum.modules.user.entities.User;
-import pl.dkaluza.forum.modules.user.models.UserModel;
-import pl.dkaluza.forum.modules.user.repository.UserRepository;
+import pl.dkaluza.forum.modules.user.UserRepository;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 

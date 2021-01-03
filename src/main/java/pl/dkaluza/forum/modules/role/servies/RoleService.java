@@ -10,8 +10,8 @@ import pl.dkaluza.forum.modules.role.mappers.UserWithRolesMapper;
 import pl.dkaluza.forum.modules.role.models.UserWithRolesModel;
 import pl.dkaluza.forum.modules.role.repository.UserRoleRepository;
 import pl.dkaluza.forum.modules.user.entities.User;
-import pl.dkaluza.forum.modules.user.mapper.UserMapper;
-import pl.dkaluza.forum.modules.user.models.UserModel;
+import pl.dkaluza.forum.modules.user.models.basic.UserMapper;
+import pl.dkaluza.forum.modules.user.models.basic.UserModel;
 
 import java.util.List;
 import java.util.stream.Collectors;

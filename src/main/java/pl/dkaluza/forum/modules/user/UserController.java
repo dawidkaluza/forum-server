@@ -1,15 +1,13 @@
-package pl.dkaluza.forum.api.user;
+package pl.dkaluza.forum.modules.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.web.bind.annotation.*;
+import pl.dkaluza.forum.core.exceptions.ApiRequestException;
 import pl.dkaluza.forum.core.exceptions.EntityNotFoundException;
-import pl.dkaluza.forum.modules.user.exceptions.EmailAlreadyExistException;
-import pl.dkaluza.forum.modules.user.models.UserCreationModel;
-import pl.dkaluza.forum.modules.user.models.UserModel;
-import pl.dkaluza.forum.modules.user.service.UserService;
+import pl.dkaluza.forum.modules.user.models.create.UserCreationModel;
+import pl.dkaluza.forum.modules.user.models.basic.UserModel;
 
 @RestController
 public class UserController {
@@ -26,7 +24,7 @@ public class UserController {
     }
 
     @PostMapping("/user")
-    public UserModel create(@RequestBody UserCreationModel model) throws EmailAlreadyExistException {
+    public UserModel create(@RequestBody UserCreationModel model) throws ApiRequestException {
         return userService.create(model);
     }
 
