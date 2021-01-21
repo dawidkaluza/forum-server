@@ -1,9 +1,8 @@
 package pl.dkaluza.forum.core.validator.apiRequest;
 
-import pl.dkaluza.forum.core.exceptions.ApiRequestException;
 import pl.dkaluza.forum.core.validator.Validator;
 
-public interface ApiRequestValidator extends Validator<ApiRequestException> {
+public interface ApiRequestValidator extends Validator<RuntimeException> {
     @Override
-    void validate() throws ApiRequestException;
+    void validate() throws RuntimeException;
 }

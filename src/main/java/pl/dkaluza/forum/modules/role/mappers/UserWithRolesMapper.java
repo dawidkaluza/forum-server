@@ -2,13 +2,13 @@ package pl.dkaluza.forum.modules.role.mappers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import pl.dkaluza.forum.core.exceptions.EntityNotFoundException;
+import pl.dkaluza.forum.core.exceptions.entity.EntityNotFoundException;
 import pl.dkaluza.forum.core.mappers.ModelAndObjectMapper;
 import pl.dkaluza.forum.modules.role.core.UserWithRoles;
 import pl.dkaluza.forum.modules.role.entities.Role;
 import pl.dkaluza.forum.modules.role.models.RoleModel;
 import pl.dkaluza.forum.modules.role.models.UserWithRolesModel;
-import pl.dkaluza.forum.modules.user.models.basic.UserMapper;
+import pl.dkaluza.forum.modules.user.base.models.basic.UserMapper;
 
 import java.util.ArrayList;
 import java.util.List;

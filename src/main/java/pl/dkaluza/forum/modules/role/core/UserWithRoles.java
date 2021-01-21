@@ -1,7 +1,7 @@
 package pl.dkaluza.forum.modules.role.core;
 
 import pl.dkaluza.forum.modules.role.entities.Role;
-import pl.dkaluza.forum.modules.user.entities.User;
+import pl.dkaluza.forum.modules.user.base.entities.User;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package pl.dkaluza.forum.modules.role.models;
 
 import org.springframework.hateoas.RepresentationModel;
-import pl.dkaluza.forum.modules.user.models.basic.UserModel;
+import pl.dkaluza.forum.modules.user.base.models.basic.UserModel;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package pl.dkaluza.forum.modules.role.entities;
 
-import pl.dkaluza.forum.modules.user.entities.User;
+import pl.dkaluza.forum.modules.user.base.entities.User;
 
 import javax.persistence.*;
 

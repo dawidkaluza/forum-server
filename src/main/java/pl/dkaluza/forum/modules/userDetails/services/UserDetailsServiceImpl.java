@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import pl.dkaluza.forum.modules.role.core.UserWithRoles;
 import pl.dkaluza.forum.modules.role.entities.UserRole;
 import pl.dkaluza.forum.modules.role.repository.UserRoleRepository;
-import pl.dkaluza.forum.modules.user.entities.User;
-import pl.dkaluza.forum.modules.user.UserRepository;
+import pl.dkaluza.forum.modules.user.base.entities.User;
+import pl.dkaluza.forum.modules.user.base.repositories.UserRepository;
 import pl.dkaluza.forum.modules.userDetails.data.UserDetailsImpl;
 
 import java.util.List;

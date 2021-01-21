@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pl.dkaluza.forum.modules.role.entities.UserRole;
-import pl.dkaluza.forum.modules.user.entities.User;
+import pl.dkaluza.forum.modules.user.base.entities.User;
 
 import java.util.List;
 

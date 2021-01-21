@@ -7,7 +7,9 @@ import pl.dkaluza.forum.core.api.ApiErrorResponse;
  * Abstract class used to be extended by exceptions
  * that should send error to client because error is caused because of him.
  */
+@Deprecated
 public abstract class ApiRequestException extends Exception {
+    private static final long serialVersionUID = 226286530574014145L;
     private final HttpStatus status;
 
     public ApiRequestException(HttpStatus status, String message) {
