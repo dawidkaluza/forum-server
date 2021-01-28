@@ -6,7 +6,6 @@ import pl.dkaluza.forum.core.validator.ComposedValidatorsExecutor;
 import pl.dkaluza.forum.modules.user.base.entities.User;
 import pl.dkaluza.forum.modules.user.base.repositories.UserRepository;
 import pl.dkaluza.forum.modules.user.confirmRegistration.entities.ConfirmRegistrationToken;
-import pl.dkaluza.forum.modules.user.confirmRegistration.exceptions.TokenNotFoundException;
 import pl.dkaluza.forum.modules.user.confirmRegistration.repositories.ConfirmRegistrationTokenRepository;
 import pl.dkaluza.forum.modules.user.confirmRegistration.validators.ConfirmRegistrationValidator;
 

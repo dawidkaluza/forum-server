@@ -6,6 +6,6 @@ public class TokenNotFoundException extends EntityNotFoundException {
     private static final long serialVersionUID = 2795683501236076484L;
 
     public TokenNotFoundException(Long id) {
-        super("Can't find token with id=" + id);
+        super("Can't find token with id=" + id, id);
     }
 }

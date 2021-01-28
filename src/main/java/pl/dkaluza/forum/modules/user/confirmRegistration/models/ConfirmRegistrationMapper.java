@@ -6,6 +6,7 @@ import pl.dkaluza.forum.modules.user.confirmRegistration.entities.ConfirmRegistr
 
 public class ConfirmRegistrationMapper implements ModelMapper<ConfirmRegistrationToken, ConfirmRegistrationModel> {
     @Override
+    @NonNull
     public ConfirmRegistrationModel toModel(@NonNull ConfirmRegistrationToken token) {
         ConfirmRegistrationModel model = new ConfirmRegistrationModel();
         model.setId(token.getId());

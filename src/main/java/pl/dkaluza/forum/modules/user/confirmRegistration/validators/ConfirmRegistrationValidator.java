@@ -28,7 +28,7 @@ public class ConfirmRegistrationValidator implements Validator<RuntimeException>
             .findById(id)
             .orElseThrow(() -> new TokenNotFoundException(id));
 
-        if (token.getExpiresAt().isAfter(LocalDateTime.now())) {
+        if (token.getExpiresAt().isBefore(LocalDateTime.now())) {
             throw new TokenExpiredException();
         }
 

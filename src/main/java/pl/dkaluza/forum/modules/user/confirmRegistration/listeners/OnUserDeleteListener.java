@@ -10,16 +10,16 @@ import pl.dkaluza.forum.modules.user.confirmRegistration.repositories.ConfirmReg
 
 @Component
 public class OnUserDeleteListener {
-    private final ConfirmRegistrationTokenRepository confirmRegistrationTokenRepository;
+    private final ConfirmRegistrationTokenRepository repository;
 
     @Autowired
-    public OnUserDeleteListener(ConfirmRegistrationTokenRepository confirmRegistrationTokenRepository) {
-        this.confirmRegistrationTokenRepository = confirmRegistrationTokenRepository;
+    public OnUserDeleteListener(ConfirmRegistrationTokenRepository repository) {
+        this.repository = repository;
     }
 
     @TransactionalEventListener
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void onApplicationEvent(OnUserDeleteEvent event) {
-        confirmRegistrationTokenRepository.deleteById(event.getUserId());
+        repository.deleteById(event.getUserId());
     }
 }
