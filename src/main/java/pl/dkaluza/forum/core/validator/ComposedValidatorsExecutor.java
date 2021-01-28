@@ -3,7 +3,7 @@ package pl.dkaluza.forum.core.validator;
 import org.springframework.stereotype.Component;
 
 /**
- * Class that eases validating many Validators using one method
+ * Class that eases using many validators via one method
  */
 @Component
 public class ComposedValidatorsExecutor {
