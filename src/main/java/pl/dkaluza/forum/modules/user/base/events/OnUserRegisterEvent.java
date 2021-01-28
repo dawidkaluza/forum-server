@@ -1,16 +1,17 @@
 package pl.dkaluza.forum.modules.user.base.events;
 
 import org.springframework.context.ApplicationEvent;
-import pl.dkaluza.forum.modules.user.base.entities.User;
 
 public class OnUserRegisterEvent extends ApplicationEvent {
     private static final long serialVersionUID = -7950664606923832193L;
+    private final long userId;
 
-    public OnUserRegisterEvent(User user) {
-        super(user);
+    public OnUserRegisterEvent(long userId) {
+        super(userId);
+        this.userId = userId;
     }
 
-    public User getUser() {
-        return (User) getSource();
+    public long getUserId() {
+        return userId;
     }
 }

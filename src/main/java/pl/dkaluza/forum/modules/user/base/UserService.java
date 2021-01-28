@@ -59,7 +59,7 @@ public class UserService {
 
         User user = userRegisterMapper.toObject(model);
         user = userRepository.save(user);
-        eventPublisher.publishEvent(new OnUserRegisterEvent(user));
+        eventPublisher.publishEvent(new OnUserRegisterEvent(user.getId()));
         return userMapper.toModel(user);
     }
 

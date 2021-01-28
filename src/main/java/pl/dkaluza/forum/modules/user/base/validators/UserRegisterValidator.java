@@ -1,13 +1,13 @@
 package pl.dkaluza.forum.modules.user.base.validators;
 
-import pl.dkaluza.forum.core.validator.apiRequest.ApiRequestValidator;
-import pl.dkaluza.forum.modules.user.base.exceptions.EmailAlreadyExistException;
+import pl.dkaluza.forum.core.validator.Validator;
+import pl.dkaluza.forum.modules.user.base.exceptions.EmailAlreadyExistsException;
 import pl.dkaluza.forum.modules.user.base.exceptions.InvalidPasswordException;
-import pl.dkaluza.forum.modules.user.base.exceptions.NameAlreadyExistException;
+import pl.dkaluza.forum.modules.user.base.exceptions.NameAlreadyExistsException;
 import pl.dkaluza.forum.modules.user.base.models.register.UserRegisterModel;
 import pl.dkaluza.forum.modules.user.base.repositories.UserRepository;
 
-public class UserRegisterValidator implements ApiRequestValidator {
+public class UserRegisterValidator implements Validator<RuntimeException> {
     private final UserRegisterModel userRegisterModel;
     private final UserRepository userRepository;
 
@@ -21,12 +21,12 @@ public class UserRegisterValidator implements ApiRequestValidator {
         //TODO check its email here or via annotations
         String email = userRegisterModel.getEmail();
         if (userRepository.findByEmail(email).isPresent()) {
-            throw new EmailAlreadyExistException(email);
+            throw new EmailAlreadyExistsException(email);
         }
 
         String name = userRegisterModel.getName();
         if (userRepository.findByName(name).isPresent()) {
-            throw new NameAlreadyExistException(name);
+            throw new NameAlreadyExistsException(name);
         }
 
         String password = userRegisterModel.getPlainPassword();

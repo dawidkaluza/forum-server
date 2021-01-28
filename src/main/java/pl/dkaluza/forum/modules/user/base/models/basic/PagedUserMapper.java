@@ -7,7 +7,7 @@ import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Component;
 import pl.dkaluza.forum.core.mappers.PagedModelMapper;
-import pl.dkaluza.forum.modules.user.base.UserController;
+import pl.dkaluza.forum.modules.user.base.api.UserController;
 import pl.dkaluza.forum.modules.user.base.entities.User;
 import pl.dkaluza.forum.modules.user.base.models.register.UserRegisterModel;
 

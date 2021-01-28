@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Component;
-import pl.dkaluza.forum.modules.user.base.UserController;
+import pl.dkaluza.forum.modules.user.base.api.UserController;
 import pl.dkaluza.forum.core.exceptions.entity.EntityNotFoundException;
 import pl.dkaluza.forum.core.mappers.ModelAndObjectMapper;
 import pl.dkaluza.forum.modules.user.base.entities.User;

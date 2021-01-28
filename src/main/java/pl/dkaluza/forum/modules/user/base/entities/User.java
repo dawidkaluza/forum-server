@@ -61,7 +61,7 @@ public class User {
         if (!(o instanceof User)) return false;
 
         User user = (User) o;
-        return id.equals(user.id);
+        return id.equals(user.getId());
     }
 
     @Override
