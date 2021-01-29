@@ -2,6 +2,7 @@ package pl.dkaluza.forum.modules.user.base;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Component;
@@ -65,7 +66,12 @@ public class UserService {
 
     @Transactional
     public void delete(Long id) {
-        userRepository.deleteById(id);
+        try {
+            userRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new UserNotFoundException(id);
+        }
+
         eventPublisher.publishEvent(new OnUserDeleteEvent(id));
     }
 }
