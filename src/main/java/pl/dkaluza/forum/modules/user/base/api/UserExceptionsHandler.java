@@ -19,7 +19,7 @@ public class UserExceptionsHandler implements ExceptionsHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<?> userNotFoundExceptionHandler(UserNotFoundException e) {
-        return new ResponseEntity<>("Cant find user with id=" + e.getId(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(NameAlreadyExistsException.class)

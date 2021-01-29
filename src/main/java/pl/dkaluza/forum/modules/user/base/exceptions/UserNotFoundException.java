@@ -6,6 +6,14 @@ public class UserNotFoundException extends EntityNotFoundException {
     private static final long serialVersionUID = -8530426275711530505L;
 
     public UserNotFoundException(Long id) {
-        super("Can't find user with id=" + id, id);
+        super("Can't find user with id=" + id);
+    }
+
+    public UserNotFoundException(String reason) {
+        super(reason);
+    }
+
+    public UserNotFoundException(String reason, Throwable throwable) {
+        super(reason, throwable);
     }
 }
