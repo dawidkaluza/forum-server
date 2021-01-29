@@ -1,4 +1,4 @@
-package pl.dkaluza.forum.modules.user.confirmRegistration.models;
+package pl.dkaluza.forum.modules.user.confirmRegistration.models.confirmRegistration;
 
 import org.springframework.lang.NonNull;
 import pl.dkaluza.forum.core.mappers.ModelMapper;

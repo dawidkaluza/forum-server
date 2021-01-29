@@ -2,31 +2,44 @@ package pl.dkaluza.forum.modules.user.confirmRegistration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.dkaluza.forum.core.validator.ComposedValidatorsExecutor;
 import pl.dkaluza.forum.modules.user.base.entities.User;
 import pl.dkaluza.forum.modules.user.base.repositories.UserRepository;
 import pl.dkaluza.forum.modules.user.confirmRegistration.entities.ConfirmRegistrationToken;
+import pl.dkaluza.forum.modules.user.confirmRegistration.mail.ConfirmRegistrationMailSender;
+import pl.dkaluza.forum.modules.user.confirmRegistration.models.confirm.ConfirmModel;
+import pl.dkaluza.forum.modules.user.confirmRegistration.models.resendToken.ResendTokenModel;
+import pl.dkaluza.forum.modules.user.confirmRegistration.properties.ConfirmRegistrationPropertiesSupplier;
+import pl.dkaluza.forum.modules.user.confirmRegistration.repositories.ConfirmRegistrationMailRepository;
 import pl.dkaluza.forum.modules.user.confirmRegistration.repositories.ConfirmRegistrationTokenRepository;
 import pl.dkaluza.forum.modules.user.confirmRegistration.validators.ConfirmRegistrationValidator;
-
-import javax.transaction.Transactional;
+import pl.dkaluza.forum.modules.user.confirmRegistration.validators.ResendTokenValidator;
 
 @Service
 public class ConfirmRegistrationService {
     private final ComposedValidatorsExecutor validatorsExecutor;
+    private final ConfirmRegistrationPropertiesSupplier propertiesSupplier;
+    private final ConfirmRegistrationMailSender mailSender;
     private final UserRepository userRepository;
     private final ConfirmRegistrationTokenRepository confirmRegistrationTokenRepository;
+    private final ConfirmRegistrationMailRepository confirmRegistrationMailRepository;
 
     @Autowired
-    public ConfirmRegistrationService(ComposedValidatorsExecutor validatorsExecutor, UserRepository userRepository, ConfirmRegistrationTokenRepository confirmRegistrationTokenRepository) {
+    public ConfirmRegistrationService(ComposedValidatorsExecutor validatorsExecutor, ConfirmRegistrationPropertiesSupplier propertiesSupplier, ConfirmRegistrationMailSender mailSender, UserRepository userRepository, ConfirmRegistrationTokenRepository confirmRegistrationTokenRepository, ConfirmRegistrationMailRepository confirmRegistrationMailRepository) {
         this.validatorsExecutor = validatorsExecutor;
+        this.propertiesSupplier = propertiesSupplier;
+        this.mailSender = mailSender;
         this.userRepository = userRepository;
         this.confirmRegistrationTokenRepository = confirmRegistrationTokenRepository;
+        this.confirmRegistrationMailRepository = confirmRegistrationMailRepository;
     }
 
     @Transactional
-    public void confirmRegistration(Long id, String tokenCode) {
-        ConfirmRegistrationValidator validator = new ConfirmRegistrationValidator(id, tokenCode, confirmRegistrationTokenRepository);
+    public void confirmRegistration(ConfirmModel model) {
+        ConfirmRegistrationValidator validator = new ConfirmRegistrationValidator(
+            model, confirmRegistrationTokenRepository
+        );
         validatorsExecutor.validate(validator);
 
         ConfirmRegistrationToken token = validator.getToken();
@@ -35,5 +48,24 @@ public class ConfirmRegistrationService {
         User user = token.getUser();
         user.setEnabled(true);
         userRepository.save(user);
+    }
+
+    @Transactional
+    public void resendToken(ResendTokenModel model) {
+        ResendTokenValidator validator = new ResendTokenValidator(
+            model, propertiesSupplier, userRepository,
+            confirmRegistrationTokenRepository, confirmRegistrationMailRepository
+        );
+        validator.validate();
+
+        User user = validator.getUser();
+        ConfirmRegistrationToken token = validator.getToken();
+        mailSender.sendMail(
+            user.getEmail(),
+            "To confirm your registration, just click here: http://localhost:8080/user/"
+                + user.getId()
+                + "/confirmRegistration/"
+                + token.getToken()
+        );
     }
 }

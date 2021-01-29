@@ -5,25 +5,25 @@ import pl.dkaluza.forum.modules.user.confirmRegistration.entities.ConfirmRegistr
 import pl.dkaluza.forum.modules.user.confirmRegistration.exceptions.InvalidTokenException;
 import pl.dkaluza.forum.modules.user.confirmRegistration.exceptions.TokenExpiredException;
 import pl.dkaluza.forum.modules.user.confirmRegistration.exceptions.TokenNotFoundException;
+import pl.dkaluza.forum.modules.user.confirmRegistration.models.confirm.ConfirmModel;
 import pl.dkaluza.forum.modules.user.confirmRegistration.repositories.ConfirmRegistrationTokenRepository;
 
 import java.time.LocalDateTime;
 
 public class ConfirmRegistrationValidator implements Validator<RuntimeException> {
-    private final Long id;
-    private final String tokenCode;
+    private final ConfirmModel model;
     private final ConfirmRegistrationTokenRepository repository;
 
     private ConfirmRegistrationToken token;
 
-    public ConfirmRegistrationValidator(Long id, String tokenCode, ConfirmRegistrationTokenRepository repository) {
-        this.id = id;
-        this.tokenCode = tokenCode;
+    public ConfirmRegistrationValidator(ConfirmModel model, ConfirmRegistrationTokenRepository repository) {
+        this.model = model;
         this.repository = repository;
     }
 
     @Override
     public void validate() throws RuntimeException {
+        long id = model.getId();
         token = repository
             .findById(id)
             .orElseThrow(() -> new TokenNotFoundException(id));
@@ -32,7 +32,7 @@ public class ConfirmRegistrationValidator implements Validator<RuntimeException>
             throw new TokenExpiredException();
         }
 
-        if (!token.getToken().equals(tokenCode)) {
+        if (!token.getToken().equals(model.getToken())) {
             throw new InvalidTokenException();
         }
     }
