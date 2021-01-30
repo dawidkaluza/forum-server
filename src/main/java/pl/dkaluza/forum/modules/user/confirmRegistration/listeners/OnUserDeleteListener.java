@@ -1,6 +1,7 @@
 package pl.dkaluza.forum.modules.user.confirmRegistration.listeners;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,12 @@ public class OnUserDeleteListener {
     @TransactionalEventListener
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void onApplicationEvent(OnUserDeleteEvent event) {
-        repository.deleteById(event.getUserId());
+        try {
+            repository.deleteById(event.getUserId());
+        } catch (EmptyResultDataAccessException ignored) {
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 }

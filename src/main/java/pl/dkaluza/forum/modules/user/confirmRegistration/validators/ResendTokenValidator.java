@@ -22,7 +22,6 @@ public class ResendTokenValidator implements Validator<RuntimeException> {
     private final ConfirmRegistrationMailRepository confirmRegistrationMailRepository;
 
     private User user;
-    private ConfirmRegistrationToken token;
 
     public ResendTokenValidator(ResendTokenModel model, ConfirmRegistrationPropertiesSupplier propertiesSupplier, UserRepository userRepository, ConfirmRegistrationTokenRepository confirmRegistrationTokenRepository, ConfirmRegistrationMailRepository confirmRegistrationMailRepository) {
         this.model = model;
@@ -39,7 +38,7 @@ public class ResendTokenValidator implements Validator<RuntimeException> {
             .findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("Can't find user with email " + email));
 
-        token = confirmRegistrationTokenRepository
+        ConfirmRegistrationToken token = confirmRegistrationTokenRepository
             .findById(user.getId())
             .orElseThrow(() -> new TokenNotFoundException(user.getId()));
 
@@ -52,9 +51,5 @@ public class ResendTokenValidator implements Validator<RuntimeException> {
 
     public User getUser() {
         return user;
-    }
-
-    public ConfirmRegistrationToken getToken() {
-        return token;
     }
 }

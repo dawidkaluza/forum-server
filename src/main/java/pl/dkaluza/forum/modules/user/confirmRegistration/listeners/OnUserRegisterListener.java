@@ -35,26 +35,25 @@ public class OnUserRegisterListener {
     @TransactionalEventListener
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void onApplicationEvent(OnUserRegisterEvent event) {
-        ConfirmRegistrationToken token = new ConfirmRegistrationToken();
+        try {
+            ConfirmRegistrationToken token = new ConfirmRegistrationToken();
 
-        long userId = event.getUserId();
-        User user = userRepository
-            .findById(userId)
-            .orElseThrow(() -> new UserNotFoundException(userId));
-        token.setUser(user);
+            long userId = event.getUserId();
+            User user = userRepository
+                .findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+            token.setUser(user);
 
-        String generatedToken = UUID.randomUUID().toString();
-        token.setToken(generatedToken);
+            String generatedToken = UUID.randomUUID().toString();
+            token.setToken(generatedToken);
 
-        token.setExpiresAt(LocalDateTime.now().plus(propertiesSupplier.tokenExpiration()));
-        confirmRegistrationTokenRepository.save(token);
+            token.setExpiresAt(LocalDateTime.now().plus(propertiesSupplier.tokenExpiration()));
+            confirmRegistrationTokenRepository.save(token);
 
-        mailSender.sendMail(
-            user.getEmail(),
-            "To confirm your registration, just click here: http://localhost:8080/user/"
-                + user.getId()
-                + "/confirmRegistration/"
-                + generatedToken
-        );
+            mailSender.sendMail(userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 }

@@ -1,29 +1,61 @@
 package pl.dkaluza.forum.modules.user.confirmRegistration.mail;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import pl.dkaluza.forum.modules.user.base.entities.User;
+import pl.dkaluza.forum.modules.user.base.exceptions.UserNotFoundException;
+import pl.dkaluza.forum.modules.user.base.repositories.UserRepository;
 import pl.dkaluza.forum.modules.user.confirmRegistration.entities.ConfirmRegistrationMail;
 import pl.dkaluza.forum.modules.user.confirmRegistration.entities.ConfirmRegistrationMailReceiver;
+import pl.dkaluza.forum.modules.user.confirmRegistration.entities.ConfirmRegistrationToken;
+import pl.dkaluza.forum.modules.user.confirmRegistration.exceptions.TokenNotFoundException;
 import pl.dkaluza.forum.modules.user.confirmRegistration.repositories.ConfirmRegistrationMailReceiverRepository;
 import pl.dkaluza.forum.modules.user.confirmRegistration.repositories.ConfirmRegistrationMailRepository;
+import pl.dkaluza.forum.modules.user.confirmRegistration.repositories.ConfirmRegistrationTokenRepository;
 
 @Component
 public class ConfirmRegistrationMailSender {
+    private final JavaMailSender mailSender;
+    private final UserRepository userRepository;
+    private final ConfirmRegistrationTokenRepository tokenRepository;
     private final ConfirmRegistrationMailReceiverRepository receiverRepository;
     private final ConfirmRegistrationMailRepository mailRepository;
 
     @Autowired
-    public ConfirmRegistrationMailSender(ConfirmRegistrationMailReceiverRepository receiverRepository, ConfirmRegistrationMailRepository mailRepository) {
+    public ConfirmRegistrationMailSender(JavaMailSender mailSender, UserRepository userRepository, ConfirmRegistrationTokenRepository tokenRepository, ConfirmRegistrationMailReceiverRepository receiverRepository, ConfirmRegistrationMailRepository mailRepository) {
+        this.mailSender = mailSender;
+        this.userRepository = userRepository;
+        this.tokenRepository = tokenRepository;
         this.receiverRepository = receiverRepository;
         this.mailRepository = mailRepository;
     }
 
     @Transactional
-    //TODO rename to sendToken and get email, userId and token as a params
-    public void sendMail(String email, String message) {
-        //TODO implement sending message here
-        System.out.println("Send message to " + email + ": " + message);
+    public void sendMail(long userId) {
+        User user = userRepository
+            .findById(userId)
+            .orElseThrow(() -> new UserNotFoundException(userId));
+
+        ConfirmRegistrationToken token = tokenRepository
+            .findById(userId)
+            .orElseThrow(() -> new TokenNotFoundException(userId));
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("Forum");
+
+        String email = user.getEmail();
+        message.setTo(user.getName() + " <" + email + ">");
+        message.setSubject("Confirm your registration");
+        message.setText(
+            "To confirm your registration, just click here: http://localhost:8080/user/"
+                + userId
+                + "/confirmRegistration/"
+                + token.getToken()
+        );
+        mailSender.send(message);
 
         ConfirmRegistrationMailReceiver receiver = receiverRepository.findByEmail(email).orElseGet(() -> {
             ConfirmRegistrationMailReceiver newReceiver = new ConfirmRegistrationMailReceiver();

@@ -61,7 +61,6 @@ public class ConfirmRegistrationServiceImpl implements ConfirmRegistrationServic
         validator.validate();
 
         User user = validator.getUser();
-        ConfirmRegistrationToken token = validator.getToken();
-        mailSender.sendMail(user.getEmail(), user.getId(), token.getToken());
+        mailSender.sendMail(user.getId());
     }
 }
