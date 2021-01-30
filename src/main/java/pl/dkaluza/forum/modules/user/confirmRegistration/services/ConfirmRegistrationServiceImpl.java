@@ -1,4 +1,4 @@
-package pl.dkaluza.forum.modules.user.confirmRegistration;
+package pl.dkaluza.forum.modules.user.confirmRegistration.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import pl.dkaluza.forum.modules.user.confirmRegistration.validators.ConfirmRegis
 import pl.dkaluza.forum.modules.user.confirmRegistration.validators.ResendTokenValidator;
 
 @Service
-public class ConfirmRegistrationService {
+public class ConfirmRegistrationServiceImpl implements ConfirmRegistrationService {
     private final ComposedValidatorsExecutor validatorsExecutor;
     private final ConfirmRegistrationPropertiesSupplier propertiesSupplier;
     private final ConfirmRegistrationMailSender mailSender;
@@ -26,7 +26,7 @@ public class ConfirmRegistrationService {
     private final ConfirmRegistrationMailRepository confirmRegistrationMailRepository;
 
     @Autowired
-    public ConfirmRegistrationService(ComposedValidatorsExecutor validatorsExecutor, ConfirmRegistrationPropertiesSupplier propertiesSupplier, ConfirmRegistrationMailSender mailSender, UserRepository userRepository, ConfirmRegistrationTokenRepository confirmRegistrationTokenRepository, ConfirmRegistrationMailRepository confirmRegistrationMailRepository) {
+    public ConfirmRegistrationServiceImpl(ComposedValidatorsExecutor validatorsExecutor, ConfirmRegistrationPropertiesSupplier propertiesSupplier, ConfirmRegistrationMailSender mailSender, UserRepository userRepository, ConfirmRegistrationTokenRepository confirmRegistrationTokenRepository, ConfirmRegistrationMailRepository confirmRegistrationMailRepository) {
         this.validatorsExecutor = validatorsExecutor;
         this.propertiesSupplier = propertiesSupplier;
         this.mailSender = mailSender;
@@ -35,6 +35,7 @@ public class ConfirmRegistrationService {
         this.confirmRegistrationMailRepository = confirmRegistrationMailRepository;
     }
 
+    @Override
     @Transactional
     public void confirmRegistration(ConfirmModel model) {
         ConfirmRegistrationValidator validator = new ConfirmRegistrationValidator(
@@ -50,6 +51,7 @@ public class ConfirmRegistrationService {
         userRepository.save(user);
     }
 
+    @Override
     @Transactional
     public void resendToken(ResendTokenModel model) {
         ResendTokenValidator validator = new ResendTokenValidator(
@@ -60,12 +62,6 @@ public class ConfirmRegistrationService {
 
         User user = validator.getUser();
         ConfirmRegistrationToken token = validator.getToken();
-        mailSender.sendMail(
-            user.getEmail(),
-            "To confirm your registration, just click here: http://localhost:8080/user/"
-                + user.getId()
-                + "/confirmRegistration/"
-                + token.getToken()
-        );
+        mailSender.sendMail(user.getEmail(), user.getId(), token.getToken());
     }
 }

@@ -1,4 +1,4 @@
-package pl.dkaluza.forum.modules.user.base;
+package pl.dkaluza.forum.modules.user.base.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -21,7 +21,7 @@ import pl.dkaluza.forum.modules.user.base.repositories.UserRepository;
 import pl.dkaluza.forum.modules.user.base.validators.UserRegisterValidator;
 
 @Component
-public class UserService {
+public class UserServiceImpl implements UserService {
     private final ApplicationEventPublisher eventPublisher;
     private final ComposedValidatorsExecutor validatorsExecutor;
     private final UserRepository userRepository;
@@ -30,7 +30,7 @@ public class UserService {
     private final UserRegisterMapper userRegisterMapper;
 
     @Autowired
-    public UserService(ApplicationEventPublisher eventPublisher, ComposedValidatorsExecutor validatorsExecutor, UserRepository userRepository, UserMapper userMapper, PagedUserMapper pagedUserMapper, UserRegisterMapper userRegisterMapper) {
+    public UserServiceImpl(ApplicationEventPublisher eventPublisher, ComposedValidatorsExecutor validatorsExecutor, UserRepository userRepository, UserMapper userMapper, PagedUserMapper pagedUserMapper, UserRegisterMapper userRegisterMapper) {
         this.eventPublisher = eventPublisher;
         this.validatorsExecutor = validatorsExecutor;
         this.userRepository = userRepository;
@@ -39,6 +39,7 @@ public class UserService {
         this.userRegisterMapper = userRegisterMapper;
     }
 
+    @Override
     @Transactional(readOnly = true)
     public PagedModel<UserModel> findAll(Pageable pageable) {
         return pagedUserMapper.toModel(
@@ -46,12 +47,14 @@ public class UserService {
         );
     }
 
+    @Override
     @Transactional(readOnly = true)
     public UserModel findById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
         return userMapper.toModel(user);
     }
 
+    @Override
     @Transactional
     public UserModel register(UserRegisterModel model) {
         validatorsExecutor.validate(
@@ -64,6 +67,7 @@ public class UserService {
         return userMapper.toModel(user);
     }
 
+    @Override
     @Transactional
     public void delete(Long id) {
         try {
