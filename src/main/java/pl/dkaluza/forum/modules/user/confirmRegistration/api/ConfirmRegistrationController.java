@@ -3,7 +3,7 @@ package pl.dkaluza.forum.modules.user.confirmRegistration.api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import pl.dkaluza.forum.modules.user.confirmRegistration.ConfirmRegistrationService;
+import pl.dkaluza.forum.modules.user.confirmRegistration.services.ConfirmRegistrationService;
 import pl.dkaluza.forum.modules.user.confirmRegistration.models.confirm.ConfirmModel;
 import pl.dkaluza.forum.modules.user.confirmRegistration.models.resendToken.ResendTokenModel;
 

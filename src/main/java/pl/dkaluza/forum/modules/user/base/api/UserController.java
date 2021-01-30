@@ -5,7 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import pl.dkaluza.forum.modules.user.base.UserService;
+import pl.dkaluza.forum.modules.user.base.services.UserService;
 import pl.dkaluza.forum.modules.user.base.models.basic.UserModel;
 import pl.dkaluza.forum.modules.user.base.models.register.UserRegisterModel;
 
