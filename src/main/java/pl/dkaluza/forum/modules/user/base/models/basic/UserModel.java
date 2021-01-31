@@ -6,9 +6,11 @@ import org.springframework.hateoas.server.core.Relation;
 @Relation(itemRelation = "user", collectionRelation = "users")
 public class UserModel extends RepresentationModel<UserModel> {
     private Long id;
+
     private String name;
+
     private String email;
-    private String encodedPassword;
+
     private boolean enabled;
 
     public Long getId() {
@@ -33,14 +35,6 @@ public class UserModel extends RepresentationModel<UserModel> {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getEncodedPassword() {
-        return encodedPassword;
-    }
-
-    public void setEncodedPassword(String encodedPassword) {
-        this.encodedPassword = encodedPassword;
     }
 
     public boolean isEnabled() {

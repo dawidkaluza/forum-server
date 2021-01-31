@@ -15,27 +15,27 @@ import pl.dkaluza.forum.modules.user.base.services.UserService;
 public class UserController {
     private final UserService userService;
     private final UserModelAssembler userModelAssembler;
-    private final PagedResourcesAssembler<UserModel> pagedUserModelAssembler;
+    private final PagedResourcesAssembler<UserModel> pagedUsersModelsAssembler;
 
     @Autowired
-    public UserController(UserService userService, UserModelAssembler userModelAssembler, @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") PagedResourcesAssembler<UserModel> pagedUserModelAssembler) {
+    public UserController(UserService userService, UserModelAssembler userModelAssembler, @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") PagedResourcesAssembler<UserModel> pagedUsersModelsAssembler) {
         this.userService = userService;
         this.userModelAssembler = userModelAssembler;
-        this.pagedUserModelAssembler = pagedUserModelAssembler;
+        this.pagedUsersModelsAssembler = pagedUsersModelsAssembler;
     }
 
-    @GetMapping("/user")
-    public PagedModel<UserModel> findAll(Pageable pageable) {
-        return pagedUserModelAssembler.toModel(
-            userService.findAll(pageable), userModelAssembler
-        );
-    }
-
-    @PostMapping("/user")
+    @PostMapping("/register")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public UserModel register(@RequestBody UserRegisterModel model) {
         return userModelAssembler.toModel(
             userService.register(model)
+        );
+    }
+
+    @GetMapping("/user")
+    public PagedModel<UserModel> findAll(Pageable pageable) {
+        return pagedUsersModelsAssembler.toModel(
+            userService.findAll(pageable), userModelAssembler
         );
     }
 
@@ -46,9 +46,9 @@ public class UserController {
         );
     }
 
-    @DeleteMapping("/user/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("id") Long id) {
-        userService.delete(id);
-    }
+//    @DeleteMapping("/user/{id}")
+//    @ResponseStatus(HttpStatus.NO_CONTENT)
+//    public void delete(@PathVariable("id") Long id) {
+//        userService.delete(id);
+//    }
 }

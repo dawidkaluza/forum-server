@@ -7,18 +7,20 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import pl.dkaluza.forum.modules.userDetails.services.UserDetailsServiceImpl;
+import pl.dkaluza.forum.core.security.UserDetailsServiceImpl;
+import pl.dkaluza.forum.modules.user.base.repositories.UserRepository;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private final UserDetailsServiceImpl userDetailsService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public SecurityConfig(UserDetailsServiceImpl userDetailsService) {
-        this.userDetailsService = userDetailsService;
+    public SecurityConfig(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -32,7 +34,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return new UserDetailsServiceImpl(userRepository);
     }
 
     @Bean
