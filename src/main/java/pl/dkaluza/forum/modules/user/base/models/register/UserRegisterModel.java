@@ -1,10 +1,6 @@
 package pl.dkaluza.forum.modules.user.base.models.register;
 
-import org.springframework.hateoas.RepresentationModel;
-import org.springframework.hateoas.server.core.Relation;
-
-@Relation(itemRelation = "userRegister")
-public class UserRegisterModel extends RepresentationModel<UserRegisterModel> {
+public class UserRegisterModel {
     private String name;
     private String email;
     private String plainPassword;

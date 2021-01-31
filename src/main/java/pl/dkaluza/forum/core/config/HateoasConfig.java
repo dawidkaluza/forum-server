@@ -8,10 +8,10 @@ import org.springframework.hateoas.mediatype.hal.CurieProvider;
 import org.springframework.hateoas.mediatype.hal.DefaultCurieProvider;
 
 @Configuration
-@EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL_FORMS)
+@EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
 public class HateoasConfig {
     @Bean
     public CurieProvider curieProvider() {
-        return new DefaultCurieProvider("ex", UriTemplate.of("/docs/{rel}"));
+        return new DefaultCurieProvider("df", UriTemplate.of("/docs/{rel}"));
     }
 }
