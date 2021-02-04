@@ -1,4 +1,4 @@
-package pl.dkaluza.forum.modules.user.confirmRegistration.listeners;
+package pl.dkaluza.forum.modules.user.confirmRegistration.listeners.user.onUserRegister;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,13 +19,15 @@ import java.util.UUID;
 
 @Component
 public class OnUserRegisterListener {
+    private final OnUserRegisterListenerErrorHandler errorHandler;
     private final ConfirmRegistrationPropertiesSupplier propertiesSupplier;
     private final ConfirmRegistrationMailSender mailSender;
     private final UserRepository userRepository;
     private final ConfirmRegistrationTokenRepository confirmRegistrationTokenRepository;
 
     @Autowired
-    public OnUserRegisterListener(ConfirmRegistrationPropertiesSupplier propertiesSupplier, ConfirmRegistrationMailSender mailSender, UserRepository userRepository, ConfirmRegistrationTokenRepository confirmRegistrationTokenRepository) {
+    public OnUserRegisterListener(OnUserRegisterListenerErrorHandler errorHandler, ConfirmRegistrationPropertiesSupplier propertiesSupplier, ConfirmRegistrationMailSender mailSender, UserRepository userRepository, ConfirmRegistrationTokenRepository confirmRegistrationTokenRepository) {
+        this.errorHandler = errorHandler;
         this.propertiesSupplier = propertiesSupplier;
         this.mailSender = mailSender;
         this.userRepository = userRepository;
@@ -52,8 +54,7 @@ public class OnUserRegisterListener {
 
             mailSender.sendMail(userId);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
+            errorHandler.handleError(e);
         }
     }
 }

@@ -1,4 +1,4 @@
-package pl.dkaluza.forum.modules.user.confirmRegistration.listeners;
+package pl.dkaluza.forum.modules.user.confirmRegistration.listeners.user.onUserDelete;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -11,10 +11,12 @@ import pl.dkaluza.forum.modules.user.confirmRegistration.repositories.ConfirmReg
 
 @Component
 public class OnUserDeleteListener {
+    private final OnUserDeleteListenerErrorHandler errorHandler;
     private final ConfirmRegistrationTokenRepository repository;
 
     @Autowired
-    public OnUserDeleteListener(ConfirmRegistrationTokenRepository repository) {
+    public OnUserDeleteListener(OnUserDeleteListenerErrorHandler errorHandler, ConfirmRegistrationTokenRepository repository) {
+        this.errorHandler = errorHandler;
         this.repository = repository;
     }
 
@@ -25,8 +27,7 @@ public class OnUserDeleteListener {
             repository.deleteById(event.getUserId());
         } catch (EmptyResultDataAccessException ignored) {
         } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
+            errorHandler.handleError(e);
         }
     }
 }
