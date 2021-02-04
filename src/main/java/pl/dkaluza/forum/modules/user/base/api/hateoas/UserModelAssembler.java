@@ -18,6 +18,7 @@ public class UserModelAssembler implements RepresentationModelAssembler<UserMode
         model.add(
             buildSelfLink(model)
         );
+
 //        model.add(
 //            buildDeleteLink(model)
 //        );
