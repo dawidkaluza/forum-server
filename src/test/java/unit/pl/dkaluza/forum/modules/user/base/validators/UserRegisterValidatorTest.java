@@ -4,26 +4,33 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.FieldError;
 import pl.dkaluza.forum.modules.user.base.entities.User;
-import pl.dkaluza.forum.modules.user.base.exceptions.EmailAlreadyExistsException;
-import pl.dkaluza.forum.modules.user.base.exceptions.InvalidPasswordException;
 import pl.dkaluza.forum.modules.user.base.models.register.UserRegisterModel;
 import pl.dkaluza.forum.modules.user.base.repositories.UserRepository;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class UserRegisterValidatorTest {
     @Test
-    public void validate_emailAlreadyExists_throwEmailAlreadyExistsException() {
+    public void validate_emailAlreadyExists_resultHasExistsFieldError() {
         //Given
-        UserRegisterModel model = getUserRegisterModel("Hector", "existing@mail.com", "iziPassword");
+        UserRegisterModel model = getUserRegisterModel("Hector", "existing@mail.com", "validPassword");
         UserRepository repository = getUserRepository();
-        UserRegisterValidator validator = new UserRegisterValidator(model, repository);
+        BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(model, "userRegisterModel");
+        UserRegisterValidator validator = new UserRegisterValidator(repository);
 
-        //When, then
-        assertThrows(EmailAlreadyExistsException.class, validator::validate);
+        //When
+        validator.validate(model, bindingResult);
+
+        //Then
+        FieldError error = bindingResult.getFieldError("email");
+        assertNotNull(error);
+        assertEquals(error.getCode(), "exists");
     }
 
     @Test
@@ -43,13 +50,7 @@ public class UserRegisterValidatorTest {
 
     @Test
     public void validate_nameAlreadyExists_throwNameAlreadyExistsException() {
-        //Given
-        UserRegisterModel model = getUserRegisterModel("existingName", "heccy@o2.pl", "iziPassword");
-        UserRepository repository = getUserRepository();
-        UserRegisterValidator validator = new UserRegisterValidator(model, repository);
-
-        //When, then
-        assertThrows(EmailAlreadyExistsException.class, validator::validate);
+        //TODO
     }
 
     @Test
@@ -65,22 +66,17 @@ public class UserRegisterValidatorTest {
     @ParameterizedTest
     @ValueSource(strings = { "1", "12", "12 ", " 12", " ab  "})
     public void validate_tooShortPassword_throwInvalidPasswordException(String shortPassword) {
-        //Given
-        UserRegisterModel model = getUserRegisterModel("Heccy", "heccy@o2.pl", shortPassword);
-        UserRepository repository = getUserRepository();
-        UserRegisterValidator validator = new UserRegisterValidator(model, repository);
-
-        //When, then
-        assertThrows(InvalidPasswordException.class, validator::validate);
+        //TODO
     }
 
     @Test
     public void validate_tooLongPassword_throwException() {
-
+        //TODO
     }
 
     @Test
     public void validate_fullyCorrectModel_noException() {
+        //TODO
     }
 
     private static UserRegisterModel getUserRegisterModel(String name, String email, String plainPassword) {

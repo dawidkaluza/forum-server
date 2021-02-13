@@ -5,33 +5,44 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import pl.dkaluza.forum.modules.user.base.api.hateoas.RegisterModelAssembler;
 import pl.dkaluza.forum.modules.user.base.api.hateoas.UserModelAssembler;
 import pl.dkaluza.forum.modules.user.base.models.basic.UserModel;
 import pl.dkaluza.forum.modules.user.base.models.register.UserRegisterModel;
 import pl.dkaluza.forum.modules.user.base.services.UserService;
+import pl.dkaluza.forum.modules.user.base.validators.UserRegisterValidator;
+
+import javax.validation.Valid;
 
 @RestController
 public class UserController {
+    private final UserRegisterValidator userRegisterValidator;
     private final UserService userService;
     private final UserModelAssembler userModelAssembler;
     private final RegisterModelAssembler registerModelAssembler;
     private final PagedResourcesAssembler<UserModel> pagedUsersModelsAssembler;
 
     @Autowired
-    public UserController(UserService userService, UserModelAssembler userModelAssembler, RegisterModelAssembler registerModelAssembler, @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") PagedResourcesAssembler<UserModel> pagedUsersModelsAssembler) {
+    public UserController(UserRegisterValidator userRegisterValidator, UserService userService, UserModelAssembler userModelAssembler, RegisterModelAssembler registerModelAssembler, @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") PagedResourcesAssembler<UserModel> pagedUsersModelsAssembler) {
+        this.userRegisterValidator = userRegisterValidator;
         this.userService = userService;
         this.userModelAssembler = userModelAssembler;
         this.registerModelAssembler = registerModelAssembler;
         this.pagedUsersModelsAssembler = pagedUsersModelsAssembler;
     }
 
+    @InitBinder("userRegisterModel")
+    public void initBinder(WebDataBinder binder) {
+        binder.addValidators(userRegisterValidator);
+    }
+
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public UserModel register(@RequestBody UserRegisterModel model) {
+    public UserModel register(@Valid @RequestBody UserRegisterModel userRegisterModel) {
         return registerModelAssembler.toModel(
-            userService.register(model)
+            userService.register(userRegisterModel)
         );
     }
 
