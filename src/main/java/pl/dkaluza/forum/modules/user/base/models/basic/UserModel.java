@@ -2,6 +2,7 @@ package pl.dkaluza.forum.modules.user.base.models.basic;
 
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
+import org.springframework.lang.NonNull;
 
 @Relation(itemRelation = "user", collectionRelation = "users")
 public class UserModel extends RepresentationModel<UserModel> {
@@ -43,5 +44,16 @@ public class UserModel extends RepresentationModel<UserModel> {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    @Override
+    @NonNull
+    public String toString() {
+        return "UserModel{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", email='" + email + '\'' +
+            ", enabled=" + enabled +
+            '}';
     }
 }

@@ -27,5 +27,4 @@ public class ConfirmRegistrationController {
     public void resendToken(@RequestBody ResendTokenModel model) {
         confirmRegistrationService.resendToken(model);
     }
-
 }
