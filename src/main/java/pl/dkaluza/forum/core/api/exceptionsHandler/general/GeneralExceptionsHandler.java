@@ -12,6 +12,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import pl.dkaluza.forum.core.api.exceptionsHandler.ExceptionsHandler;
 import pl.dkaluza.forum.core.api.exceptionsHandler.ExceptionsHandlerOrder;
+import pl.dkaluza.forum.core.api.response.ResponseFieldsError;
 
 import java.sql.SQLException;
 
@@ -19,8 +20,10 @@ import java.sql.SQLException;
 public class GeneralExceptionsHandler extends ResponseEntityExceptionHandler implements ExceptionsHandler {
     @Override
     @NonNull
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, @NonNull HttpHeaders headers, @NonNull HttpStatus status, @NonNull WebRequest request) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(@NonNull MethodArgumentNotValidException ex, @NonNull HttpHeaders headers, @NonNull HttpStatus status, @NonNull WebRequest request) {
+        return new ResponseFieldsError(HttpStatus.UNPROCESSABLE_ENTITY, "Invalid params")
+            .addAll(ex.getFieldErrors())
+            .toResponseEntity();
     }
 
     @ExceptionHandler(SQLException.class)

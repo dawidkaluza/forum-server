@@ -7,21 +7,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindException;
-import org.springframework.validation.DataBinder;
-import org.springframework.validation.Errors;
-import org.springframework.validation.SmartValidator;
-import pl.dkaluza.forum.core.validator.ComposedValidatorsExecutor;
 import pl.dkaluza.forum.modules.user.base.entities.User;
 import pl.dkaluza.forum.modules.user.base.events.OnUserDeleteEvent;
 import pl.dkaluza.forum.modules.user.base.events.OnUserRegisterEvent;
+import pl.dkaluza.forum.modules.user.base.exceptions.EmailAlreadyExistsException;
+import pl.dkaluza.forum.modules.user.base.exceptions.NameAlreadyExistsException;
 import pl.dkaluza.forum.modules.user.base.exceptions.UserNotFoundException;
 import pl.dkaluza.forum.modules.user.base.models.basic.UserMapper;
 import pl.dkaluza.forum.modules.user.base.models.basic.UserModel;
 import pl.dkaluza.forum.modules.user.base.models.register.UserRegisterMapper;
 import pl.dkaluza.forum.modules.user.base.models.register.UserRegisterModel;
 import pl.dkaluza.forum.modules.user.base.repositories.UserRepository;
-import pl.dkaluza.forum.modules.user.base.validators.UserRegisterValidator;
 
 @Component
 public class UserServiceImpl implements UserService {
@@ -31,7 +27,7 @@ public class UserServiceImpl implements UserService {
     private final UserRegisterMapper userRegisterMapper;
 
     @Autowired
-    public UserServiceImpl(ApplicationEventPublisher eventPublisher, UserRegisterValidator userRegisterValidator, UserRepository userRepository, UserMapper userMapper, UserRegisterMapper userRegisterMapper) {
+    public UserServiceImpl(ApplicationEventPublisher eventPublisher, UserRepository userRepository, UserMapper userMapper, UserRegisterMapper userRegisterMapper) {
         this.eventPublisher = eventPublisher;
         this.userRepository = userRepository;
         this.userMapper = userMapper;
@@ -56,6 +52,14 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserModel register(UserRegisterModel model) {
+        if (userRepository.existsByEmail(model.getEmail())) {
+            throw new EmailAlreadyExistsException(model.getEmail());
+        }
+
+        if (userRepository.existsByName(model.getName())) {
+            throw new NameAlreadyExistsException(model.getName());
+        }
+
         User user = userRegisterMapper.toObject(model);
         user = userRepository.save(user);
         eventPublisher.publishEvent(new OnUserRegisterEvent(user.getId()));

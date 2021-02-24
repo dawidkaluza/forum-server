@@ -1,36 +1,25 @@
-package pl.dkaluza.forum.modules.user.base.validators;
+package pl.dkaluza.forum.modules.user.base.api;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.Mockito;
-import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.FieldError;
-import pl.dkaluza.forum.modules.user.base.entities.User;
-import pl.dkaluza.forum.modules.user.base.models.register.UserRegisterModel;
-import pl.dkaluza.forum.modules.user.base.repositories.UserRepository;
+public class UserControllerTest {
 
-import java.util.Optional;
+    /// CASES WHILE REGISTRATION ////
+    /*
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-public class UserRegisterValidatorTest {
     @Test
     public void validate_emailAlreadyExists_resultHasExistsFieldError() {
-        //Given
-        UserRegisterModel model = getUserRegisterModel("Hector", "existing@mail.com", "validPassword");
-        UserRepository repository = getUserRepository();
-        BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(model, "userRegisterModel");
-        UserRegisterValidator validator = new UserRegisterValidator(repository);
-
-        //When
-        validator.validate(model, bindingResult);
-
-        //Then
-        FieldError error = bindingResult.getFieldError("email");
-        assertNotNull(error);
-        assertEquals(error.getCode(), "exists");
+//        //Given
+//        UserRegisterModel model = getUserRegisterModel("Hector", "existing@mail.com", "validPassword");
+//        UserRepository repository = getUserRepository();
+//        BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(model, "userRegisterModel");
+//        UserRegisterValidator validator = new UserRegisterValidator(repository);
+//
+//        //When
+//        validator.validate(model, bindingResult);
+//
+//        //Then
+//        FieldError error = bindingResult.getFieldError("email");
+//        assertNotNull(error);
+//        assertEquals(error.getCode(), "exists");
     }
 
     @Test
@@ -105,4 +94,5 @@ public class UserRegisterValidatorTest {
         });
         return repository;
     }
+     */
 }

@@ -3,10 +3,10 @@ package pl.dkaluza.forum.modules.user.base.models.resetPassword;
 import org.springframework.hateoas.server.core.Relation;
 
 @Relation(itemRelation = "passwordReset")
-public class PasswordResetModel {
+public class ResetPasswordModel {
     private String email;
 
-    public PasswordResetModel() {
+    public ResetPasswordModel() {
     }
 
     public String getEmail() {
