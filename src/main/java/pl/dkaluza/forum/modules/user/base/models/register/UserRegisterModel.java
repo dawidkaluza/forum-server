@@ -5,7 +5,7 @@ import javax.validation.constraints.Pattern;
 
 public class UserRegisterModel {
     @Pattern(regexp = "^[^\\S]{3,32}$", message = "{user.register.invalidName}")
-    @NotEmpty(message = "{user.register.emptyName")
+    @NotEmpty(message = "{user.register.emptyName}")
     private String name;
 
     @Pattern(regexp = "^\\S+@\\S+\\.\\S+$", message = "{user.register.invalidEmail}")
@@ -13,7 +13,7 @@ public class UserRegisterModel {
     private String email;
 
     @Pattern(regexp = "^[^\\S]{5,32}$", message = "{user.register.invalidPassword}")
-    @NotEmpty(message = "{user.register.emptyPassword")
+    @NotEmpty(message = "{user.register.emptyPassword}")
     private String plainPassword;
 
     public String getName() {

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.FieldError;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,53 +13,41 @@ import java.util.List;
 
 public class ResponseFieldsError extends ResponseError {
     @JsonSerialize(using = FieldErrorsSerializer.class, as = List.class)
-    private final List<FieldError> fieldErrors;
+    private final List<LocaleFieldError> fieldErrors;
 
     public ResponseFieldsError(HttpStatus status, String message) {
         super(status, message);
         fieldErrors = new ArrayList<>();
     }
 
-    public ResponseFieldsError add(FieldError error) {
+    public ResponseFieldsError add(LocaleFieldError error) {
         fieldErrors.add(error);
         return this;
     }
 
-    public ResponseFieldsError addAll(Collection<? extends FieldError> errors) {
+    public ResponseFieldsError addAll(Collection<? extends LocaleFieldError> errors) {
         fieldErrors.addAll(errors);
         return this;
     }
 
-    public List<FieldError> getFieldErrors() {
+    public List<LocaleFieldError> getFieldErrors() {
         return fieldErrors;
     }
 
-    private static class FieldErrorsSerializer extends JsonSerializer<List<FieldError>> {
+    private static class FieldErrorsSerializer extends JsonSerializer<List<LocaleFieldError>> {
         @Override
-        public void serialize(List<FieldError> errors, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+        public void serialize(List<LocaleFieldError> errors, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
             jsonGenerator.writeStartArray("fieldErrors");
 
-            for (FieldError error : errors) {
+            for (LocaleFieldError error : errors) {
                 jsonGenerator.writeStartObject();
-                jsonGenerator.writeStringField("object", getObjectName(error));
+                jsonGenerator.writeStringField("object", error.getObjectName());
                 jsonGenerator.writeStringField("field", error.getField());
-                //TODO translate this message
-                jsonGenerator.writeStringField("message", error.getDefaultMessage());
+                jsonGenerator.writeStringField("message", error.getMessage());
                 jsonGenerator.writeEndObject();
             }
 
             jsonGenerator.writeEndArray();
-        }
-
-
-        private String getObjectName(FieldError error) {
-            String objectName = error.getObjectName();
-            if (objectName.endsWith("Model")) {
-                int objectNameLen = objectName.length();
-                return objectName.substring(0, objectNameLen - 5);
-            }
-
-            return objectName;
         }
     }
 }
