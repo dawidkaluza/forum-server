@@ -4,15 +4,15 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
 public class UserRegisterModel {
-    @Pattern(regexp = "^[^\\S]{3,32}$", message = "{user.register.invalidName}")
+    @Pattern(regexp = "^[\\S]{3,32}$", message = "{user.register.invalidName}")
     @NotEmpty(message = "{user.register.emptyName}")
     private String name;
 
-    @Pattern(regexp = "^\\S+@\\S+\\.\\S+$", message = "{user.register.invalidEmail}")
+    @Pattern(regexp = "\\S+@\\S+\\.\\S+$", message = "{user.register.invalidEmail}")
     @NotEmpty(message = "{user.register.emptyEmail}")
     private String email;
 
-    @Pattern(regexp = "^[^\\S]{5,32}$", message = "{user.register.invalidPassword}")
+    @Pattern(regexp = "^[\\S]{5,32}$", message = "{user.register.invalidPassword}")
     @NotEmpty(message = "{user.register.emptyPassword}")
     private String plainPassword;
 
