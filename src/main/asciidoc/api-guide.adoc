@@ -1,34 +1,82 @@
-= RESTful Notes API Guide
-Andy Wilkinson;
+= Discussion forum - API documentation
+Dawid Kałuża <daw.kaluza@gmail.com>
 :doctype: book
+:toc: left
 :icons: font
 :source-highlighter: highlightjs
-:toc: left
 :toclevels: 4
 :sectlinks:
-:operation-curl-request-title: Example request
-:operation-http-response-title: Example response
 
 [[overview]]
-= Overview
+== Overview
 
-[[overview_http_verbs]]
-== HTTP verbs
+There is short and general description of this API. You can check how to use HTTP headers and methods, authorization and what rules you need to follow.
 
-RESTful notes tries to adhere as closely as possible to standard HTTP and REST conventions in its use of HTTP verbs.
+[[http_methods]]
+== HTTP methods
+
+This API tries to follow standard REST conventions as much as possible and below you can check which HTTP methods are used.
 
 |===
-| Verb | Usage
+|Method |Description
 
-| `GET`
-| Used to retrieve a resource
+|GET
+|Used to get a resource(s)
 
-| `POST`
-| Used to create a new resource
+|POST
+|Used to create a new resource
 
-| `PATCH`
-| Used to update an existing resource, including partial updates
+|PATCH
+|Used to update an existing resource partially
 
-| `DELETE`
-| Used to delete an existing resource
+|DELETE
+|Used to remove an existing resource
 |===
+
+[[status_codes]]
+== Status codes
+
+Obviously, depending on the result of a given request, client will get a proper status code in a response. There are a lot of status codes, so here you can check only general usage of them. More specific details are in requests.
+
+|===
+|Code range |Description
+
+|2xx - success
+|Used when request is completed successfully, usually returned with a response body (except 204 - no content)
+
+|4xx - client error
+|Used when some client error happens. This type of response also returns a specific body in response, which is described above.
+
+|5xx - server error
+|Used when some server error happens. This type of response is generally unexpected, but details are also described in response body, as in 4xx client errors.
+|===
+
+[[errors]]
+== Errors
+
+//TODO include http-response and response-fields from some error-throwing request
+If you get 4xx or 5xx status code in a response, message will be composed of given fields:
+
+* "status" (number) - status code
+* "message" (string) - general error message
+* "timestamp" (string) - time of error occurrence (format: dd-MM-yyyy HH:mm:ss)
+* fieldErrors (array, optional) - array of field errors objects
+** field (string) - field path
+** message (string) - error message of that field
+
+[[authentication]]
+== Authentication
+
+// TODO
+To be continued...
+
+[[language]]
+== Language
+
+You can use `Accept-Language` header to specify language that you prefer. Unfortunately, only English (en) is available at the moment.
+
+[[hateoas]]
+== HATEOAS
+
+Responses produced by this api are also formatted in HAL format. Links to resources can be found in `_links` object which can exist in a response. More about given format can be found https://github.com/mikekelly/hal_specification/blob/master/hal_specification.md[here].
+
