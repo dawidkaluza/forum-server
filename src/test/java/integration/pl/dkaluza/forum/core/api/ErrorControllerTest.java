@@ -60,7 +60,6 @@ public class ErrorControllerTest {
 
         //Documentation
         result.andDo(document("error",
-            responseBody(),
             responseFields(
                 fieldWithPath("status").description("Http status"),
                 fieldWithPath("message").description("Message that describes what happened"),
