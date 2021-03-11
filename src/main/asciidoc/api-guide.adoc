@@ -10,7 +10,7 @@ Dawid Kałuża <daw.kaluza@gmail.com>
 [[overview]]
 == Overview
 
-There is short and general description of this API. You can check how to use HTTP headers and methods, authorization and what rules you need to follow.
+There is short and general description of the API. You can check how to use HTTP headers, methods, how authorization works and what other rules you need to follow.
 
 [[http_methods]]
 == HTTP methods
@@ -54,15 +54,13 @@ Obviously, depending on the result of a given request, client will get a proper 
 [[errors]]
 == Errors
 
-//TODO include http-response and response-fields from some error-throwing request
 If you get 4xx or 5xx status code in a response, message will be composed of given fields:
 
-* "status" (number) - status code
-* "message" (string) - general error message
-* "timestamp" (string) - time of error occurrence (format: dd-MM-yyyy HH:mm:ss)
-* fieldErrors (array, optional) - array of field errors objects
-** field (string) - field path
-** message (string) - error message of that field
+include::{snippets}/error/response-fields.adoc[]
+
+Response can look like in the following example:
+include::{snippets}/error/http-response.adoc[]
+
 
 [[authentication]]
 == Authentication
@@ -78,5 +76,5 @@ You can use `Accept-Language` header to specify language that you prefer. Unfort
 [[hateoas]]
 == HATEOAS
 
-Responses produced by this api are also formatted in HAL format. Links to resources can be found in `_links` object which can exist in a response. More about given format can be found https://github.com/mikekelly/hal_specification/blob/master/hal_specification.md[here].
+Responses produced by this api are formatted in HAL format. Links to resources can be found in `_links` object which can exist in a response. More about given format can be found https://github.com/mikekelly/hal_specification/blob/master/hal_specification.md[here].
 
