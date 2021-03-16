@@ -54,7 +54,6 @@ public class ErrorControllerTest {
             .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.value()))
             .andExpect(jsonPath("$.message").exists())
             .andExpect(jsonPath("$.timestamp").exists())
-            .andExpect(jsonPath("$.fieldErrors[*].object").exists())
             .andExpect(jsonPath("$.fieldErrors[*].field").exists())
             .andExpect(jsonPath("$.fieldErrors[*].message").exists());
 
@@ -65,7 +64,6 @@ public class ErrorControllerTest {
                 fieldWithPath("message").description("Message that describes what happened"),
                 fieldWithPath("timestamp").description("Timestamp when error occurs (format: dd-MM-yyyy HH:mm:ss)"),
                 fieldWithPath("fieldErrors").optional().description("Optional array with field errors"),
-                fieldWithPath("fieldErrors[].object").description("Object name of this field error"),
                 fieldWithPath("fieldErrors[].field").description("Field name of this field error"),
                 fieldWithPath("fieldErrors[].message").description("Message of this field error")
             )

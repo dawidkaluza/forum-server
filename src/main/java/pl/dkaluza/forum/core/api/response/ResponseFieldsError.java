@@ -41,7 +41,6 @@ public class ResponseFieldsError extends ResponseError {
 
             for (LocaleFieldError error : errors) {
                 jsonGenerator.writeStartObject();
-                jsonGenerator.writeStringField("object", error.getObjectName());
                 jsonGenerator.writeStringField("field", error.getField());
                 jsonGenerator.writeStringField("message", error.getMessage());
                 jsonGenerator.writeEndObject();

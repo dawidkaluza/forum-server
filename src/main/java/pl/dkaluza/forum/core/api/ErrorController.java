@@ -14,7 +14,7 @@ public class ErrorController {
         return new ResponseFieldsError(
             HttpStatus.BAD_REQUEST, "Example response error message"
         ).add(
-            new LocaleFieldError("Some object name", "Some field", "Some message")
+            new LocaleFieldError("Some field", "Some message")
         ).toResponseEntity();
     }
 }

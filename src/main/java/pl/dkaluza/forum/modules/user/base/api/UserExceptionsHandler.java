@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import pl.dkaluza.forum.core.api.exceptionsHandler.ExceptionsHandler;
-import pl.dkaluza.forum.core.api.response.LocaleFieldError;
 import pl.dkaluza.forum.core.api.response.LocaleFieldErrorMapper;
 import pl.dkaluza.forum.core.api.response.ResponseFieldsError;
 import pl.dkaluza.forum.modules.user.base.exceptions.EmailAlreadyExistsException;
@@ -43,7 +42,7 @@ public class UserExceptionsHandler implements ExceptionsHandler {
     public ResponseEntity<?> emailAlreadyExistsExceptionHandler(WebRequest request) {
         return new ResponseFieldsError(HttpStatus.CONFLICT, "Invalid params")
             .add(localeFieldErrorMapper.map(
-                "userRegister", "email", "user.register.emailAlreadyExists", request.getLocale()
+                "email", "user.register.emailAlreadyExists", request.getLocale()
             )).toResponseEntity();
     }
 }

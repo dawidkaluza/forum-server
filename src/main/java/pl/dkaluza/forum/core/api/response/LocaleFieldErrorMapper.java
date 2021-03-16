@@ -19,9 +19,8 @@ public class LocaleFieldErrorMapper {
         this.messageSource = messageSource;
     }
 
-    public LocaleFieldError map(String objectName, String field, String code, Locale locale) {
+    public LocaleFieldError map(String field, String code, Locale locale) {
         return new LocaleFieldError(
-            objectName,
             field,
             messageSource.getMessage(code, null, locale)
         );
@@ -29,7 +28,6 @@ public class LocaleFieldErrorMapper {
 
     public LocaleFieldError map(FieldError error, Locale locale) {
         return new LocaleFieldError(
-            error.getObjectName(),
             error.getField(),
             messageSource.getMessage(error, locale)
         );

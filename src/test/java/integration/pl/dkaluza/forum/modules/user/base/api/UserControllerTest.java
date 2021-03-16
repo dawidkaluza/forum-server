@@ -9,9 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
-import org.springframework.restdocs.hypermedia.LinksSnippet;
-import org.springframework.restdocs.payload.PayloadDocumentation;
-import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -27,7 +24,7 @@ import java.util.Map;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseBody;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -53,7 +50,7 @@ public class UserControllerTest {
 
         UserRegisterModel model = new UserRegisterModel();
         model.setEmail("mark@gmail.com");
-        model.setName("mark");
+        model.setName("mark.kram");
         model.setPlainPassword("veryHardPassword");
         userService.register(model);
     }
@@ -84,7 +81,7 @@ public class UserControllerTest {
             .andExpect(jsonPath("$.fieldErrors[*].message").exists());
 
         //Document
-        result.andDo(document("user/register",
+        result.andDo(document("user/register/emailAlreadyExists",
             responseBody()
         ));
     }
