@@ -18,25 +18,10 @@ public class UserModelAssembler implements RepresentationModelAssembler<UserMode
         model.add(
             buildSelfLink(model)
         );
-
-//        model.add(
-//            buildDeleteLink(model)
-//        );
         return model;
     }
 
     private Link buildSelfLink(UserModel model) {
         return linkTo(methodOn(UserController.class).get(model.getId())).withSelfRel();
     }
-
-//    private Link buildDeleteLink(UserModel model) {
-//        Method method;
-//        try {
-//            method = (UserController.class).getMethod("delete", Long.class);
-//        } catch (NoSuchMethodException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        return linkTo(method, model.getId()).withRel("delete_user");
-//    }
 }
