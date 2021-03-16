@@ -19,6 +19,7 @@ public class IndexModelAssembler implements RepresentationModelAssembler<IndexMo
     public IndexModel toModel(IndexModel model) {
         model.add(buildSelfLink());
         model.add(buildRegisterLink());
+        model.add(buildUsersLink());
         return model;
     }
 
@@ -28,5 +29,9 @@ public class IndexModelAssembler implements RepresentationModelAssembler<IndexMo
 
     private Link buildRegisterLink() {
         return linkTo(methodOn(UserController.class).register(new UserRegisterModel())).withRel("register");
+    }
+
+    private Link buildUsersLink() {
+        return linkTo(methodOn(UserController.class).findAll(null)).withRel("users");
     }
 }

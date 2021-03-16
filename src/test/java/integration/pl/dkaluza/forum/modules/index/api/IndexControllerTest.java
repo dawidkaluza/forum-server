@@ -53,6 +53,7 @@ public class IndexControllerTest {
             .andExpect(jsonPath("_links.self").exists())
             .andExpect(jsonPath("_links.curies").exists())
             .andExpect(jsonPath("_links.df:register").exists())
+            .andExpect(jsonPath("_links.df:users").exists())
             .andExpect(jsonPath("message").exists());
 
         //Document
@@ -62,7 +63,8 @@ public class IndexControllerTest {
                 links(
                     selfLinkDescriptor(),
                     curiesLinkDescriptor(),
-                    linkWithRel("df:register").description("Register new account")
+                    linkWithRel("df:register").description("Register new account"),
+                    linkWithRel("df:users").description("Lists all registered users")
                 ),
                 responseFields(
                     fieldWithPath("message").description("Just a welcome message :)"),
