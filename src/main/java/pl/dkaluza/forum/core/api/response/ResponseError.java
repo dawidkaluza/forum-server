@@ -2,7 +2,6 @@ package pl.dkaluza.forum.core.api.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -13,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-@JsonRootName("error")
 public class ResponseError {
     @JsonProperty
     @JsonSerialize(using = HttpStatusSerializer.class, as = HttpStatus.class)
