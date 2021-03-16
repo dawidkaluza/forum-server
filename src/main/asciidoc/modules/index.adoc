@@ -1,0 +1,30 @@
+include::../header.adoc[]
+
+[[index]]
+== Index
+
+On index page, you can find starting links that helps you explore the rest of the api.
+
+[[request]]
+== Request
+
+include::{snippets}/index/http-request.adoc[]
+
+[[response]]
+== Response
+
+[[response_fields]]
+=== Fields
+
+include::{snippets}/index/response-fields.adoc[]
+
+[[response_links]]
+=== Links
+
+include::{snippets}/index/links.adoc[]
+
+[[response_example]]
+=== Example
+
+include::{snippets}/index/http-response.adoc[]
+

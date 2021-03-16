@@ -1,0 +1,8 @@
+= Discussion forum - API documentation
+Dawid Kałuża <daw.kaluza@gmail.com>
+:doctype: book
+:toc: left
+:icons: font
+:source-highlighter: highlightjs
+:toclevels: 4
+:sectlinks:

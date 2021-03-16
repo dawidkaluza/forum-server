@@ -1,11 +1,4 @@
-= Discussion forum - API documentation
-Dawid Kałuża <daw.kaluza@gmail.com>
-:doctype: book
-:toc: left
-:icons: font
-:source-highlighter: highlightjs
-:toclevels: 4
-:sectlinks:
+include::header.adoc[]
 
 [[overview]]
 == Overview
@@ -77,4 +70,9 @@ You can use `Accept-Language` header to specify language that you prefer. Unfort
 == HATEOAS
 
 Responses produced by this api are formatted in HAL format. Links to resources can be found in `_links` object which can exist in a response. More about given format can be found https://github.com/mikekelly/hal_specification/blob/master/hal_specification.md[here].
+
+[[getting_started]]
+== Getting started with API
+
+If you're ready, go to the following link: xxx
 
