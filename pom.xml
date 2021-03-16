@@ -114,6 +114,7 @@
                             </attributes>
                             <sourceDirectory>src/main/asciidoc</sourceDirectory>
                             <outputDirectory>target/generated-docs</outputDirectory>
+                            <preserveDirectories>true</preserveDirectories>
                         </configuration>
                     </execution>
                 </executions>
