@@ -2,6 +2,7 @@ package pl.dkaluza.forum.core.restdocs;
 
 import org.springframework.restdocs.hypermedia.LinkDescriptor;
 import org.springframework.restdocs.payload.FieldDescriptor;
+import org.springframework.restdocs.snippet.Attributes;
 
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
 import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
@@ -33,5 +34,9 @@ public class LinksUtils {
 
     public static LinkDescriptor nextLinkDescriptor() {
         return linkWithRel("next").description("Next page of the collection");
+    }
+
+    public static Attributes.Attribute docsAttribute(String uri) {
+        return new Attributes.Attribute("docs", uri);
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.operation.preprocess.Preprocessors;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -20,7 +21,8 @@ import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.li
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static pl.dkaluza.forum.core.restdocs.LinksUtils.*;
@@ -34,8 +36,12 @@ public class IndexControllerTest {
     public void setUp(WebApplicationContext webAppContext, RestDocumentationContextProvider restDoc) {
         mockMvc = MockMvcBuilders
             .webAppContextSetup(webAppContext)
-            .apply(documentationConfiguration(restDoc))
-            .build();
+            .apply(
+                documentationConfiguration(restDoc)
+                    .operationPreprocessors()
+                    .withRequestDefaults(Preprocessors.prettyPrint())
+                    .withResponseDefaults(Preprocessors.prettyPrint())
+            ).build();
     }
 
     @Test
@@ -63,8 +69,8 @@ public class IndexControllerTest {
                 links(
                     selfLinkDescriptor(),
                     curiesLinkDescriptor(),
-                    linkWithRel("df:register").description("Register new account"),
-                    linkWithRel("df:users").description("Lists all registered users")
+                    linkWithRel("df:register").description("Registers new account").attributes(docsAttribute("register.html")),
+                    linkWithRel("df:users").description("Lists all registered users").attributes(docsAttribute("users.html"))
                 ),
                 responseFields(
                     fieldWithPath("message").description("Just a welcome message :)"),

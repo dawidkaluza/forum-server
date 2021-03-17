@@ -1,6 +1,7 @@
 package pl.dkaluza.forum.modules.user.base.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,10 +17,12 @@ import pl.dkaluza.forum.modules.user.base.exceptions.UserNotFoundException;
 
 @RestControllerAdvice
 public class UserExceptionsHandler implements ExceptionsHandler {
+    private final MessageSource messageSource;
     private final LocaleFieldErrorMapper localeFieldErrorMapper;
 
     @Autowired
-    public UserExceptionsHandler(LocaleFieldErrorMapper localeFieldErrorMapper) {
+    public UserExceptionsHandler(MessageSource messageSource, LocaleFieldErrorMapper localeFieldErrorMapper) {
+        this.messageSource = messageSource;
         this.localeFieldErrorMapper = localeFieldErrorMapper;
     }
 
@@ -31,7 +34,7 @@ public class UserExceptionsHandler implements ExceptionsHandler {
 
     @ExceptionHandler(NameAlreadyExistsException.class)
     public ResponseEntity<?> nameAlreadyExistsExceptionHandler(WebRequest request) {
-        return new ResponseFieldsError(HttpStatus.CONFLICT, "Invalid params")
+        return new ResponseFieldsError(HttpStatus.CONFLICT, messageSource.getMessage("invalidParams", null, request.getLocale()))
             .add(localeFieldErrorMapper.map(
                 "name", "user.register.nameAlreadyExists", request.getLocale()
             )).toResponseEntity();
@@ -39,7 +42,7 @@ public class UserExceptionsHandler implements ExceptionsHandler {
 
     @ExceptionHandler(EmailAlreadyExistsException.class)
     public ResponseEntity<?> emailAlreadyExistsExceptionHandler(WebRequest request) {
-        return new ResponseFieldsError(HttpStatus.CONFLICT, "Invalid params")
+        return new ResponseFieldsError(HttpStatus.CONFLICT, messageSource.getMessage("invalidParams", null, request.getLocale()))
             .add(localeFieldErrorMapper.map(
                 "email", "user.register.emailAlreadyExists", request.getLocale()
             )).toResponseEntity();

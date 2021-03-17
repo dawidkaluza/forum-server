@@ -1,19 +1,19 @@
 package pl.dkaluza.forum.modules.user.base.models.register;
 
-import javax.validation.constraints.NotEmpty;
+import pl.dkaluza.forum.core.validation.ExternalEmail;
+
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 public class UserRegisterModel {
     @Pattern(regexp = "^[\\S]{3,32}$", message = "{user.register.invalidName}")
-    @NotEmpty(message = "{user.register.emptyName}")
     private String name;
 
-    @Pattern(regexp = "\\S+@\\S+\\.\\S+$", message = "{user.register.invalidEmail}")
-    @NotEmpty(message = "{user.register.emptyEmail}")
+    @ExternalEmail(message = "{user.register.invalidEmail}")
+    @Size(max = 128, message = "{user.register.invalidEmail}")
     private String email;
 
     @Pattern(regexp = "^[\\S]{5,32}$", message = "{user.register.invalidPassword}")
-    @NotEmpty(message = "{user.register.emptyPassword}")
     private String plainPassword;
 
     public String getName() {

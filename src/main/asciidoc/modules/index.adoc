@@ -1,12 +1,32 @@
-include::../header.adoc[]
+= Discussion forum - API documentation
+Dawid Kałuża <daw.kaluza@gmail.com>
+:doctype: book
+:toc: left
+:icons: font
+:source-highlighter: highlightjs
+:toclevels: 4
+:sectlinks:
 
-[[index]]
-== Index
+[[overview]]
+== Overview
 
 On index page, you can find starting links that helps you explore the rest of the api.
 
 [[request]]
 == Request
+
+[[request_method]]
+=== Method
+
+GET
+
+[[request_body]]
+=== Body
+
+No body is needed for this request
+
+[[request_example]]
+=== Example
 
 include::{snippets}/index/http-request.adoc[]
 

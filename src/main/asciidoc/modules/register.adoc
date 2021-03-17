@@ -1,0 +1,78 @@
+= Discussion forum - API documentation
+Dawid Kałuża <daw.kaluza@gmail.com>
+:doctype: book
+:toc: left
+:icons: font
+:source-highlighter: highlightjs
+:toclevels: 4
+:sectlinks:
+
+[[overview]]
+== Overview
+
+This link is used to register new account on the forum.
+
+[[request]]
+== Request
+
+[[request_method]]
+=== Method
+POST
+
+[[request_body]]
+=== Body
+
+include::{snippets}/user/register/success/request-fields.adoc[]
+
+[[request_example]]
+=== Example
+include::{snippets}/user/register/success/http-request.adoc[]
+
+[[response]]
+== Response
+
+[[response_fields]]
+=== Fields
+
+include::{snippets}/user/register/success/response-fields.adoc[]
+
+[[response_links]]
+=== Links
+
+include::{snippets}/user/register/success/links.adoc[]
+
+[[response_example]]
+=== Example
+
+include::{snippets}/user/register/success/http-response.adoc[]
+
+[[response_errors]]
+=== Errors
+
+If registering new account fails, you may meet the following errors. Don't assume you will get only one of them, sometimes they may be sent together, especially errors related to validating raw input (like invalid email or invalid password)
+
+==== Email already exists
+
+include::{snippets}/user/register/emailAlreadyExists/http-response.adoc[]
+
+==== Invalid email
+
+include::{snippets}/user/register/invalidEmail/http-response.adoc[]
+
+==== Name already exists
+
+include::{snippets}/user/register/nameAlreadyExists/http-response.adoc[]
+
+==== Invalid name
+
+include::{snippets}/user/register/invalidName/http-response.adoc[]
+
+==== Invalid password
+
+include::{snippets}/user/register/invalidPassword/http-response.adoc[]
+
+
+
+
+
+

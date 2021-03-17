@@ -9,6 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.operation.preprocess.Preprocessors;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -21,14 +23,19 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseBody;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static pl.dkaluza.forum.core.restdocs.LinksUtils.curiesLinkDescriptor;
+import static pl.dkaluza.forum.core.restdocs.LinksUtils.linksFieldDescriptor;
 
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
 public class UserControllerTest {
     private final ObjectMapper objectMapper;
@@ -45,7 +52,12 @@ public class UserControllerTest {
     public void setUp(WebApplicationContext webAppContext, RestDocumentationContextProvider restDoc) {
         mockMvc = MockMvcBuilders
             .webAppContextSetup(webAppContext)
-            .apply(documentationConfiguration(restDoc))
+            .apply(
+                documentationConfiguration(restDoc)
+                    .operationPreprocessors()
+                    .withRequestDefaults(Preprocessors.prettyPrint())
+                    .withResponseDefaults(Preprocessors.prettyPrint())
+            )
             .build();
 
         UserRegisterModel model = new UserRegisterModel();
@@ -59,7 +71,7 @@ public class UserControllerTest {
     public void register_emailAlreadyExists_responseWithProperError() throws Exception {
         //Given
         Map<String, Object> body = new HashMap<>();
-        body.put("name", "adam");
+        body.put("name", "adam.kram");
         body.put("email", "mark@gmail.com");
         body.put("plainPassword", "adamPswrd");
 
@@ -81,152 +93,336 @@ public class UserControllerTest {
             .andExpect(jsonPath("$.fieldErrors[*].message").exists());
 
         //Document
-        result.andDo(document("user/register/emailAlreadyExists",
-            responseBody()
+        result.andDo(document("user/register/emailAlreadyExists"));
+    }
+
+    @Test
+    public void register_invalidEmail_responseWithProperError() throws Exception {
+        //Given
+        Map<String, Object> body = new HashMap<>();
+        body.put("name", "adam.kram");
+        body.put("email", "mark@local");
+        body.put("plainPassword", "adamPswrd");
+
+        //When
+        ResultActions result = mockMvc.perform(
+            post("/register")
+                .content(objectMapper.writeValueAsString(body))
+                .contentType(MediaType.APPLICATION_JSON)
+                .locale(Locale.ENGLISH)
+        );
+
+        //Then
+        result
+            .andExpect(status().isUnprocessableEntity())
+            .andExpect(jsonPath("$.status").value(422))
+            .andExpect(jsonPath("$.message").exists())
+            .andExpect(jsonPath("$.timestamp").exists())
+            .andExpect(jsonPath("$.fieldErrors[*].field").value("email"))
+            .andExpect(jsonPath("$.fieldErrors[*].message").exists());
+
+        //Document
+        result.andDo(document("user/register/invalidEmail"));
+    }
+
+    @Test
+    public void register_tooShortEmail_responseWithProperError() throws Exception {
+        //Given
+        Map<String, Object> body = new HashMap<>();
+        body.put("name", "adam.kram");
+        body.put("email", "m@g.com");
+        body.put("plainPassword", "adamPswrd");
+
+        //When
+        ResultActions result = mockMvc.perform(
+            post("/register")
+                .content(objectMapper.writeValueAsString(body))
+                .contentType(MediaType.APPLICATION_JSON)
+                .locale(Locale.ENGLISH)
+        );
+
+        //Then
+        result
+            .andExpect(status().isUnprocessableEntity())
+            .andExpect(jsonPath("$.status").value(422))
+            .andExpect(jsonPath("$.message").exists())
+            .andExpect(jsonPath("$.timestamp").exists())
+            .andExpect(jsonPath("$.fieldErrors[*].field").value("email"))
+            .andExpect(jsonPath("$.fieldErrors[*].message").exists());
+    }
+
+    @Test
+    public void register_tooLongEmail_responseWithProperError() throws Exception {
+        //Given
+        Map<String, Object> body = new HashMap<>();
+        body.put("name", "adam.kram");
+        body.put("email", "mamamamamamamamamamamamamamamamamamamamamamamamamamamamamamamamamamamamamamamammamamamamamammamamamamamamamammamamamamamammamama@gmail.com");
+        body.put("plainPassword", "adamPswrd");
+
+        //When
+        ResultActions result = mockMvc.perform(
+            post("/register")
+                .content(objectMapper.writeValueAsString(body))
+                .contentType(MediaType.APPLICATION_JSON)
+                .locale(Locale.ENGLISH)
+        );
+
+        //Then
+        result
+            .andExpect(status().isUnprocessableEntity())
+            .andExpect(jsonPath("$.status").value(422))
+            .andExpect(jsonPath("$.message").exists())
+            .andExpect(jsonPath("$.timestamp").exists())
+            .andExpect(jsonPath("$.fieldErrors[*].field").value("email"))
+            .andExpect(jsonPath("$.fieldErrors[*].message").exists());
+    }
+
+    @Test
+    public void register_nameAlreadyExists_responseWithProperError() throws Exception {
+        //Given
+        Map<String, Object> body = new HashMap<>();
+        body.put("name", "mark.kram");
+        body.put("email", "adam@gmail.com");
+        body.put("plainPassword", "adamPswrd");
+
+        //When
+        ResultActions result = mockMvc.perform(
+            post("/register")
+                .content(objectMapper.writeValueAsString(body))
+                .contentType(MediaType.APPLICATION_JSON)
+                .locale(Locale.ENGLISH)
+        );
+
+        //Then
+        result
+            .andExpect(status().isConflict())
+            .andExpect(jsonPath("$.status").value(409))
+            .andExpect(jsonPath("$.message").exists())
+            .andExpect(jsonPath("$.timestamp").exists())
+            .andExpect(jsonPath("$.fieldErrors[*].field").value("name"))
+            .andExpect(jsonPath("$.fieldErrors[*].message").exists());
+
+        //Document
+        result.andDo(document("user/register/nameAlreadyExists"));
+    }
+
+    @Test
+    public void register_invalidName_responseWithProperError() throws Exception {
+        //Given
+        Map<String, Object> body = new HashMap<>();
+        body.put("name", "Adam Kram");
+        body.put("email", "adam@gmail.com");
+        body.put("plainPassword", "adamPswrd");
+
+        //When
+        ResultActions result = mockMvc.perform(
+            post("/register")
+                .content(objectMapper.writeValueAsString(body))
+                .contentType(MediaType.APPLICATION_JSON)
+                .locale(Locale.ENGLISH)
+        );
+
+        //Then
+        result
+            .andExpect(status().isUnprocessableEntity())
+            .andExpect(jsonPath("$.status").value(422))
+            .andExpect(jsonPath("$.message").exists())
+            .andExpect(jsonPath("$.timestamp").exists())
+            .andExpect(jsonPath("$.fieldErrors[*].field").value("name"))
+            .andExpect(jsonPath("$.fieldErrors[*].message").exists());
+
+        //Document
+        result.andDo(document("user/register/invalidName"));
+    }
+
+    @Test
+    public void register_tooShortName_responseWithProperError() throws Exception {
+        //Given
+        Map<String, Object> body = new HashMap<>();
+        body.put("name", "ad");
+        body.put("email", "adam@gmail.com");
+        body.put("plainPassword", "adamPswrd");
+
+        //When
+        ResultActions result = mockMvc.perform(
+            post("/register")
+                .content(objectMapper.writeValueAsString(body))
+                .contentType(MediaType.APPLICATION_JSON)
+                .locale(Locale.ENGLISH)
+        );
+
+        //Then
+        result
+            .andExpect(status().isUnprocessableEntity())
+            .andExpect(jsonPath("$.status").value(422))
+            .andExpect(jsonPath("$.message").exists())
+            .andExpect(jsonPath("$.timestamp").exists())
+            .andExpect(jsonPath("$.fieldErrors[*].field").value("name"))
+            .andExpect(jsonPath("$.fieldErrors[*].message").exists());
+    }
+
+    @Test
+    public void register_tooLongName_responseWithProperError() throws Exception {
+        //Given
+        Map<String, Object> body = new HashMap<>();
+        body.put("name", "adamadamadamadamadamadamadamadamadam");
+        body.put("email", "adam@gmail.com");
+        body.put("plainPassword", "adamPswrd");
+
+        //When
+        ResultActions result = mockMvc.perform(
+            post("/register")
+                .content(objectMapper.writeValueAsString(body))
+                .contentType(MediaType.APPLICATION_JSON)
+                .locale(Locale.ENGLISH)
+        );
+
+        //Then
+        result
+            .andExpect(status().isUnprocessableEntity())
+            .andExpect(jsonPath("$.status").value(422))
+            .andExpect(jsonPath("$.message").exists())
+            .andExpect(jsonPath("$.timestamp").exists())
+            .andExpect(jsonPath("$.fieldErrors[*].field").value("name"))
+            .andExpect(jsonPath("$.fieldErrors[*].message").exists());
+    }
+
+    @Test
+    public void register_invalidPassword_responseWithProperError() throws Exception {
+        //Given
+        Map<String, Object> body = new HashMap<>();
+        body.put("name", "adam.kram");
+        body.put("email", "adam@gmail.com");
+        body.put("plainPassword", "super strong password");
+
+        //When
+        ResultActions result = mockMvc.perform(
+            post("/register")
+                .content(objectMapper.writeValueAsString(body))
+                .contentType(MediaType.APPLICATION_JSON)
+                .locale(Locale.ENGLISH)
+        );
+
+        //Then
+        result
+            .andExpect(status().isUnprocessableEntity())
+            .andExpect(jsonPath("$.status").value(422))
+            .andExpect(jsonPath("$.message").exists())
+            .andExpect(jsonPath("$.timestamp").exists())
+            .andExpect(jsonPath("$.fieldErrors[*].field").value("plainPassword"))
+            .andExpect(jsonPath("$.fieldErrors[*].message").exists());
+
+        //Document
+        result.andDo(document("user/register/invalidPassword"));
+    }
+
+    @Test
+    public void register_tooShortPassword_responseWithProperError() throws Exception {
+        //Given
+        Map<String, Object> body = new HashMap<>();
+        body.put("name", "adam.kram");
+        body.put("email", "adam@gmail.com");
+        body.put("plainPassword", "123");
+
+        //When
+        ResultActions result = mockMvc.perform(
+            post("/register")
+                .content(objectMapper.writeValueAsString(body))
+                .contentType(MediaType.APPLICATION_JSON)
+                .locale(Locale.ENGLISH)
+        );
+
+        //Then
+        result
+            .andExpect(status().isUnprocessableEntity())
+            .andExpect(jsonPath("$.status").value(422))
+            .andExpect(jsonPath("$.message").exists())
+            .andExpect(jsonPath("$.timestamp").exists())
+            .andExpect(jsonPath("$.fieldErrors[*].field").value("plainPassword"))
+            .andExpect(jsonPath("$.fieldErrors[*].message").exists());
+    }
+
+    @Test
+    public void register_tooLongPassword_responseWithProperError() throws Exception {
+        //Given
+        Map<String, Object> body = new HashMap<>();
+        body.put("name", "adam.kram");
+        body.put("email", "adam@gmail.com");
+        body.put("plainPassword", "adamadamadamadamadamadamadamadamadam");
+
+        //When
+        ResultActions result = mockMvc.perform(
+            post("/register")
+                .content(objectMapper.writeValueAsString(body))
+                .contentType(MediaType.APPLICATION_JSON)
+                .locale(Locale.ENGLISH)
+        );
+
+        //Then
+        result
+            .andExpect(status().isUnprocessableEntity())
+            .andExpect(jsonPath("$.status").value(422))
+            .andExpect(jsonPath("$.message").exists())
+            .andExpect(jsonPath("$.timestamp").exists())
+            .andExpect(jsonPath("$.fieldErrors[*].field").value("plainPassword"))
+            .andExpect(jsonPath("$.fieldErrors[*].message").exists());
+    }
+
+    @Test
+    public void register_validData_responseWithCreatedUser() throws Exception {
+        //Given
+        Map<String, Object> body = new HashMap<>();
+        body.put("name", "adam.kram");
+        body.put("email", "adam@gmail.com");
+        body.put("plainPassword", "adamPswrd");
+
+        //When
+        ResultActions result = mockMvc.perform(
+            post("/register")
+                .content(objectMapper.writeValueAsString(body))
+                .contentType(MediaType.APPLICATION_JSON)
+                .locale(Locale.ENGLISH)
+        );
+
+        //Then
+        result
+            .andExpect(status().isAccepted())
+            .andExpect(jsonPath("$.id").exists())
+            .andExpect(jsonPath("$.name").value("adam.kram"))
+            .andExpect(jsonPath("$.email").value("adam@gmail.com"))
+            .andExpect(jsonPath("$.enabled").value(false))
+            .andExpect(jsonPath("$._links.df:confirmRegistration").exists())
+            .andExpect(jsonPath("$._links.df:resendRegistrationToken").exists());
+
+        //Document
+        result.andDo(document(
+            "user/register/success",
+            requestFields(
+                fieldWithPath("name").description(
+                    "Name that will identify the user on public posts, comments, etc. " +
+                        "Must be unique and contain only non-whitespace, from 3 to 32 chars."
+                ),
+                fieldWithPath("email").description(
+                    "E-mail address that will be used to contact with account's owner in case of confirm registration, reset password, etc. " +
+                        "Must be unique and contain from 3 to 128 chars."
+                ),
+                fieldWithPath("plainPassword").description(
+                    "Password used to get access to the account. " +
+                        "Must contain from 5 to 32 chars."
+                )
+            ),
+            responseFields(
+                fieldWithPath("id").description("Id of newly created user"),
+                fieldWithPath("name").description("Name of newly created user"),
+                fieldWithPath("email").description("Email of newly created user"),
+                fieldWithPath("enabled").description("Boolean that signs if user is enabled (generally via e-mail confirmation)"),
+                linksFieldDescriptor()
+            ),
+            links(
+                curiesLinkDescriptor(),
+                linkWithRel("df:confirmRegistration").description("Link where you can confirm your registration"),
+                linkWithRel("df:resendRegistrationToken").description("Link where you can resend token to your e-mail address")
+            )
         ));
     }
-
-    @Test
-    public void register_invalidEmail_responseWithProperError() {
-        //TODO
-    }
-
-    @Test
-    public void register_tooShortEmail_responseWithProperError() {
-        //TODO
-    }
-
-    @Test
-    public void register_tooLongEmail_responseWithProperError() {
-        //TODO
-    }
-
-    @Test
-    public void register_nameAlreadyExists_responseWithProperError() {
-        //TODO
-    }
-
-    @Test
-    public void register_invalidName_responseWithProperError() {
-        //TODO
-    }
-
-    @Test
-    public void register_tooShortName_responseWithProperError() {
-        //TODO
-    }
-
-    @Test
-    public void register_tooLongName_responseWithProperError() {
-        //TODO
-    }
-
-    @Test
-    public void register_tooShortPassword_responseWithProperError() {
-        //TODO
-    }
-
-    @Test
-    public void register_tooLongPassword_responseWithProperError() {
-        //TODO
-    }
-
-    @Test
-    public void register_validData_responseWithCreatedUser() {
-        //TODO
-    }
-
-    /// CASES WHILE REGISTRATION ////
-    /*
-
-    @Test
-    public void validate_emailAlreadyExists_resultHasExistsFieldError() {
-//        //Given
-//        UserRegisterModel model = getUserRegisterModel("Hector", "existing@mail.com", "validPassword");
-//        UserRepository repository = getUserRepository();
-//        BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(model, "userRegisterModel");
-//        UserRegisterValidator validator = new UserRegisterValidator(repository);
-//
-//        //When
-//        validator.validate(model, bindingResult);
-//
-//        //Then
-//        FieldError error = bindingResult.getFieldError("email");
-//        assertNotNull(error);
-//        assertEquals(error.getCode(), "exists");
-    }
-
-    @Test
-    public void validate_notEmail_throwInvalidEmailException() {
-        //TODO
-    }
-
-    @Test
-    public void validate_tooShortEmail_throwInvalidEmailException() {
-        //TODO
-    }
-
-    @Test
-    public void validate_tooLongEmail_throwInvalidEmailException() {
-        //TODO
-    }
-
-    @Test
-    public void validate_nameAlreadyExists_throwNameAlreadyExistsException() {
-        //TODO
-    }
-
-    @Test
-    public void validate_tooShortName_throwInvalidNameException() {
-        //TODO
-    }
-
-    @Test
-    public void validate_tooLongName_throwInvalidNameException() {
-        //TODO
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = { "1", "12", "12 ", " 12", " ab  "})
-    public void validate_tooShortPassword_throwInvalidPasswordException(String shortPassword) {
-        //TODO
-    }
-
-    @Test
-    public void validate_tooLongPassword_throwException() {
-        //TODO
-    }
-
-    @Test
-    public void validate_fullyCorrectModel_noException() {
-        //TODO
-    }
-
-    private static UserRegisterModel getUserRegisterModel(String name, String email, String plainPassword) {
-        UserRegisterModel model = new UserRegisterModel();
-        model.setName(name);
-        model.setEmail(email);
-        model.setPlainPassword(plainPassword);
-        return model;
-    }
-
-    private static UserRepository getUserRepository() {
-        UserRepository repository = Mockito.mock(UserRepository.class);
-        Mockito.when(repository.findByEmail(Mockito.anyString())).thenAnswer(inv -> {
-            if (inv.getArgument(0).equals("existing@mail.com")) {
-                return Optional.of(new User());
-            }
-
-            return Optional.empty();
-        });
-        Mockito.when(repository.findByName(Mockito.anyString())).thenAnswer(inv -> {
-            if (inv.getArgument(0).equals("existingName")) {
-                return Optional.of(new User());
-            }
-
-            return Optional.empty();
-        });
-        return repository;
-    }
-     */
 }

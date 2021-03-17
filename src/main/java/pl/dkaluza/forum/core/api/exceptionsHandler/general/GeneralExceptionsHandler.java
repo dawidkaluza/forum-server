@@ -1,6 +1,7 @@
 package pl.dkaluza.forum.core.api.exceptionsHandler.general;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +23,12 @@ import java.util.List;
 
 @RestControllerAdvice
 public class GeneralExceptionsHandler extends ResponseEntityExceptionHandler implements ExceptionsHandler {
+    private final MessageSource messageSource;
     private final LocaleFieldErrorMapper localeFieldErrorMapper;
 
     @Autowired
-    public GeneralExceptionsHandler(LocaleFieldErrorMapper localeFieldErrorMapper) {
+    public GeneralExceptionsHandler(MessageSource messageSource, LocaleFieldErrorMapper localeFieldErrorMapper) {
+        this.messageSource = messageSource;
         this.localeFieldErrorMapper = localeFieldErrorMapper;
     }
 
@@ -33,7 +36,7 @@ public class GeneralExceptionsHandler extends ResponseEntityExceptionHandler imp
     @NonNull
     protected ResponseEntity<Object> handleMethodArgumentNotValid(@NonNull MethodArgumentNotValidException ex, @NonNull HttpHeaders headers, @NonNull HttpStatus status, @NonNull WebRequest request) {
         List<LocaleFieldError> localeErrors = localeFieldErrorMapper.map(ex.getFieldErrors(), request.getLocale());
-        return new ResponseFieldsError(HttpStatus.UNPROCESSABLE_ENTITY, "Invalid params")
+        return new ResponseFieldsError(HttpStatus.UNPROCESSABLE_ENTITY, messageSource.getMessage("invalidParams", null, request.getLocale()))
             .addAll(localeErrors)
             .toResponseEntity();
     }

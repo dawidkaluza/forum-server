@@ -29,7 +29,7 @@ This API tries to follow standard REST conventions as much as possible and below
 [[status_codes]]
 == Status codes
 
-Obviously, depending on the result of a given request, client will get a proper status code in a response. There are a lot of status codes, so here you can check only general usage of them. More specific details are in requests.
+Obviously, depending on the result of a given request, client will get a proper status code in a response. There are a lot of status codes, so here you can check only general usage of them. More specific details are described in requests.
 
 |===
 |Code range |Description
@@ -72,7 +72,7 @@ You can use `Accept-Language` header to specify language that you prefer. Unfort
 Responses produced by this api are formatted in HAL format. Links to resources can be found in `_links` object which can exist in a response. More about given format can be found https://github.com/mikekelly/hal_specification/blob/master/hal_specification.md[here].
 
 [[getting_started]]
-== Getting started with API
+== Getting started
 
-If you're ready, go to the following link: xxx
+If you're ready, go to the following link: link:modules/index.html[index]
 
