@@ -36,7 +36,7 @@ public class GeneralExceptionsHandler extends ResponseEntityExceptionHandler imp
     @NonNull
     protected ResponseEntity<Object> handleMethodArgumentNotValid(@NonNull MethodArgumentNotValidException ex, @NonNull HttpHeaders headers, @NonNull HttpStatus status, @NonNull WebRequest request) {
         List<LocaleFieldError> localeErrors = localeFieldErrorMapper.map(ex.getFieldErrors(), request.getLocale());
-        return new ResponseFieldsError(HttpStatus.UNPROCESSABLE_ENTITY, messageSource.getMessage("invalidParams", null, request.getLocale()))
+        return new ResponseFieldsError(HttpStatus.UNPROCESSABLE_ENTITY, messageSource.getMessage("invalidFields", null, request.getLocale()))
             .addAll(localeErrors)
             .toResponseEntity();
     }

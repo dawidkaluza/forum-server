@@ -34,7 +34,7 @@ public class UserExceptionsHandler implements ExceptionsHandler {
 
     @ExceptionHandler(NameAlreadyExistsException.class)
     public ResponseEntity<?> nameAlreadyExistsExceptionHandler(WebRequest request) {
-        return new ResponseFieldsError(HttpStatus.CONFLICT, messageSource.getMessage("invalidParams", null, request.getLocale()))
+        return new ResponseFieldsError(HttpStatus.CONFLICT, messageSource.getMessage("invalidFields", null, request.getLocale()))
             .add(localeFieldErrorMapper.map(
                 "name", "user.register.nameAlreadyExists", request.getLocale()
             )).toResponseEntity();
@@ -42,7 +42,7 @@ public class UserExceptionsHandler implements ExceptionsHandler {
 
     @ExceptionHandler(EmailAlreadyExistsException.class)
     public ResponseEntity<?> emailAlreadyExistsExceptionHandler(WebRequest request) {
-        return new ResponseFieldsError(HttpStatus.CONFLICT, messageSource.getMessage("invalidParams", null, request.getLocale()))
+        return new ResponseFieldsError(HttpStatus.CONFLICT, messageSource.getMessage("invalidFields", null, request.getLocale()))
             .add(localeFieldErrorMapper.map(
                 "email", "user.register.emailAlreadyExists", request.getLocale()
             )).toResponseEntity();

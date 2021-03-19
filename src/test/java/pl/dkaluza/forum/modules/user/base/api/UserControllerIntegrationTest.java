@@ -31,19 +31,18 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static pl.dkaluza.forum.core.restdocs.LinksUtils.curiesLinkDescriptor;
-import static pl.dkaluza.forum.core.restdocs.LinksUtils.linksFieldDescriptor;
+import static pl.dkaluza.forum.core.restdocs.LinksUtils.*;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
-public class UserControllerTest {
+public class UserControllerIntegrationTest {
     private final ObjectMapper objectMapper;
     private final UserService userService;
     private MockMvc mockMvc;
 
     @Autowired
-    public UserControllerTest(ObjectMapper objectMapper, UserService userService) {
+    public UserControllerIntegrationTest(ObjectMapper objectMapper, UserService userService) {
         this.objectMapper = objectMapper;
         this.userService = userService;
     }
@@ -123,32 +122,6 @@ public class UserControllerTest {
 
         //Document
         result.andDo(document("user/register/invalidEmail"));
-    }
-
-    @Test
-    public void register_tooShortEmail_responseWithProperError() throws Exception {
-        //Given
-        Map<String, Object> body = new HashMap<>();
-        body.put("name", "adam.kram");
-        body.put("email", "m@g.com");
-        body.put("plainPassword", "adamPswrd");
-
-        //When
-        ResultActions result = mockMvc.perform(
-            post("/register")
-                .content(objectMapper.writeValueAsString(body))
-                .contentType(MediaType.APPLICATION_JSON)
-                .locale(Locale.ENGLISH)
-        );
-
-        //Then
-        result
-            .andExpect(status().isUnprocessableEntity())
-            .andExpect(jsonPath("$.status").value(422))
-            .andExpect(jsonPath("$.message").exists())
-            .andExpect(jsonPath("$.timestamp").exists())
-            .andExpect(jsonPath("$.fieldErrors[*].field").value("email"))
-            .andExpect(jsonPath("$.fieldErrors[*].message").exists());
     }
 
     @Test
@@ -420,8 +393,8 @@ public class UserControllerTest {
             ),
             links(
                 curiesLinkDescriptor(),
-                linkWithRel("df:confirmRegistration").description("Link where you can confirm your registration"),
-                linkWithRel("df:resendRegistrationToken").description("Link where you can resend token to your e-mail address")
+                linkWithRel("df:confirmRegistration").description("Link where you can confirm your registration").attributes(docsAttribute("confirmRegistration.html")),
+                linkWithRel("df:resendRegistrationToken").description("Link where you can resend token to your e-mail address").attributes(docsAttribute("resendRegistrationToken.html"))
             )
         ));
     }

@@ -4,9 +4,6 @@
 {{#links}}
 |{{#tableCellContent}}`+{{rel}}+`{{/tableCellContent}}
 |{{#tableCellContent}}{{description}}{{/tableCellContent}}
-|{{#tableCellContent}}
-    {{#docs}}link:{{.}}[Link]{{/docs}}
-    {{^docs}}None{{/docs}}
-{{/tableCellContent}}
+|{{#tableCellContent}}{{#docs}}link:{{.}}[Link]{{/docs}}{{^docs}}None{{/docs}}{{/tableCellContent}}
 {{/links}}
 |===
