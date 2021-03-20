@@ -67,7 +67,7 @@ public class ConfirmRegistrationMailSender {
                 "To confirm your registration, just click here: http://localhost:8080/user/"
                     + userId
                     + "/confirmRegistration/"
-                    + token
+                    + token.getToken()
             );
             mailSender.send(message);
         });
