@@ -1,17 +1,21 @@
 package pl.dkaluza.forum.modules.user.confirmRegistration.models.confirm;
 
-import org.springframework.hateoas.server.core.Relation;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
-@Relation(itemRelation = "confirm")
 public class ConfirmModel {
-    private long id;
+    @NotNull(message = "emptyField")
+    private Long id;
+
+    @NotNull(message = "emptyField")
+    @NotEmpty(message = "emptyField")
     private String token;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
