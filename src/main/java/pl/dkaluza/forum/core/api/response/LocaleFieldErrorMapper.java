@@ -22,7 +22,7 @@ public class LocaleFieldErrorMapper {
     public LocaleFieldError map(String field, String code, Locale locale) {
         return new LocaleFieldError(
             field,
-            messageSource.getMessage(code, null, locale)
+            messageSource.getMessage(code, null, "Message not found", locale)
         );
     }
 
