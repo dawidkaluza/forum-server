@@ -15,7 +15,7 @@ public class ConfirmRegistrationPropertiesSupplier {
         this.environment = environment;
     }
 
-    public Duration tokenExpiration() {
+    public Duration getTokenExpiration() {
         return Duration.ofHours(
             environment.getProperty("user.confirm-registration.token.expiration-hours", Integer.class, 24)
         );
@@ -25,7 +25,7 @@ public class ConfirmRegistrationPropertiesSupplier {
         return environment.getProperty("user.confirm-registration.resend-token.max-tries", Integer.class, 5);
     }
 
-    public Duration tryExpiration() {
+    public Duration getTryExpiration() {
         return Duration.ofMinutes(
             environment.getProperty("user.confirm-registration.resend-token.try-expiration-minutes", Integer.class, 60)
         );

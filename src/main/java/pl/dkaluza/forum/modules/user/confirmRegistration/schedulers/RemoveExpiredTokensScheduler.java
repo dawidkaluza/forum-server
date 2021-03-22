@@ -23,7 +23,7 @@ public class RemoveExpiredTokensScheduler {
     @Transactional
     @Scheduled(fixedDelay = 24 * 60 * 60 * 1000)
     public void removeExpiredTokens() {
-        LocalDateTime time = LocalDateTime.now().minus(propertiesSupplier.tokenExpiration());
+        LocalDateTime time = LocalDateTime.now().minus(propertiesSupplier.getTokenExpiration());
         confirmRegistrationTokenRepository.deleteAllByExpiresAtBefore(time);
     }
 }

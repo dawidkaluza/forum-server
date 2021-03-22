@@ -43,14 +43,14 @@ public class ConfirmRegistrationServiceImpl implements ConfirmRegistrationServic
         long id = model.getId();
         ConfirmRegistrationToken token = confirmRegistrationTokenRepository
             .findById(id)
-            .orElseThrow(() -> new TokenNotFoundException(id));
+            .orElseThrow(() -> TokenNotFoundException.of(id));
 
         if (token.getExpiresAt().isBefore(LocalDateTime.now())) {
-            throw new TokenExpiredException();
+            throw new TokenExpiredException("Requested token expired");
         }
 
         if (!token.getToken().equals(model.getToken())) {
-            throw new InvalidTokenException();
+            throw new InvalidTokenException("Requested token is invalid");
         }
 
         confirmRegistrationTokenRepository.delete(token);
@@ -70,15 +70,15 @@ public class ConfirmRegistrationServiceImpl implements ConfirmRegistrationServic
 
         long id = user.getId();
         if (!confirmRegistrationTokenRepository.existsById(id)) {
-            throw new TokenNotFoundException(id);
+            throw TokenNotFoundException.of(id);
         }
 
-        LocalDateTime expiresAt = LocalDateTime.now().minus(propertiesSupplier.tryExpiration());
+        LocalDateTime expiresAt = LocalDateTime.now().minus(propertiesSupplier.getTryExpiration());
         int triesNum = confirmRegistrationMailRepository.countAllByReceiverEmailAndSentAtAfter(email, expiresAt);
         if (triesNum >= propertiesSupplier.getMaxTries()) {
-            throw new TooManyTokenResendsException("Resends limit has been reached");
+            throw new TooManyTokenResendsException("Resends limit for requested email has been reached");
         }
 
-        mailSender.sendMail(user.getId());
+        mailSender.sendMail(id);
     }
 }

@@ -41,11 +41,11 @@ public class ConfirmRegistrationMailSender {
     public void sendMail(long userId) {
         User user = userRepository
             .findById(userId)
-            .orElseThrow(() -> new UserNotFoundException(userId));
+            .orElseThrow(() -> UserNotFoundException.of(userId));
 
         ConfirmRegistrationToken token = tokenRepository
             .findById(userId)
-            .orElseThrow(() -> new TokenNotFoundException(userId));
+            .orElseThrow(() -> TokenNotFoundException.of(userId));
 
         String email = user.getEmail();
         ConfirmRegistrationMailReceiver receiver = receiverRepository.findByEmail(email).orElseGet(() -> {
@@ -59,17 +59,21 @@ public class ConfirmRegistrationMailSender {
         mailRepository.save(mail);
 
         mailSenderExecutor.execute(() -> {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom("Forum");
-            message.setTo(user.getName() + " <" + email + ">");
-            message.setSubject("Confirm your registration");
-            message.setText(
-                "To confirm your registration, just click here: http://localhost:8080/user/"
-                    + userId
-                    + "/confirmRegistration/"
-                    + token.getToken()
-            );
-            mailSender.send(message);
+            try {
+                SimpleMailMessage message = new SimpleMailMessage();
+                message.setFrom("Forum");
+                message.setTo(user.getName() + " <" + email + ">");
+                message.setSubject("Confirm your registration");
+                message.setText(
+                    "To confirm your registration, just click here: http://localhost:8080/user/"
+                        + userId
+                        + "/confirmRegistration/"
+                        + token.getToken()
+                );
+                mailSender.send(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
     }
 }
