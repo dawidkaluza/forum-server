@@ -1,5 +1,5 @@
 = Discussion forum - API documentation
-Dawid Kałuża <daw.kaluza@gmail.com>
+Dawid Kałuża
 :doctype: book
 :toc: left
 :toc-title: Navigation
