@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import pl.dkaluza.forum.modules.index.models.IndexModel;
 
 @Service
-public class IndexServiceImpl implements IndexService {
+class IndexServiceImpl implements IndexService {
     @Override
     public IndexModel getIndex() {
         IndexModel model = new IndexModel();
