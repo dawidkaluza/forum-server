@@ -43,13 +43,13 @@ public class OnUserRegisterListener {
             long userId = event.getUserId();
             User user = userRepository
                 .findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
+                .orElseThrow(() -> UserNotFoundException.of(userId));
             token.setUser(user);
 
             String generatedToken = UUID.randomUUID().toString();
             token.setToken(generatedToken);
 
-            token.setExpiresAt(LocalDateTime.now().plus(propertiesSupplier.tokenExpiration()));
+            token.setExpiresAt(LocalDateTime.now().plus(propertiesSupplier.getTokenExpiration()));
             confirmRegistrationTokenRepository.save(token);
 
             mailSender.sendMail(userId);
