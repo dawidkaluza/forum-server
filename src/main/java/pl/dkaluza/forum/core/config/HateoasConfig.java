@@ -12,6 +12,6 @@ import org.springframework.hateoas.mediatype.hal.DefaultCurieProvider;
 public class HateoasConfig {
     @Bean
     public CurieProvider curieProvider() {
-        return new DefaultCurieProvider("df", UriTemplate.of("/docs/{rel}"));
+        return new DefaultCurieProvider("df", UriTemplate.of("/docs/{rel}.html"));
     }
 }
