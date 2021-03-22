@@ -9,15 +9,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
-import org.springframework.restdocs.operation.preprocess.Preprocessors;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import pl.dkaluza.forum.modules.user.base.models.register.UserRegisterModel;
-import pl.dkaluza.forum.modules.user.base.services.UserService;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -28,7 +26,7 @@ import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.li
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,13 +37,11 @@ import static pl.dkaluza.forum.core.restdocs.LinksUtils.*;
 @ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
 public class UserControllerIntegrationTest {
     private final ObjectMapper objectMapper;
-    private final UserService userService;
     private MockMvc mockMvc;
 
     @Autowired
-    public UserControllerIntegrationTest(ObjectMapper objectMapper, UserService userService) {
+    public UserControllerIntegrationTest(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
-        this.userService = userService;
     }
 
     @BeforeEach
@@ -59,15 +55,10 @@ public class UserControllerIntegrationTest {
                     .withResponseDefaults(prettyPrint())
             )
             .build();
-
-        UserRegisterModel model = new UserRegisterModel();
-        model.setEmail("mark@gmail.com");
-        model.setName("mark.kram");
-        model.setPlainPassword("veryHardPassword");
-        userService.register(model);
     }
 
     @Test
+    @Sql("valid-data.sql")
     public void register_emailAlreadyExists_responseWithProperError() throws Exception {
         //Given
         Map<String, Object> body = new HashMap<>();
@@ -88,15 +79,14 @@ public class UserControllerIntegrationTest {
             .andExpect(status().isConflict())
             .andExpect(jsonPath("$.status").value(409))
             .andExpect(jsonPath("$.message").exists())
-            .andExpect(jsonPath("$.timestamp").exists())
-            .andExpect(jsonPath("$.fieldErrors[*].field").value("email"))
-            .andExpect(jsonPath("$.fieldErrors[*].message").exists());
+            .andExpect(jsonPath("$.timestamp").exists());
 
         //Document
         result.andDo(document("user/register/emailAlreadyExists"));
     }
 
     @Test
+    @Sql("valid-data.sql")
     public void register_invalidEmail_responseWithProperError() throws Exception {
         //Given
         Map<String, Object> body = new HashMap<>();
@@ -126,6 +116,7 @@ public class UserControllerIntegrationTest {
     }
 
     @Test
+    @Sql("valid-data.sql")
     public void register_tooLongEmail_responseWithProperError() throws Exception {
         //Given
         Map<String, Object> body = new HashMap<>();
@@ -152,6 +143,7 @@ public class UserControllerIntegrationTest {
     }
 
     @Test
+    @Sql("valid-data.sql")
     public void register_nameAlreadyExists_responseWithProperError() throws Exception {
         //Given
         Map<String, Object> body = new HashMap<>();
@@ -172,15 +164,14 @@ public class UserControllerIntegrationTest {
             .andExpect(status().isConflict())
             .andExpect(jsonPath("$.status").value(409))
             .andExpect(jsonPath("$.message").exists())
-            .andExpect(jsonPath("$.timestamp").exists())
-            .andExpect(jsonPath("$.fieldErrors[*].field").value("name"))
-            .andExpect(jsonPath("$.fieldErrors[*].message").exists());
+            .andExpect(jsonPath("$.timestamp").exists());
 
         //Document
         result.andDo(document("user/register/nameAlreadyExists"));
     }
 
     @Test
+    @Sql("valid-data.sql")
     public void register_invalidName_responseWithProperError() throws Exception {
         //Given
         Map<String, Object> body = new HashMap<>();
@@ -210,6 +201,7 @@ public class UserControllerIntegrationTest {
     }
 
     @Test
+    @Sql("valid-data.sql")
     public void register_tooShortName_responseWithProperError() throws Exception {
         //Given
         Map<String, Object> body = new HashMap<>();
@@ -236,6 +228,7 @@ public class UserControllerIntegrationTest {
     }
 
     @Test
+    @Sql("valid-data.sql")
     public void register_tooLongName_responseWithProperError() throws Exception {
         //Given
         Map<String, Object> body = new HashMap<>();
@@ -262,6 +255,7 @@ public class UserControllerIntegrationTest {
     }
 
     @Test
+    @Sql("valid-data.sql")
     public void register_invalidPassword_responseWithProperError() throws Exception {
         //Given
         Map<String, Object> body = new HashMap<>();
@@ -291,6 +285,7 @@ public class UserControllerIntegrationTest {
     }
 
     @Test
+    @Sql("valid-data.sql")
     public void register_tooShortPassword_responseWithProperError() throws Exception {
         //Given
         Map<String, Object> body = new HashMap<>();
@@ -317,6 +312,7 @@ public class UserControllerIntegrationTest {
     }
 
     @Test
+    @Sql("valid-data.sql")
     public void register_tooLongPassword_responseWithProperError() throws Exception {
         //Given
         Map<String, Object> body = new HashMap<>();
@@ -343,6 +339,7 @@ public class UserControllerIntegrationTest {
     }
 
     @Test
+    @Sql("valid-data.sql")
     public void register_validData_responseWithCreatedUser() throws Exception {
         //Given
         Map<String, Object> body = new HashMap<>();
