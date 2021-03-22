@@ -1,19 +1,17 @@
 package pl.dkaluza.forum.modules.user.base.exceptions;
 
-import pl.dkaluza.forum.core.exceptions.entity.EntityNotFoundException;
-
-public class UserNotFoundException extends EntityNotFoundException {
+public class UserNotFoundException extends UserException {
     private static final long serialVersionUID = -8530426275711530505L;
 
-    public UserNotFoundException(Long id) {
-        super("Can't find user with id=" + id);
+    public UserNotFoundException(String message) {
+        super(message);
     }
 
-    public UserNotFoundException(String reason) {
-        super(reason);
+    public UserNotFoundException(String message, Throwable throwable) {
+        super(message, throwable);
     }
 
-    public UserNotFoundException(String reason, Throwable throwable) {
-        super(reason, throwable);
+    public static UserNotFoundException of(Long id) {
+        return new UserNotFoundException("Can't find user with id=" + id);
     }
 }

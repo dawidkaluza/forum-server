@@ -1,51 +1,50 @@
 package pl.dkaluza.forum.modules.user.base.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import pl.dkaluza.forum.core.api.exceptionsHandler.ExceptionsHandler;
-import pl.dkaluza.forum.core.api.response.LocaleFieldErrorMapper;
-import pl.dkaluza.forum.core.api.response.ResponseFieldsError;
+import pl.dkaluza.forum.core.api.response.RequestErrorCreator;
 import pl.dkaluza.forum.modules.user.base.exceptions.EmailAlreadyExistsException;
 import pl.dkaluza.forum.modules.user.base.exceptions.NameAlreadyExistsException;
 import pl.dkaluza.forum.modules.user.base.exceptions.UserNotFoundException;
 
-@RestControllerAdvice(assignableTypes = UserController.class)
+@RestControllerAdvice
 public class UserExceptionsHandler implements ExceptionsHandler {
-    private final MessageSource messageSource;
-    private final LocaleFieldErrorMapper localeFieldErrorMapper;
+    private final RequestErrorCreator requestErrorCreator;
 
     @Autowired
-    public UserExceptionsHandler(MessageSource messageSource, LocaleFieldErrorMapper localeFieldErrorMapper) {
-        this.messageSource = messageSource;
-        this.localeFieldErrorMapper = localeFieldErrorMapper;
+    public UserExceptionsHandler(RequestErrorCreator requestErrorCreator) {
+        this.requestErrorCreator = requestErrorCreator;
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<?> userNotFoundExceptionHandler(WebRequest request) {
-        return new ResponseFieldsError(HttpStatus.CONFLICT, messageSource.getMessage("invalidFields", null, "Invalid fields", request.getLocale()))
-            .add(localeFieldErrorMapper.map(
-                "name", "user.notFound", request.getLocale()
-            )).toResponseEntity();
+        return requestErrorCreator.builder()
+            .withStatus(HttpStatus.NOT_FOUND)
+            .withMessage(request.getLocale(), "user.notFound", "User not found")
+            .withTimestampAsNow()
+            .build();
     }
 
     @ExceptionHandler(NameAlreadyExistsException.class)
     public ResponseEntity<?> nameAlreadyExistsExceptionHandler(WebRequest request) {
-        return new ResponseFieldsError(HttpStatus.CONFLICT, messageSource.getMessage("invalidFields", null, "Invalid fields", request.getLocale()))
-            .add(localeFieldErrorMapper.map(
-                "name", "user.register.nameAlreadyExists", request.getLocale()
-            )).toResponseEntity();
+        return requestErrorCreator.builder()
+            .withStatus(HttpStatus.CONFLICT)
+            .withMessage(request.getLocale(), "user.nameAlreadyExists", "Name already exists")
+            .withTimestampAsNow()
+            .build();
     }
 
     @ExceptionHandler(EmailAlreadyExistsException.class)
     public ResponseEntity<?> emailAlreadyExistsExceptionHandler(WebRequest request) {
-        return new ResponseFieldsError(HttpStatus.CONFLICT, messageSource.getMessage("invalidFields", null, "Invalid fields", request.getLocale()))
-            .add(localeFieldErrorMapper.map(
-                "email", "user.register.emailAlreadyExists", request.getLocale()
-            )).toResponseEntity();
+        return requestErrorCreator.builder()
+            .withStatus(HttpStatus.CONFLICT)
+            .withMessage(request.getLocale(), "user.emailAlreadyExists", "Email already exists")
+            .withTimestampAsNow()
+            .build();
     }
 }

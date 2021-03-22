@@ -1,6 +1,6 @@
 package pl.dkaluza.forum.modules.user.confirmRegistration.exceptions;
 
-public class TooManyTokenResendsException extends RuntimeException {
+public class TooManyTokenResendsException extends ConfirmRegistrationException {
     private static final long serialVersionUID = 591835183423061686L;
 
     public TooManyTokenResendsException(String message) {

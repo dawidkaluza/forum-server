@@ -1,17 +1,17 @@
 package pl.dkaluza.forum.modules.user.base.exceptions;
 
-import pl.dkaluza.forum.core.exceptions.entity.EntityAlreadyExistsException;
-
-public class NameAlreadyExistsException extends EntityAlreadyExistsException {
+public class NameAlreadyExistsException extends UserException {
     private static final long serialVersionUID = 1105974699151403021L;
-    private final String name;
 
-    public NameAlreadyExistsException(String name) {
-        super("Name " + name + " already exists");
-        this.name = name;
+    public NameAlreadyExistsException(String message) {
+        super(message);
     }
 
-    public String getName() {
-        return name;
+    public NameAlreadyExistsException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public static NameAlreadyExistsException of(String name) {
+        return new NameAlreadyExistsException("Can't find user with name=" + name);
     }
 }
