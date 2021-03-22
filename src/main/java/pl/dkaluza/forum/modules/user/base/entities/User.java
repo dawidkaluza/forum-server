@@ -1,6 +1,7 @@
 package pl.dkaluza.forum.modules.user.base.entities;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity(name = "users")
 public class User {
@@ -18,6 +19,8 @@ public class User {
     private String encodedPassword;
 
     private boolean enabled;
+
+    private LocalDateTime createdAt;
 
     public Long getId() {
         return id;
@@ -53,6 +56,14 @@ public class User {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override

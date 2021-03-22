@@ -20,7 +20,7 @@ import pl.dkaluza.forum.modules.user.base.models.register.UserRegisterModel;
 import pl.dkaluza.forum.modules.user.base.repositories.UserRepository;
 
 @Component
-public class UserServiceImpl implements UserService {
+class UserServiceImpl implements UserService {
     private final ApplicationEventPublisher eventPublisher;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public UserModel findById(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        User user = userRepository.findById(id).orElseThrow(() -> UserNotFoundException.of(id));
         return userMapper.toModel(user);
     }
 
@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
         try {
             userRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new UserNotFoundException(id);
+            throw UserNotFoundException.of(id);
         }
 
         eventPublisher.publishEvent(new OnUserDeleteEvent(id));

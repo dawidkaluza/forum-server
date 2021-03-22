@@ -6,14 +6,14 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class UserRegisterModel {
-    @Pattern(regexp = "^[\\S]{3,32}$", message = "{user.register.invalidName}")
+    @Pattern(regexp = "^[\\S]{3,32}$", message = "{user.registration.invalidName}")
     private String name;
 
-    @ExternalEmail(message = "{user.register.invalidEmail}")
-    @Size(max = 128, message = "{user.register.invalidEmail}")
+    @ExternalEmail(message = "{user.registration.invalidEmail}")
+    @Size(max = 128, message = "{user.registration.invalidEmail}")
     private String email;
 
-    @Pattern(regexp = "^[\\S]{5,32}$", message = "{user.register.invalidPassword}")
+    @Pattern(regexp = "^[\\S]{5,32}$", message = "{user.registration.invalidPassword}")
     private String plainPassword;
 
     public String getName() {

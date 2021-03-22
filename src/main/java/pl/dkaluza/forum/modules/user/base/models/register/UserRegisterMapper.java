@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 import pl.dkaluza.forum.core.mappers.ObjectMapper;
 import pl.dkaluza.forum.modules.user.base.entities.User;
 
+import java.time.LocalDateTime;
+
 @Component
 public class UserRegisterMapper implements ObjectMapper<User, UserRegisterModel> {
     private final PasswordEncoder passwordEncoder;
@@ -24,6 +26,7 @@ public class UserRegisterMapper implements ObjectMapper<User, UserRegisterModel>
             passwordEncoder.encode(model.getPlainPassword())
         );
         user.setEnabled(false);
+        user.setCreatedAt(LocalDateTime.now());
         return user;
     }
 }

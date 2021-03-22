@@ -15,9 +15,7 @@ public class UserModelAssembler implements RepresentationModelAssembler<UserMode
     @Override
     @NonNull
     public UserModel toModel(UserModel model) {
-        model.add(
-            buildSelfLink(model)
-        );
+        model.add(buildSelfLink(model));
         return model;
     }
 
