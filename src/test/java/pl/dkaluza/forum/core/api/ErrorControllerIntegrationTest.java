@@ -18,8 +18,9 @@ import java.util.Locale;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -46,9 +47,9 @@ public class ErrorControllerIntegrationTest {
 
         //Then
         result
-            .andExpect(status().isBadRequest())
+            .andExpect(status().isIAmATeapot())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.value()))
+            .andExpect(jsonPath("$.status").value(HttpStatus.I_AM_A_TEAPOT.value()))
             .andExpect(jsonPath("$.message").exists())
             .andExpect(jsonPath("$.timestamp").exists())
             .andExpect(jsonPath("$.fieldErrors[*].field").exists())

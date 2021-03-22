@@ -1,10 +1,10 @@
 package pl.dkaluza.forum.core.api.response;
 
-public class LocaleFieldError {
+public class RequestFieldError {
     private final String field;
     private final String message;
 
-    public LocaleFieldError(String field, String message) {
+    RequestFieldError(String field, String message) {
         this.field = field;
         this.message = message;
     }

@@ -1,20 +1,28 @@
 package pl.dkaluza.forum.core.api;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.dkaluza.forum.core.api.response.LocaleFieldError;
-import pl.dkaluza.forum.core.api.response.ResponseFieldsError;
+import pl.dkaluza.forum.core.api.response.RequestErrorCreator;
 
 @RestController
 public class ErrorController {
+    private final RequestErrorCreator requestErrorCreator;
+
+    @Autowired
+    public ErrorController(RequestErrorCreator requestErrorCreator) {
+        this.requestErrorCreator = requestErrorCreator;
+    }
+
     @GetMapping("/error")
     public ResponseEntity<?> error() {
-        return new ResponseFieldsError(
-            HttpStatus.BAD_REQUEST, "Example response error message"
-        ).add(
-            new LocaleFieldError("some.field", "Some message")
-        ).toResponseEntity();
+        return requestErrorCreator.builder()
+            .withStatus(HttpStatus.I_AM_A_TEAPOT)
+            .withMessage("Example of request error message")
+            .withTimestampAsNow()
+            .withFieldError("some.field", "Some message")
+            .build();
     }
 }
