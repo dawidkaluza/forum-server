@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import pl.dkaluza.forum.modules.user.confirmRegistration.api.ConfirmRegistrationController;
 import pl.dkaluza.forum.modules.user.confirmRegistration.models.confirm.ConfirmModel;
 
+import java.lang.reflect.Method;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -21,6 +23,13 @@ public class ResendTokenModelAssembler implements RepresentationModelAssembler<R
     }
 
     private Link buildConfirmRegistrationLink() {
-        return linkTo(methodOn(ConfirmRegistrationController.class).confirmRegistration(new ConfirmModel())).withRel("confirmRegistration");
+        Method method;
+        try {
+            method = (ConfirmRegistrationController.class).getMethod("confirmRegistration", ConfirmModel.class);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+
+        return linkTo(method, new ConfirmModel()).withRel("confirmRegistration");
     }
 }

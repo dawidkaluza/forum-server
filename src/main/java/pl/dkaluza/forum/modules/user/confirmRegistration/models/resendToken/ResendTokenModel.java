@@ -1,8 +1,5 @@
 package pl.dkaluza.forum.modules.user.confirmRegistration.models.resendToken;
 
-import org.springframework.hateoas.server.core.Relation;
-
-@Relation(itemRelation = "resendToken")
 public class ResendTokenModel {
     private String email;
 
