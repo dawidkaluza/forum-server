@@ -1,4 +1,12 @@
-include::header.adoc[]
+= Discussion forum - API documentation
+Dawid Kałuża <daw.kaluza@gmail.com>
+:doctype: book
+:toc: left
+:toc-title: Navigation
+:icons: font
+:source-highlighter: highlightjs
+:toclevels: 4
+:sectlinks:
 
 [[overview]]
 == Overview
@@ -74,5 +82,5 @@ Responses produced by this api are formatted in HAL format. Links to resources c
 [[getting_started]]
 == Getting started
 
-If you're ready, go to the following link: link:modules/index.html[index]
+If you're ready, go to the following link: link:rels/index.html[index]
 

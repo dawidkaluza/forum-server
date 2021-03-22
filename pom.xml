@@ -110,6 +110,7 @@
                             <backend>html</backend>
                             <doctype>book</doctype>
                             <attributes>
+                                <asciidocBaseDir>${project.basedir}/src/main/asciidoc</asciidocBaseDir>
                                 <snippets>${snippetsDirectory}</snippets>
                             </attributes>
                             <sourceDirectory>src/main/asciidoc</sourceDirectory>

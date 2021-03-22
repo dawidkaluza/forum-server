@@ -1,0 +1,65 @@
+include::{asciidocBaseDir}/header.adoc[]
+
+[[overview]]
+== Overview
+
+This link is used to resend e-mail with confirmation token if user didn't receive any message earlier.
+
+This link has some constraints:
+
+* max tries - user can't resend an e-mail message so many times. Default, he can make 5 tries.
+* try expiration - if user exceeded max tries num in time given in "try expiration" property, he must wait this time, otherwise any next resend token request will be blocked. Default, try expiration is 60 mins.
+
+[[request]]
+== Request
+
+[[request_method]]
+=== Method
+PUT
+
+[[request_body]]
+=== Body
+
+include::{snippets}/user/confirmRegistration/resendToken/success/request-fields.adoc[]
+
+[[request_example]]
+=== Example
+include::{snippets}/user/confirmRegistration/resendToken/success/http-request.adoc[]
+
+[[response]]
+== Response
+
+[[response_fields]]
+=== Fields
+
+include::{snippets}/user/confirmRegistration/resendToken/success/response-fields.adoc[]
+
+[[response_links]]
+=== Links
+
+include::{snippets}/user/confirmRegistration/resendToken/success/links.adoc[]
+
+[[response_example]]
+=== Example
+
+include::{snippets}/user/confirmRegistration/resendToken/success/http-response.adoc[]
+
+[[response_errors]]
+=== Errors
+
+==== User not found
+
+include::{snippets}/user/confirmRegistration/resendToken/userNotFound/http-response.adoc[]
+
+==== Token not found
+
+include::{snippets}/user/confirmRegistration/resendToken/tokenNotFound/http-response.adoc[]
+
+==== Too many tries
+
+include::{snippets}/user/confirmRegistration/resendToken/tooManyTries/http-response.adoc[]
+
+
+
+
+

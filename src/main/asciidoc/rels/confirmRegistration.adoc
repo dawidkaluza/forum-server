@@ -1,0 +1,54 @@
+include::{asciidocBaseDir}/header.adoc[]
+
+[[overview]]
+== Overview
+
+This link is used to confirm user registration.
+
+Confirmation process is done via email message. Recently registered user to confirm that given while registration e-mail belongs to him, needs to check his inbox and find a message sent from forum, where he can confirm registration which is equivalent to activating the account. Default, user has 7 days to confirm the registration.
+
+[[request]]
+== Request
+
+[[request_method]]
+=== Method
+PUT
+
+[[request_body]]
+=== Body
+
+include::{snippets}/user/confirmRegistration/confirmRegistration/success/request-fields.adoc[]
+
+[[request_example]]
+=== Example
+include::{snippets}/user/confirmRegistration/confirmRegistration/success/http-request.adoc[]
+
+[[response]]
+== Response
+
+[[response_fields]]
+=== Fields
+
+No fields (at the moment)
+
+[[response_example]]
+=== Example
+
+include::{snippets}/user/confirmRegistration/confirmRegistration/success/http-response.adoc[]
+
+[[response_errors]]
+=== Errors
+
+==== Token not found
+
+include::{snippets}/user/confirmRegistration/confirmRegistration/tokenNotFound/http-response.adoc[]
+
+==== Token expired
+
+include::{snippets}/user/confirmRegistration/confirmRegistration/tokenExpired/http-response.adoc[]
+
+
+
+
+
+

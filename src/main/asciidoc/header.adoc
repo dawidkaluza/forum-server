@@ -2,6 +2,7 @@
 Dawid Kałuża <daw.kaluza@gmail.com>
 :doctype: book
 :toc: left
+:toc-title: Navigation
 :icons: font
 :source-highlighter: highlightjs
 :toclevels: 4
