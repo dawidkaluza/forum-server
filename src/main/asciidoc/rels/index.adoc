@@ -13,11 +13,6 @@ On index page, you can find starting links that helps you explore the rest of th
 
 GET
 
-[[request_body]]
-=== Body
-
-No body is needed for this request
-
 [[request_example]]
 === Example
 

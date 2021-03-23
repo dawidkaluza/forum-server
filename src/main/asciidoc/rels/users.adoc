@@ -13,14 +13,9 @@ This link is used to get list of users.
 GET
 
 [[request_params]]
-=== Params
+=== Request params
 
 include::{snippets}/user/users/success/request-parameters.adoc[]
-
-[[request_body]]
-=== Body
-
-Empty
 
 [[request_example]]
 === Example
