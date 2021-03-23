@@ -2,6 +2,7 @@ package pl.dkaluza.forum.modules.user.base.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
@@ -38,7 +39,7 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public PagedModel<UserModel> findAll(Pageable pageable) {
+    public PagedModel<UserModel> findAll(@PageableDefault Pageable pageable) {
         return pagedUsersModelsAssembler.toModel(
             userService.findAll(pageable), userModelAssembler
         );

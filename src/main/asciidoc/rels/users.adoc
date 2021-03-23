@@ -1,0 +1,57 @@
+include::{asciidocBaseDir}/header.adoc[]
+
+[[overview]]
+== Overview
+
+This link is used to get list of users.
+
+[[request]]
+== Request
+
+[[request_method]]
+=== Method
+GET
+
+[[request_params]]
+=== Params
+
+include::{snippets}/user/users/success/request-parameters.adoc[]
+
+[[request_body]]
+=== Body
+
+Empty
+
+[[request_example]]
+=== Example
+
+include::{snippets}/user/users/success/http-request.adoc[]
+
+[[response]]
+== Response
+
+[[response_fields]]
+=== Fields
+
+include::{snippets}/user/users/success/response-fields.adoc[]
+
+[[response_links]]
+=== Links
+
+include::{snippets}/user/users/success/links.adoc[]
+
+[[response_example]]
+=== Example
+
+include::{snippets}/user/users/success/http-response.adoc[]
+
+[[response_errors]]
+=== Errors
+
+No specific errors are returned in this request
+
+
+
+
+
+
