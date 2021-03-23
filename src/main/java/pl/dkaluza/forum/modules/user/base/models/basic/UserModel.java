@@ -4,7 +4,7 @@ import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 import org.springframework.lang.NonNull;
 
-@Relation(itemRelation = "user", collectionRelation = "users")
+@Relation(itemRelation = "user", collectionRelation = "user")
 public class UserModel extends RepresentationModel<UserModel> {
     private Long id;
 

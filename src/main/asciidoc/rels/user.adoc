@@ -1,0 +1,55 @@
+include::{asciidocBaseDir}/header.adoc[]
+
+[[overview]]
+== Overview
+
+This link is used to get details about user by its id.
+
+[[request]]
+== Request
+
+[[request_method]]
+=== Method
+
+GET
+
+[[request_path_params]]
+=== Path params
+
+include::{snippets}/user/user/success/path-parameters.adoc[]
+
+[[request_example]]
+=== Example
+
+include::{snippets}/user/user/success/http-request.adoc[]
+
+[[response]]
+== Response
+
+[[response_fields]]
+=== Fields
+
+include::{snippets}/user/user/success/response-fields.adoc[]
+
+[[response_links]]
+=== Links
+
+include::{snippets}/user/user/success/links.adoc[]
+
+[[response_example]]
+=== Example
+
+include::{snippets}/user/user/success/http-response.adoc[]
+
+[[response_errors]]
+=== Errors
+
+==== User not found
+
+include::{snippets}/user/user/userNotFound/http-response.adoc[]
+
+
+
+
+
+
