@@ -16,7 +16,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import pl.dkaluza.forum.modules.user.base.repositories.UserRepository;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,19 +23,17 @@ import javax.servlet.http.HttpServletResponse;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
-    private final JwtTokenUtil jwtTokenUtil;
     private final JwtTokenFilter jwtTokenFilter;
 
     @Autowired
-    public SecurityConfig(UserRepository userRepository) {
-        userDetailsService = new UserDetailsServiceImpl(userRepository);
-        jwtTokenUtil = new JwtTokenUtil();
-        jwtTokenFilter = new JwtTokenFilter(jwtTokenUtil, userDetailsService);
+    public SecurityConfig(UserDetailsService userDetailsService, JwtTokenFilter jwtTokenFilter) {
+        this.userDetailsService = userDetailsService;
+        this.jwtTokenFilter = jwtTokenFilter;
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
     @Override
@@ -70,17 +67,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
-    }
-
-    @Override
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return userDetailsService;
-    }
-
-    @Bean
-    public JwtTokenUtil jwtTokenUtil() {
-        return jwtTokenUtil;
     }
 
     @Bean

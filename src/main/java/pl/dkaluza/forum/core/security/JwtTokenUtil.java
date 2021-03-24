@@ -1,13 +1,22 @@
 package pl.dkaluza.forum.core.security;
 
 import io.jsonwebtoken.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-
+@Component
 class JwtTokenUtil {
-    private final String jwtSecret = "jBL4Y2URv5hC3Vz9cc4ta2pfe";
-    private final String jwtIssuer = "dkaluza.pl";
+    private final String jwtSecret;
+    private final String jwtIssuer;
+
+    @Autowired
+    public JwtTokenUtil(Environment environment) {
+        jwtSecret = environment.getProperty("jwt.secret", "notSoSecret");
+        jwtIssuer = environment.getProperty("jwt.issuer", "dkaluza.pl");
+    }
 
     public String generateToken(long userId, String username) {
         return Jwts.builder()
