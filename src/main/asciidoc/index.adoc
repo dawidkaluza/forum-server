@@ -58,8 +58,7 @@ include::{snippets}/error/http-response.adoc[]
 [[authentication]]
 == Authentication
 
-// TODO
-To be continued...
+Authentication is provided by JSON Web Token. More details about the whole process of using this token is described in next parts of the documentation, when you'll be ready to log-in into the forum.
 
 [[language]]
 == Language
