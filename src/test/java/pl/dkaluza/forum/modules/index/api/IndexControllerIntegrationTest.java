@@ -58,26 +58,25 @@ public class IndexControllerIntegrationTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("_links.self").exists())
             .andExpect(jsonPath("_links.curies").exists())
+            .andExpect(jsonPath("_links.df:login").exists())
             .andExpect(jsonPath("_links.df:register").exists())
             .andExpect(jsonPath("_links.df:users").exists())
             .andExpect(jsonPath("message").exists());
 
         //Document
-        result
-            .andDo(document(
-                "index",
-                links(
-                    selfLinkDescriptor(),
-                    curiesLinkDescriptor(),
-                    linkWithRel("df:register").description("Registers new account").attributes(docsAttribute("register.html")),
-                    linkWithRel("df:users").description("Lists all registered users").attributes(docsAttribute("users.html"))
-                ),
-                responseFields(
-                    fieldWithPath("message").description("Just a welcome message :)"),
-                    linksFieldDescriptor()
-                )
-            ));
-
-
+        result.andDo(document(
+            "index",
+            links(
+                selfLinkDescriptor(),
+                curiesLinkDescriptor(),
+                linkWithRel("df:login").description("Logins into account").attributes(docsAttribute("login.html")),
+                linkWithRel("df:register").description("Registers new account").attributes(docsAttribute("register.html")),
+                linkWithRel("df:users").description("Lists all registered users").attributes(docsAttribute("users.html"))
+            ),
+            responseFields(
+                fieldWithPath("message").description("Just a welcome message :)"),
+                linksFieldDescriptor()
+            )
+        ));
     }
 }

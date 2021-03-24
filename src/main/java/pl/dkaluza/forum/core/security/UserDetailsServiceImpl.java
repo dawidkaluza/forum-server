@@ -3,6 +3,7 @@ package pl.dkaluza.forum.core.security;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 import pl.dkaluza.forum.modules.user.base.entities.User;
 import pl.dkaluza.forum.modules.user.base.repositories.UserRepository;
 
@@ -14,6 +15,7 @@ class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository
             .findByEmail(email)

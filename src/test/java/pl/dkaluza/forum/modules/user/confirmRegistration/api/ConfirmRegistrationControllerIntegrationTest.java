@@ -118,7 +118,7 @@ public class ConfirmRegistrationControllerIntegrationTest {
 
     @Test
     @Sql("valid-data.sql")
-    public void confirmRegistration_validData_emptyResponse() throws Exception {
+    public void confirmRegistration_validData_responseWithLinks() throws Exception {
         //Given
         Map<String, Object> body = new HashMap<>();
         body.put("id", 1L);
@@ -134,7 +134,8 @@ public class ConfirmRegistrationControllerIntegrationTest {
 
         //Then
         result
-            .andExpect(status().isNoContent());
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$._links.df:login").exists());
 
         //Document
         result.andDo(document(
@@ -142,6 +143,13 @@ public class ConfirmRegistrationControllerIntegrationTest {
             requestFields(
                 fieldWithPath("id").description("User id to confirm registration"),
                 fieldWithPath("token").description("Token sent in e-mail message")
+            ),
+            responseFields(
+                linksFieldDescriptor()
+            ),
+            links(
+                curiesLinkDescriptor(),
+                linkWithRel("df:login").description("Logins into account").attributes(docsAttribute("login.html"))
             )
         ));
     }
@@ -242,7 +250,9 @@ public class ConfirmRegistrationControllerIntegrationTest {
 
         //Then
         result
-            .andExpect(status().isAccepted());
+            .andExpect(status().isAccepted())
+            .andExpect(jsonPath("$._links.df:confirmRegistration").exists())
+        ;
 
         //Document
         result.andDo(document(
