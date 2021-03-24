@@ -1,0 +1,52 @@
+include::{asciidocBaseDir}/header.adoc[]
+
+[[overview]]
+== Overview
+
+This link is used to log in into account. This process is resolved via JWT here. You'll get the token in response header, more details are described below.
+
+[[request]]
+== Request
+
+[[request_method]]
+=== Method
+POST
+
+[[request_body]]
+=== Body
+
+include::{snippets}/security/login/success/request-fields.adoc[]
+
+[[request_example]]
+=== Example
+include::{snippets}/security/login/success/http-request.adoc[]
+
+[[response]]
+== Response
+
+[[response_headers]]
+=== Headers
+
+include::{snippets}/security/login/success/response-headers.adoc[]
+
+[[response_example]]
+=== Example
+
+include::{snippets}/security/login/success/http-response.adoc[]
+
+[[response_errors]]
+=== Errors
+
+==== Bad credentials
+
+include::{snippets}/security/login/badCredentials/http-response.adoc[]
+
+==== Account is disabled
+
+include::{snippets}/security/login/disabled/http-response.adoc[]
+
+
+
+
+
+
