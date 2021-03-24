@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -26,6 +27,15 @@ public class LoginExceptionsHandler implements ExceptionsHandler {
             .withStatus(HttpStatus.UNAUTHORIZED)
             .withTimestampAsNow()
             .withMessage(request.getLocale(), "security.authentication.badCredentials", "Bad credentials")
+            .build();
+    }
+
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<?> disabledExceptionHandler(WebRequest request) {
+        return requestErrorCreator.builder()
+            .withStatus(HttpStatus.UNAUTHORIZED)
+            .withTimestampAsNow()
+            .withMessage(request.getLocale(), "security.authentication.disabled", "Account is not enabled yet")
             .build();
     }
 
