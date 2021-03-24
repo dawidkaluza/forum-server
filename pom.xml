@@ -51,6 +51,13 @@
             <artifactId>spring-boot-devtools</artifactId>
         </dependency>
 
+        <!-- Security -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
+
         <!-- PSQL -->
         <dependency>
             <groupId>org.postgresql</groupId>

@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import pl.dkaluza.forum.modules.user.base.entities.User;
 import pl.dkaluza.forum.modules.user.base.repositories.UserRepository;
 
-public class UserDetailsServiceImpl implements UserDetailsService {
+class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
 
     public UserDetailsServiceImpl(UserRepository userRepository) {

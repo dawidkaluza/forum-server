@@ -8,7 +8,7 @@ import pl.dkaluza.forum.modules.user.base.entities.User;
 import java.util.Collection;
 import java.util.Collections;
 
-public class UserDetailsImpl implements UserDetails {
+class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 9086485465190374880L;
 
     private final long id;
@@ -52,17 +52,17 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override

@@ -8,7 +8,7 @@ public interface ExceptionsHandler extends Ordered {
     }
 
     @Override
-    default  int getOrder() {
+    default int getOrder() {
         return getHandlerOrder().ordinal();
     }
 }
