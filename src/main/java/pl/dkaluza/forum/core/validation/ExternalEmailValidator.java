@@ -1,5 +1,7 @@
 package pl.dkaluza.forum.core.validation;
 
+import org.springframework.util.StringUtils;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.regex.Pattern;
@@ -13,6 +15,10 @@ public class ExternalEmailValidator implements ConstraintValidator<ExternalEmail
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
+        if (!StringUtils.hasText(value)) {
+            return false;
+        }
+
         return EMAIL_PATTERN.matcher(value).matches();
     }
 }
