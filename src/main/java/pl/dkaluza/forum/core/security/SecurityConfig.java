@@ -51,12 +51,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             );
 
         http.authorizeRequests()
-            .antMatchers("/docs/**").permitAll()
             .antMatchers("/").permitAll()
+            .antMatchers("/docs/**").permitAll()
             .antMatchers("/login/**").permitAll()
             .antMatchers("/register/**").permitAll()
             .antMatchers("/confirmRegistration/**").permitAll()
-            .antMatchers("/user/**").permitAll()
             .anyRequest().authenticated();
 
         http.addFilterBefore(
