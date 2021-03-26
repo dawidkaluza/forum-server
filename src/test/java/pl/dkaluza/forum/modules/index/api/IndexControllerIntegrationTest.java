@@ -61,6 +61,8 @@ public class IndexControllerIntegrationTest {
             .andExpect(jsonPath("_links.df:login").exists())
             .andExpect(jsonPath("_links.df:register").exists())
             .andExpect(jsonPath("_links.df:users").exists())
+            .andExpect(jsonPath("_links.df:topics").exists())
+            .andExpect(jsonPath("_links.df:posts").exists())
             .andExpect(jsonPath("message").exists());
 
         //Document
@@ -71,7 +73,9 @@ public class IndexControllerIntegrationTest {
                 curiesLinkDescriptor(),
                 linkWithRel("df:login").description("Logins into account").attributes(docsAttribute("login.html")),
                 linkWithRel("df:register").description("Registers new account").attributes(docsAttribute("register.html")),
-                linkWithRel("df:users").description("Lists all registered users").attributes(docsAttribute("users.html"))
+                linkWithRel("df:users").description("Lists all registered users").attributes(docsAttribute("users.html")),
+                linkWithRel("df:topics").description("Lists all topics in order from newest to oldest").attributes(docsAttribute("topics.html")),
+                linkWithRel("df:posts").description("Lists all posts in order from newest to oldest").attributes(docsAttribute("posts.html"))
             ),
             responseFields(
                 fieldWithPath("message").description("Just a welcome message :)"),

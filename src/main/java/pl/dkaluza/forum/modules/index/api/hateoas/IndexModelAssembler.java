@@ -6,6 +6,8 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import pl.dkaluza.forum.core.security.LoginController;
 import pl.dkaluza.forum.core.security.LoginModel;
+import pl.dkaluza.forum.modules.forum.topic.api.PostController;
+import pl.dkaluza.forum.modules.forum.topic.api.TopicController;
 import pl.dkaluza.forum.modules.index.api.IndexController;
 import pl.dkaluza.forum.modules.index.models.IndexModel;
 import pl.dkaluza.forum.modules.user.base.api.UserController;
@@ -23,6 +25,8 @@ public class IndexModelAssembler implements RepresentationModelAssembler<IndexMo
         model.add(buildLoginLink());
         model.add(buildRegisterLink());
         model.add(buildUsersLink());
+        model.add(buildTopicsLink());
+        model.add(buildPostsLink());
         return model;
     }
 
@@ -40,5 +44,13 @@ public class IndexModelAssembler implements RepresentationModelAssembler<IndexMo
 
     private Link buildUsersLink() {
         return linkTo(methodOn(UserController.class).findAll(null)).withRel("users");
+    }
+
+    private Link buildTopicsLink() {
+        return linkTo(methodOn(TopicController.class).getAll(null)).withRel("topics");
+    }
+
+    private Link buildPostsLink() {
+        return linkTo(methodOn(PostController.class).getAll(null)).withRel("posts");
     }
 }
