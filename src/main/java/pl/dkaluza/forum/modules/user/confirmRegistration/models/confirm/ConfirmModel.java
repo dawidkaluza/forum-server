@@ -1,14 +1,14 @@
 package pl.dkaluza.forum.modules.user.confirmRegistration.models.confirm;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 public class ConfirmModel {
-    @NotNull(message = "emptyField")
+    @NotNull(message = "{emptyField}")
     private Long id;
 
-    @NotNull(message = "emptyField")
-    @NotEmpty(message = "emptyField")
+    @NotBlank(message = "{emptyField}")
     private String token;
 
     public Long getId() {
