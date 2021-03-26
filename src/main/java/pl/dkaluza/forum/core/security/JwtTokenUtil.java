@@ -10,21 +10,21 @@ import java.util.Date;
 @Component
 class JwtTokenUtil {
     private final String jwtSecret;
-    private final String jwtIssuer;
+    private final Integer jwtExpirationDays;
 
     @Autowired
     public JwtTokenUtil(Environment environment) {
         jwtSecret = environment.getProperty("jwt.secret", "notSoSecret");
-        jwtIssuer = environment.getProperty("jwt.issuer", "dkaluza.pl");
+        jwtExpirationDays = environment.getProperty("jwt.expirationDays", Integer.class, 7);
     }
 
     public String generateToken(long userId, String username) {
         return Jwts.builder()
+            //TODO move "userId" to claims
             .setSubject(userId + "," + username)
-            .setIssuer(jwtIssuer)
             .setIssuedAt(new Date())
-            .setExpiration(new Date(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000))
-            .signWith(SignatureAlgorithm.HS512, jwtSecret)
+            .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationDays * 24 * 60 * 60 * 1000))
+            .signWith(SignatureAlgorithm.HS256, jwtSecret)
             .compact();
     }
 

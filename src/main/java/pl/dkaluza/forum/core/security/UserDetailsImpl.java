@@ -8,7 +8,7 @@ import pl.dkaluza.forum.modules.user.base.entities.User;
 import java.util.Collection;
 import java.util.Collections;
 
-class UserDetailsImpl implements UserDetails {
+public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 9086485465190374880L;
 
     private final long id;
@@ -23,6 +23,7 @@ class UserDetailsImpl implements UserDetails {
         this.enabled = enabled;
     }
 
+    //TODO remove
     public static UserDetailsImpl ofUser(User user) {
         return new UserDetailsImpl(
             user.getId(), user.getEmail(), user.getEncodedPassword(), user.isEnabled()

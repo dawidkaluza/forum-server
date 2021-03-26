@@ -3,6 +3,7 @@ package pl.dkaluza.forum.core.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
@@ -13,11 +14,11 @@ import pl.dkaluza.forum.core.api.exceptionsHandler.ExceptionsHandler;
 import pl.dkaluza.forum.core.api.response.RequestErrorCreator;
 
 @RestControllerAdvice
-public class LoginExceptionsHandler implements ExceptionsHandler {
+public class SecurityExceptionsHandler implements ExceptionsHandler {
     private final RequestErrorCreator requestErrorCreator;
 
     @Autowired
-    public LoginExceptionsHandler(RequestErrorCreator requestErrorCreator) {
+    public SecurityExceptionsHandler(RequestErrorCreator requestErrorCreator) {
         this.requestErrorCreator = requestErrorCreator;
     }
 
@@ -45,6 +46,15 @@ public class LoginExceptionsHandler implements ExceptionsHandler {
             .withStatus(HttpStatus.UNAUTHORIZED)
             .withTimestampAsNow()
             .withMessage(request.getLocale(), "security.authentication.error", "Authentication error")
+            .build();
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<?> accessDeniedExceptionHandler(WebRequest request) {
+        return requestErrorCreator.builder()
+            .withStatus(HttpStatus.FORBIDDEN)
+            .withTimestampAsNow()
+            .withMessage(request.getLocale(), "security.accessDenied", "Access denied")
             .build();
     }
 }
