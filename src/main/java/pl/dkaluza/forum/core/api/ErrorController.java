@@ -16,7 +16,7 @@ public class ErrorController {
         this.requestErrorCreator = requestErrorCreator;
     }
 
-    @GetMapping("/error")
+    @GetMapping("/error/example")
     public ResponseEntity<?> error() {
         return requestErrorCreator.builder()
             .withStatus(HttpStatus.I_AM_A_TEAPOT)

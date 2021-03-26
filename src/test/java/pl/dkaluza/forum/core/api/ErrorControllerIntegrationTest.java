@@ -40,7 +40,7 @@ public class ErrorControllerIntegrationTest {
     public void error_validRequest_validError() throws Exception {
         //Given, When
         ResultActions result = mockMvc.perform(
-            get("/error")
+            get("/error/example")
                 .contentType(MediaType.APPLICATION_JSON)
                 .locale(Locale.ENGLISH)
         );
