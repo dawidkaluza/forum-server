@@ -1,13 +1,11 @@
 package pl.dkaluza.forum.modules.forum.topic.api.hateoas;
 
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 import pl.dkaluza.forum.modules.forum.topic.api.PostController;
 import pl.dkaluza.forum.modules.forum.topic.api.TopicController;
 import pl.dkaluza.forum.modules.forum.topic.models.basic.PostModel;
-import pl.dkaluza.forum.modules.forum.topic.models.basic.TopicModel;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;

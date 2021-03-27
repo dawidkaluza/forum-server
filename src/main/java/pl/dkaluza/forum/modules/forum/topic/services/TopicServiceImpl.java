@@ -55,7 +55,7 @@ class TopicServiceImpl implements TopicService {
             .findAll(pageable)
             .map(topic -> {
                 Post post = postRepository
-                    .findFirstByTopicOrderByIdDesc(topic)
+                    .findFirstByTopicOrderById(topic)
                     .orElseThrow(() -> new PostNotFoundException("Can't find first post for topic with id=" + topic.getId()));
 
                 return topicMapper.toModel(Pair.of(topic, post));
@@ -70,7 +70,7 @@ class TopicServiceImpl implements TopicService {
             .orElseThrow(() -> new TopicNotFoundException("Can't find topic with id=" + id));
 
         Post post = postRepository
-            .findFirstByTopicOrderByIdDesc(topic)
+            .findFirstByTopicOrderById(topic)
             .orElseThrow(() -> new PostNotFoundException("Can't find first post for topic with id=" + topic.getId()));
 
         return topicMapper.toModel(Pair.of(topic, post));
@@ -99,7 +99,7 @@ class TopicServiceImpl implements TopicService {
         topicRepository.save(topic);
 
         Post post = postRepository
-            .findFirstByTopicOrderByIdDesc(topic)
+            .findFirstByTopicOrderById(topic)
             .orElseThrow(() -> new PostNotFoundException("Can't find first post for topic with id=" + topic.getId()));
 
         return topicMapper.toModel(Pair.of(topic, post));
@@ -116,7 +116,7 @@ class TopicServiceImpl implements TopicService {
         topicRepository.save(topic);
 
         Post post = postRepository
-            .findFirstByTopicOrderByIdDesc(topic)
+            .findFirstByTopicOrderById(topic)
             .orElseThrow(() -> new PostNotFoundException("Can't find first post for topic with id=" + topic.getId()));
 
         return topicMapper.toModel(Pair.of(topic, post));

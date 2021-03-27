@@ -2,9 +2,11 @@ package pl.dkaluza.forum.modules.forum.topic.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.lang.Nullable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +48,7 @@ public class TopicController {
     }
 
     @GetMapping("/topic")
-    public PagedModel<TopicModel> getAll(@PageableDefault Pageable pageable) {
+    public PagedModel<TopicModel> getAll(@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         return pagedTopicModelsAssembler.toModel(
             topicService.getAll(pageable), topicModelAssembler
         );
@@ -67,16 +69,16 @@ public class TopicController {
     }
 
     @PutMapping("/topic/{id}/close")
-    @PreAuthorize("@topicPrivilegesChecker.canOpenOrCloseTopic(#auth, #id)")
-    public TopicModel close(Authentication auth, @PathVariable("id") Long id) {
+    @PreAuthorize("@topicPrivilegesChecker.canCloseTopic(#auth, #id)")
+    public TopicModel close(@Nullable Authentication auth, @PathVariable("id") Long id) {
         return topicModelAssembler.toModel(
             topicService.close(id)
         );
     }
 
     @PutMapping("/topic/{id}/open")
-    @PreAuthorize("@topicPrivilegesChecker.canOpenOrCloseTopic(#auth, #id)")
-    public TopicModel open(Authentication auth, @PathVariable("id") Long id) {
+    @PreAuthorize("@topicPrivilegesChecker.canOpenTopic(#auth, #id)")
+    public TopicModel open(@Nullable Authentication auth, @PathVariable("id") Long id) {
         return topicModelAssembler.toModel(
             topicService.open(id)
         );

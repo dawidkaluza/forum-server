@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class CreatePostModel {
-    @NotBlank(message = "{topic.createPost.invalidContent}")
+    @NotBlank(message = "{emptyField}")
     @Size(min = 3, max = 1024, message = "{topic.createPost.invalidContent}")
     private String content;
 

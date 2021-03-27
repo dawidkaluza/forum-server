@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface PostRepository extends PagingAndSortingRepository<Post, Long> {
-    Optional<Post> findFirstByTopicOrderByIdDesc(Topic topic);
+    Optional<Post> findFirstByTopicOrderById(Topic topic);
 
     Page<Post> findAllByTopicOrderById(Topic topic, Pageable pageable);
 }

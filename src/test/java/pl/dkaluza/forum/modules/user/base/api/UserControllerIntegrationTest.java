@@ -400,6 +400,11 @@ public class UserControllerIntegrationTest {
         ));
     }
 
+    //TODO
+    // move pagination tests to some different class
+    // that's not responsibility of UserController to test is pagination works correctly
+    // maybe at the moment it should be enough to write a description about paginating request results on the docs index page?
+    // maybe spring utilities shouldn't be tested here? Hard to say.
     @Test
     public void findAll_noUsers_responseWithEmptyList() throws Exception {
         //Given, When
@@ -595,13 +600,13 @@ public class UserControllerIntegrationTest {
             .andExpect(jsonPath("$._embedded.df:user[0].name").value("mario.kram"))
             .andExpect(jsonPath("$._embedded.df:user[0].email").value("mario@gmail.com"))
             .andExpect(jsonPath("$._embedded.df:user[0].enabled").value(true))
-            .andExpect(jsonPath("$._embedded.df:user[*]._links").exists())
             .andExpect(jsonPath("$._embedded.df:user[*]._links.self").exists())
             .andExpect(jsonPath("$._links.first").exists())
             .andExpect(jsonPath("$._links.prev").exists())
             .andExpect(jsonPath("$._links.self").exists())
             .andExpect(jsonPath("$._links.next").exists())
             .andExpect(jsonPath("$._links.last").exists())
+            .andExpect(jsonPath("$._links.curies").exists())
             .andExpect(jsonPath("$.page.size").value(5))
             .andExpect(jsonPath("$.page.totalElements").value(20))
             .andExpect(jsonPath("$.page.totalPages").value(4))
