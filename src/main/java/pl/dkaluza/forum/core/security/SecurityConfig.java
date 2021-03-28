@@ -45,12 +45,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.exceptionHandling()
             .authenticationEntryPoint(
                 //TODO send more detailed message?
-                (req, res, ex) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")
+                (req, res, ex) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not authenticated")
             );
 
         http.authorizeRequests()
             .antMatchers("/").permitAll()
             .antMatchers("/docs/**").permitAll()
+            .antMatchers("/error/**").permitAll()
             .antMatchers("/login/**").permitAll()
             .antMatchers("/register/**").permitAll()
             .antMatchers("/confirmRegistration/**").permitAll()
