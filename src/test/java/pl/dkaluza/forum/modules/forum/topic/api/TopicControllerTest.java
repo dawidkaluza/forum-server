@@ -340,7 +340,7 @@ public class TopicControllerTest {
         //Given
         Map<String, Object> body = new HashMap<>();
         body.put("title", "Best features on the forum");
-        body.put("content", "Hello, below you can write must usable features, let's go!");
+        body.put("content", "Hello, below you can write most usable features, let's go!");
         body.put("authorId", 1);
 
         //When
@@ -359,7 +359,7 @@ public class TopicControllerTest {
         result.andDo(document(
             "createTopic/success",
             requestFields(
-                fieldWithPath("title").description("Title of created post. Should describe about what whole topic will be"),
+                fieldWithPath("title").description("Title of created topic. Should describe about what whole topic will be"),
                 fieldWithPath("content").description("Content of the first post in this topic. Simple message that will be seen while viewing this post"),
                 fieldWithPath("authorId").description("Author id. At the moment it's just an id of authenticated user")
             ),
@@ -498,8 +498,8 @@ public class TopicControllerTest {
                 pageParamDescriptor(),
                 sizeParamDescriptor()
             ),
-            postsPageResponseFields(),
-            postsPageLinks()
+            topicPostsPageResponseFields(),
+            topicPostsPageLinks()
         ));
     }
 

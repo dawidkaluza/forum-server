@@ -2,15 +2,14 @@ package pl.dkaluza.forum.modules.forum.topic.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.lang.Nullable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import pl.dkaluza.forum.modules.forum.topic.api.hateoas.PostModelAssembler;
+import pl.dkaluza.forum.modules.forum.topic.api.hateoas.PagedTopicModelsAssembler;
+import pl.dkaluza.forum.modules.forum.topic.api.hateoas.PagedTopicPostsModelsAssembler;
 import pl.dkaluza.forum.modules.forum.topic.api.hateoas.TopicModelAssembler;
 import pl.dkaluza.forum.modules.forum.topic.models.basic.PostModel;
 import pl.dkaluza.forum.modules.forum.topic.models.basic.TopicModel;
@@ -25,16 +24,14 @@ public class TopicController {
     private final TopicPrivilegesChecker topicPrivilegesChecker;
     private final TopicService topicService;
     private final TopicModelAssembler topicModelAssembler;
-    private final PostModelAssembler postModelAssembler;
-    private final PagedResourcesAssembler<TopicModel> pagedTopicModelsAssembler;
-    private final PagedResourcesAssembler<PostModel> pagedPostModelsAssembler;
+    private final PagedTopicModelsAssembler pagedTopicModelsAssembler;
+    private final PagedTopicPostsModelsAssembler pagedPostModelsAssembler;
 
     @Autowired
-    public TopicController(TopicPrivilegesChecker topicPrivilegesChecker, TopicService topicService, TopicModelAssembler topicModelAssembler, PostModelAssembler postModelAssembler, @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") PagedResourcesAssembler<TopicModel> pagedTopicModelsAssembler, @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") PagedResourcesAssembler<PostModel> pagedPostModelsAssembler) {
+    public TopicController(TopicPrivilegesChecker topicPrivilegesChecker, TopicService topicService, TopicModelAssembler topicModelAssembler, PagedTopicModelsAssembler pagedTopicModelsAssembler, PagedTopicPostsModelsAssembler pagedPostModelsAssembler) {
         this.topicPrivilegesChecker = topicPrivilegesChecker;
         this.topicService = topicService;
         this.topicModelAssembler = topicModelAssembler;
-        this.postModelAssembler = postModelAssembler;
         this.pagedTopicModelsAssembler = pagedTopicModelsAssembler;
         this.pagedPostModelsAssembler = pagedPostModelsAssembler;
     }
@@ -48,9 +45,9 @@ public class TopicController {
     }
 
     @GetMapping("/topic")
-    public PagedModel<TopicModel> getAll(@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+    public PagedModel<TopicModel> getAll(@PageableDefault Pageable pageable) {
         return pagedTopicModelsAssembler.toModel(
-            topicService.getAll(pageable), topicModelAssembler
+            topicService.getAll(pageable)
         );
     }
 
@@ -64,7 +61,7 @@ public class TopicController {
     @GetMapping("/topic/{id}/post")
     public PagedModel<PostModel> getPosts(@PathVariable("id") Long id, @PageableDefault Pageable pageable) {
         return pagedPostModelsAssembler.toModel(
-            topicService.getPosts(id, pageable), postModelAssembler
+            topicService.getPosts(id, pageable)
         );
     }
 

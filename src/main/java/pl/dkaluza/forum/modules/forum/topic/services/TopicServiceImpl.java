@@ -1,8 +1,7 @@
 package pl.dkaluza.forum.modules.forum.topic.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,8 +50,13 @@ class TopicServiceImpl implements TopicService {
     @Override
     @Transactional(readOnly = true)
     public Page<TopicModel> getAll(Pageable pageable) {
-        return topicRepository
-            .findAll(pageable)
+        PageRequest pageRequest = PageRequest.of(
+            pageable.getPageNumber(), pageable.getPageSize(),
+            Sort.by(Sort.Direction.DESC, "id")
+        );
+
+        Page<TopicModel> page = topicRepository
+            .findAll(pageRequest)
             .map(topic -> {
                 Post post = postRepository
                     .findFirstByTopicOrderById(topic)
@@ -60,6 +64,10 @@ class TopicServiceImpl implements TopicService {
 
                 return topicMapper.toModel(Pair.of(topic, post));
             });
+
+        return new PageImpl<>(
+            page.getContent(), pageable, page.getTotalElements()
+        );
     }
 
     @Override

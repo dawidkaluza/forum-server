@@ -19,6 +19,7 @@ import java.util.Locale;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static pl.dkaluza.forum.utils.mockmvc.ErrorResultMatchers.expectError;
@@ -33,8 +34,12 @@ public class ErrorControllerTest {
     public void setUp(WebApplicationContext webAppContext, RestDocumentationContextProvider restDoc) {
         mockMvc = MockMvcBuilders
             .webAppContextSetup(webAppContext)
-            .apply(documentationConfiguration(restDoc))
-            .build();
+            .apply(
+                documentationConfiguration(restDoc)
+                    .operationPreprocessors()
+                    .withRequestDefaults(prettyPrint())
+                    .withResponseDefaults(prettyPrint())
+            ).build();
     }
 
     @Test

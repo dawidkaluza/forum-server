@@ -1,0 +1,81 @@
+include::{asciidocBaseDir}/header.adoc[]
+
+[[overview]]
+== Overview
+
+This link is used to create a new post in the topic.
+
+[[request]]
+== Request
+
+[[request_method]]
+=== Method
+POST
+
+[[request_body]]
+=== Body
+
+include::{snippets}/forum/topic/createPost/success/request-fields.adoc[]
+
+
+[[request_example]]
+=== Example
+
+include::{snippets}/forum/topic/createPost/success/http-request.adoc[]
+
+[[response]]
+== Response
+
+[[response_fields]]
+=== Fields
+
+include::{snippets}/forum/topic/createPost/success/response-fields.adoc[]
+
+[[response_links]]
+=== Links
+
+include::{snippets}/forum/topic/createPost/success/links.adoc[]
+
+[[response_example]]
+=== Example
+
+include::{snippets}/forum/topic/createPost/success/http-response.adoc[]
+
+[[response_errors]]
+=== Errors
+
+==== Invalid authentication
+
+include::{asciidocBaseDir}/errors/invalidAuthentication/http-response.adoc[]
+
+==== Invalid content
+
+include::{snippets}/forum/topic/createPost/emptyContent/http-response.adoc[]
+
+==== Topic not found
+
+include::{snippets}/forum/topic/createPost/topicNotFound/http-response.adoc[]
+
+==== Closed topic
+
+include::{snippets}/forum/topic/createPost/closedTopic/http-response.adoc[]
+
+==== Invalid topic
+
+include::{snippets}/forum/topic/createPost/emptyTopic/http-response.adoc[]
+
+==== Invalid author authenticated
+
+include::{snippets}/forum/topic/createPost/invalidAuthorAuthenticated/http-response.adoc[]
+
+==== Invalid author
+
+include::{snippets}/forum/topic/createPost/emptyAuthor/http-response.adoc[]
+
+
+
+
+
+
+
+

@@ -2,7 +2,6 @@ package pl.dkaluza.forum.modules.forum.topic.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
@@ -41,8 +40,7 @@ public class PostController {
     }
 
     @GetMapping("/post")
-    //TODO controller shouldn't know about fields in Post object like "id"
-    public PagedModel<PostModel> getAll(@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+    public PagedModel<PostModel> getAll(@PageableDefault Pageable pageable) {
         return pagedPostModelsAssembler.toModel(
             postService.getAll(pageable), postModelAssembler
         );

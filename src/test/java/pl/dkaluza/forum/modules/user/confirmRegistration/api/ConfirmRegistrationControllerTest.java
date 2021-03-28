@@ -242,7 +242,7 @@ public class ConfirmRegistrationControllerTest {
 
         //Document
         result.andDo(document(
-            "user/confirmRegistration/resendToken/success",
+            "resendToken/success",
             requestFields(
                 fieldWithPath("email").description("User's email who needs to resend the token")
             ),

@@ -5,6 +5,8 @@ include::{asciidocBaseDir}/header.adoc[]
 
 This link is used to log-in into the user's account. This process is resolved via JWT. You'll get the token in a response header, more details are described below.
 
+You need to set the received token in Authorization header with "Bearer " prefix. Without this token in header user will be interpreted as non-authenticated.
+
 [[request]]
 == Request
 

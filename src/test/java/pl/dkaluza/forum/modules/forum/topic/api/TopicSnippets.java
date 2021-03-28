@@ -25,9 +25,9 @@ abstract class TopicSnippets {
         return links(
             curiesLinkDescriptor(),
             selfLinkDescriptor(),
-            linkWithRel("df:topicPosts").description("Link to posts that belong to the topic").description(docsAttribute("topicPosts.html")),
-            linkWithRel("df:openTopic").description("Link used to open the topic").description(docsAttribute("openTopic.html")),
-            linkWithRel("df:closeTopic").description("Link used to close the topic").description(docsAttribute("closeTopic.html"))
+            linkWithRel("df:topicPosts").description("Link to posts that belong to the topic").attributes(docsAttribute("topicPosts.html")),
+            linkWithRel("df:openTopic").description("Link used to open the topic").attributes(docsAttribute("openTopic.html")),
+            linkWithRel("df:closeTopic").description("Link used to close the topic").attributes(docsAttribute("closeTopic.html"))
         );
     }
 
@@ -43,10 +43,11 @@ abstract class TopicSnippets {
     static LinksSnippet topicsPageLinks() {
         return links(
             curiesLinkDescriptor(),
+            linkWithRel("df:createTopic").description("Link to create new topic").attributes(docsAttribute("createTopic.html")),
             linkWithRel("df:post").optional().description("Link to post with specified id").attributes(docsAttribute("post.html")),
-            linkWithRel("df:topicPosts").optional().description("Link to posts that belong to the topic").description(docsAttribute("topicPosts.html")),
-            linkWithRel("df:openTopic").optional().description("Link used to open the topic").description(docsAttribute("openTopic.html")),
-            linkWithRel("df:closeTopic").optional().description("Link used to close the topic").description(docsAttribute("closeTopic.html")),
+            linkWithRel("df:topicPosts").optional().description("Link to posts that belong to the topic").attributes(docsAttribute("topicPosts.html")),
+            linkWithRel("df:openTopic").optional().description("Link used to open the topic").attributes(docsAttribute("openTopic.html")),
+            linkWithRel("df:closeTopic").optional().description("Link used to close the topic").attributes(docsAttribute("closeTopic.html")),
             firstPageLinkDescriptor(),
             prevPageLinkDescriptor(),
             selfPageLinkDescriptor(),
@@ -70,7 +71,7 @@ abstract class TopicSnippets {
         return links(
             selfLinkDescriptor(),
             curiesLinkDescriptor(),
-            linkWithRel("df:topic").description("Link to topic where post belongs").description(docsAttribute("topic.html"))
+            linkWithRel("df:topic").description("Link to topic where post belongs").attributes(docsAttribute("topic.html"))
         );
     }
 
@@ -87,7 +88,25 @@ abstract class TopicSnippets {
         return links(
             curiesLinkDescriptor(),
             linkWithRel("df:post").optional().description("Link to post with specified id").attributes(docsAttribute("post.html")),
-            linkWithRel("df:topic").optional().description("Link to topic where post belongs to").description(docsAttribute("topic.html")),
+            linkWithRel("df:topic").optional().description("Link to topic where post belongs to").attributes(docsAttribute("topic.html")),
+            firstPageLinkDescriptor(),
+            prevPageLinkDescriptor(),
+            selfPageLinkDescriptor(),
+            nextPageLinkDescriptor(),
+            lastPageLinkDescriptor()
+        );
+    }
+
+    static ResponseFieldsSnippet topicPostsPageResponseFields() {
+        return postsPageResponseFields();
+    }
+
+    static LinksSnippet topicPostsPageLinks() {
+        return links(
+            curiesLinkDescriptor(),
+            linkWithRel("df:createPost").optional().description("Link to create new post").attributes(docsAttribute("createPost.html")),
+            linkWithRel("df:post").optional().description("Link to post with specified id").attributes(docsAttribute("post.html")),
+            linkWithRel("df:topic").optional().description("Link to topic where post belongs to").attributes(docsAttribute("topic.html")),
             firstPageLinkDescriptor(),
             prevPageLinkDescriptor(),
             selfPageLinkDescriptor(),

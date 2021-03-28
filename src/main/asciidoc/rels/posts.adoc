@@ -1,0 +1,54 @@
+include::{asciidocBaseDir}/header.adoc[]
+
+[[overview]]
+== Overview
+
+This link is used to get list of the topics. These topics are ordered descending by id (in other words, in order from the newest to the oldest).
+
+[[request]]
+== Request
+
+[[request_method]]
+=== Method
+GET
+
+[[request_params]]
+=== Request params
+
+include::{snippets}/forum/topic/getAllPosts/success/request-parameters.adoc[]
+
+[[request_example]]
+=== Example
+
+include::{snippets}/forum/topic/getAllPosts/success/http-request.adoc[]
+
+[[response]]
+== Response
+
+[[response_fields]]
+=== Fields
+
+include::{snippets}/forum/topic/getAllPosts/success/response-fields.adoc[]
+
+[[response_links]]
+=== Links
+
+include::{snippets}/forum/topic/getAllPosts/success/links.adoc[]
+
+[[response_example]]
+=== Example
+
+include::{snippets}/forum/topic/getAllPosts/success/http-response.adoc[]
+
+[[response_errors]]
+=== Errors
+
+==== Invalid authentication
+
+include::{asciidocBaseDir}/errors/invalidAuthentication/http-response.adoc[]
+
+
+
+
+
+

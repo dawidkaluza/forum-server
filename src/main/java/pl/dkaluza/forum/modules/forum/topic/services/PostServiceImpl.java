@@ -1,8 +1,7 @@
 package pl.dkaluza.forum.modules.forum.topic.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.dkaluza.forum.modules.forum.topic.entities.Post;
@@ -53,9 +52,18 @@ class PostServiceImpl implements PostService {
     @Override
     @Transactional(readOnly = true)
     public Page<PostModel> getAll(Pageable pageable) {
-        return postRepository
-            .findAll(pageable)
+        PageRequest pageRequest = PageRequest.of(
+            pageable.getPageNumber(), pageable.getPageSize(),
+            Sort.by(Sort.Direction.DESC, "id")
+        );
+
+        Page<PostModel> page = postRepository
+            .findAll(pageRequest)
             .map(postMapper::toModel);
+
+        return new PageImpl<>(
+            page.getContent(), pageable, page.getTotalElements()
+        );
     }
 
     @Override

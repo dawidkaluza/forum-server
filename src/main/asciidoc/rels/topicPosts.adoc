@@ -1,0 +1,63 @@
+include::{asciidocBaseDir}/header.adoc[]
+
+[[overview]]
+== Overview
+
+This link is used to get list of the posts that belongs to given topic. These posts are ordered ascending by id (in other words, in order from the oldest to the newest).
+
+[[request]]
+== Request
+
+[[request_method]]
+=== Method
+GET
+
+[[request_path_params]]
+=== Path params
+
+include::{snippets}/forum/topic/getTopicPosts/success/path-parameters.adoc[]
+
+[[request_params]]
+=== Request params
+
+include::{snippets}/forum/topic/getTopicPosts/success/request-parameters.adoc[]
+
+[[request_example]]
+=== Example
+
+include::{snippets}/forum/topic/getTopicPosts/success/http-request.adoc[]
+
+[[response]]
+== Response
+
+[[response_fields]]
+=== Fields
+
+include::{snippets}/forum/topic/getTopicPosts/success/response-fields.adoc[]
+
+[[response_links]]
+=== Links
+
+include::{snippets}/forum/topic/getTopicPosts/success/links.adoc[]
+
+[[response_example]]
+=== Example
+
+include::{snippets}/forum/topic/getTopicPosts/success/http-response.adoc[]
+
+[[response_errors]]
+=== Errors
+
+==== Invalid authentication
+
+include::{asciidocBaseDir}/errors/invalidAuthentication/http-response.adoc[]
+
+==== Topic not found
+
+include::{snippets}/forum/topic/getTopicPosts/topicNotFound/http-response.adoc[]
+
+
+
+
+
+
