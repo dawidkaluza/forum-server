@@ -10,6 +10,8 @@ import org.springframework.util.Assert;
 import org.springframework.validation.FieldError;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -31,7 +33,7 @@ public class RequestErrorCreator {
         private final MessageSource messageSource;
         private HttpStatus status;
         private String message;
-        private LocalDateTime timestamp;
+        private ZonedDateTime timestamp;
         private final List<RequestFieldError> fieldErrors;
 
         private Builder(MessageSource messageSource) {
@@ -68,13 +70,13 @@ public class RequestErrorCreator {
 
         public Builder withTimestamp(LocalDateTime timestamp) {
             Assert.state(this.timestamp == null, "Timestamp has been initialized");
-            this.timestamp = timestamp;
+            this.timestamp = timestamp.atZone(ZoneOffset.UTC);
             return this;
         }
 
         public Builder withTimestampAsNow() {
             Assert.state(this.timestamp == null, "Timestamp has been initialized");
-            this.timestamp = LocalDateTime.now();
+            this.timestamp = ZonedDateTime.now(ZoneOffset.UTC);
             return this;
         }
 

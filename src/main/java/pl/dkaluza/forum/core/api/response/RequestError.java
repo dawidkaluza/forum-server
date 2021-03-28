@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 public class RequestError {
@@ -20,13 +20,14 @@ public class RequestError {
     @JsonProperty
     private final String message;
 
-    private final LocalDateTime timestamp;
+    @JsonProperty
+    private final ZonedDateTime timestamp;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonSerialize(using = FieldErrorsSerializer.class, as = List.class)
     private final List<RequestFieldError> fieldErrors;
 
-    RequestError(HttpStatus status, String message, LocalDateTime timestamp, List<RequestFieldError> fieldErrors) {
+    RequestError(HttpStatus status, String message, ZonedDateTime timestamp, List<RequestFieldError> fieldErrors) {
         this.status = status;
         this.message = message;
         this.timestamp = timestamp;

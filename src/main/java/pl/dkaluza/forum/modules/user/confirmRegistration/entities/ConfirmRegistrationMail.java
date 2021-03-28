@@ -2,6 +2,7 @@ package pl.dkaluza.forum.modules.user.confirmRegistration.entities;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 @Entity
 public class ConfirmRegistrationMail {
@@ -16,7 +17,7 @@ public class ConfirmRegistrationMail {
 
     @PrePersist
     protected void prePersist() {
-        sentAt = LocalDateTime.now();
+        sentAt = LocalDateTime.now(ZoneOffset.UTC);
     }
 
     public Long getId() {

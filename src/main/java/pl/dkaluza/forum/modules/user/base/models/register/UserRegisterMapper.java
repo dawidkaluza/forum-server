@@ -7,6 +7,7 @@ import pl.dkaluza.forum.core.mappers.ObjectMapper;
 import pl.dkaluza.forum.modules.user.base.entities.User;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 @Component
 public class UserRegisterMapper implements ObjectMapper<User, UserRegisterModel> {
@@ -26,7 +27,7 @@ public class UserRegisterMapper implements ObjectMapper<User, UserRegisterModel>
             passwordEncoder.encode(model.getPlainPassword())
         );
         user.setEnabled(false);
-        user.setCreatedAt(LocalDateTime.now());
+        user.setCreatedAt(LocalDateTime.now(ZoneOffset.UTC));
         return user;
     }
 }

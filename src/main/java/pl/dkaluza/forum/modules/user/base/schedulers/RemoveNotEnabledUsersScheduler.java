@@ -10,6 +10,7 @@ import pl.dkaluza.forum.modules.user.base.repositories.UserRepository;
 import pl.dkaluza.forum.modules.user.base.services.UserService;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 @Component
@@ -29,7 +30,7 @@ public class RemoveNotEnabledUsersScheduler {
     @Scheduled(fixedDelay = 24 * 60 * 60 * 1000)
     public void removeNotEnabledUsers() {
         List<User> users = userRepository.findAllByCreatedAtBeforeAndEnabledIsFalse(
-            LocalDateTime.now().minus(propertiesSupplier.getTimeToActivateAccount())
+            LocalDateTime.now(ZoneOffset.UTC).minus(propertiesSupplier.getTimeToActivateAccount())
         );
 
         for (User user : users) {

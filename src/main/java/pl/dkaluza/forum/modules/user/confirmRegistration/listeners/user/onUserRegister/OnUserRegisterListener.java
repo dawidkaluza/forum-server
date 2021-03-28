@@ -15,6 +15,7 @@ import pl.dkaluza.forum.modules.user.confirmRegistration.properties.ConfirmRegis
 import pl.dkaluza.forum.modules.user.confirmRegistration.repositories.ConfirmRegistrationTokenRepository;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.UUID;
 
 @Component
@@ -49,7 +50,7 @@ public class OnUserRegisterListener {
             String generatedToken = UUID.randomUUID().toString();
             token.setToken(generatedToken);
 
-            token.setExpiresAt(LocalDateTime.now().plus(propertiesSupplier.getTokenExpiration()));
+            token.setExpiresAt(LocalDateTime.now(ZoneOffset.UTC).plus(propertiesSupplier.getTokenExpiration()));
             confirmRegistrationTokenRepository.save(token);
 
             mailSender.sendMail(userId);

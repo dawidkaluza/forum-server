@@ -19,6 +19,7 @@ import pl.dkaluza.forum.modules.user.confirmRegistration.repositories.ConfirmReg
 import pl.dkaluza.forum.modules.user.confirmRegistration.repositories.ConfirmRegistrationTokenRepository;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 @Service
 public class ConfirmRegistrationServiceImpl implements ConfirmRegistrationService {
@@ -45,7 +46,7 @@ public class ConfirmRegistrationServiceImpl implements ConfirmRegistrationServic
             .findById(id)
             .orElseThrow(() -> TokenNotFoundException.of(id));
 
-        if (token.getExpiresAt().isBefore(LocalDateTime.now())) {
+        if (token.getExpiresAt().isBefore(LocalDateTime.now(ZoneOffset.UTC))) {
             throw new TokenExpiredException("Requested token expired");
         }
 
@@ -73,7 +74,7 @@ public class ConfirmRegistrationServiceImpl implements ConfirmRegistrationServic
             throw TokenNotFoundException.of(id);
         }
 
-        LocalDateTime expiresAt = LocalDateTime.now().minus(propertiesSupplier.getTryExpiration());
+        LocalDateTime expiresAt = LocalDateTime.now(ZoneOffset.UTC).minus(propertiesSupplier.getTryExpiration());
         int triesNum = confirmRegistrationMailRepository.countAllByReceiverEmailAndSentAtAfter(email, expiresAt);
         if (triesNum >= propertiesSupplier.getMaxTries()) {
             throw new TooManyTokenResendsException("Resends limit for requested email has been reached");

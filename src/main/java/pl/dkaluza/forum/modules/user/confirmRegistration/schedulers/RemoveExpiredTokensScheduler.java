@@ -8,6 +8,7 @@ import pl.dkaluza.forum.modules.user.confirmRegistration.properties.ConfirmRegis
 import pl.dkaluza.forum.modules.user.confirmRegistration.repositories.ConfirmRegistrationTokenRepository;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 @Component
 public class RemoveExpiredTokensScheduler {
@@ -23,7 +24,7 @@ public class RemoveExpiredTokensScheduler {
     @Transactional
     @Scheduled(fixedDelay = 24 * 60 * 60 * 1000)
     public void removeExpiredTokens() {
-        LocalDateTime time = LocalDateTime.now().minus(propertiesSupplier.getTokenExpiration());
+        LocalDateTime time = LocalDateTime.now(ZoneOffset.UTC).minus(propertiesSupplier.getTokenExpiration());
         confirmRegistrationTokenRepository.deleteAllByExpiresAtBefore(time);
     }
 }
