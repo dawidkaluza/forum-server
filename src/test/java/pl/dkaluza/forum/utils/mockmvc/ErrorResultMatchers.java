@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public abstract class ErrorResultMatchers {
+    //TODO add checking is timestamp formatted correctly
     public static void expectError(ResultActions result, HttpStatus status) throws Exception {
         result
             .andExpect(status().is(status.value()))

@@ -4,10 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
@@ -33,17 +35,21 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static pl.dkaluza.forum.core.restdocs.LinksUtils.*;
+import static pl.dkaluza.forum.utils.mockmvc.ErrorResultMatchers.expectError;
+import static pl.dkaluza.forum.utils.restdocs.HateoasUtils.*;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-@ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
-public class ConfirmRegistrationControllerIntegrationTest {
+@ExtendWith({SpringExtension.class})
+public class ConfirmRegistrationControllerTest {
+    @RegisterExtension
+    final RestDocumentationExtension restDoc = new RestDocumentationExtension("target/generated-snippets/user/confirmRegistration");
+
     private final ObjectMapper objectMapper;
     private MockMvc mockMvc;
 
     @Autowired
-    public ConfirmRegistrationControllerIntegrationTest(ObjectMapper objectMapper) {
+    public ConfirmRegistrationControllerTest(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
@@ -79,14 +85,10 @@ public class ConfirmRegistrationControllerIntegrationTest {
         );
 
         //Then
-        result
-            .andExpect(status().isNotFound())
-            .andExpect(jsonPath("$.status").value(404))
-            .andExpect(jsonPath("$.message").exists())
-            .andExpect(jsonPath("$.timestamp").exists());
+        expectError(result, HttpStatus.NOT_FOUND);
 
         //Document
-        result.andDo(document("user/confirmRegistration/confirmRegistration/tokenNotFound"));
+        result.andDo(document("confirmRegistration/tokenNotFound"));
     }
 
     @Test
@@ -106,14 +108,10 @@ public class ConfirmRegistrationControllerIntegrationTest {
         );
 
         //Then
-        result
-            .andExpect(status().isGone())
-            .andExpect(jsonPath("$.status").value(410))
-            .andExpect(jsonPath("$.message").exists())
-            .andExpect(jsonPath("$.timestamp").exists());
+        expectError(result, HttpStatus.GONE);
 
         //Document
-        result.andDo(document("user/confirmRegistration/confirmRegistration/tokenExpired"));
+        result.andDo(document("confirmRegistration/tokenExpired"));
     }
 
     @Test
@@ -139,10 +137,10 @@ public class ConfirmRegistrationControllerIntegrationTest {
 
         //Document
         result.andDo(document(
-            "user/confirmRegistration/confirmRegistration/success",
+            "confirmRegistration/success",
             requestFields(
-                fieldWithPath("id").description("User id to confirm registration"),
-                fieldWithPath("token").description("Token sent in e-mail message")
+                fieldWithPath("id").description("User's id who want to confirm the registration"),
+                fieldWithPath("token").description("Token sent in e-mail message to the user")
             ),
             responseFields(
                 linksFieldDescriptor()
@@ -170,15 +168,11 @@ public class ConfirmRegistrationControllerIntegrationTest {
         );
 
         //Then
-        result
-            .andExpect(status().isNotFound())
-            .andExpect(jsonPath("$.status").value(404))
-            .andExpect(jsonPath("$.message").exists())
-            .andExpect(jsonPath("$.timestamp").exists());
+        expectError(result, HttpStatus.NOT_FOUND);
 
 
         //Document
-        result.andDo(document("user/confirmRegistration/resendToken/userNotFound"));
+        result.andDo(document("resendToken/userNotFound"));
     }
 
     @Test
@@ -197,14 +191,10 @@ public class ConfirmRegistrationControllerIntegrationTest {
         );
 
         //Then
-        result
-            .andExpect(status().isNotFound())
-            .andExpect(jsonPath("$.status").value(404))
-            .andExpect(jsonPath("$.message").exists())
-            .andExpect(jsonPath("$.timestamp").exists());
+        expectError(result, HttpStatus.NOT_FOUND);
 
         //Document
-        result.andDo(document("user/confirmRegistration/resendToken/tokenNotFound"));
+        result.andDo(document("resendToken/tokenNotFound"));
     }
 
     @Test
@@ -223,14 +213,10 @@ public class ConfirmRegistrationControllerIntegrationTest {
         );
 
         //Then
-        result
-            .andExpect(status().isLocked())
-            .andExpect(jsonPath("$.status").value(423))
-            .andExpect(jsonPath("$.message").exists())
-            .andExpect(jsonPath("$.timestamp").exists());
+        expectError(result, HttpStatus.LOCKED);
 
         //Document
-        result.andDo(document("user/confirmRegistration/resendToken/tooManyTries"));
+        result.andDo(document("resendToken/tooManyTries"));
     }
 
     @Test
@@ -258,14 +244,14 @@ public class ConfirmRegistrationControllerIntegrationTest {
         result.andDo(document(
             "user/confirmRegistration/resendToken/success",
             requestFields(
-                fieldWithPath("email").description("User email who needs to resend confirm registration token")
+                fieldWithPath("email").description("User's email who needs to resend the token")
             ),
             responseFields(
                 linksFieldDescriptor()
             ),
             links(
                 curiesLinkDescriptor(),
-                linkWithRel("df:confirmRegistration").description("Link, where user can confirm registration").attributes(docsAttribute("confirmRegistration.html"))
+                linkWithRel("df:confirmRegistration").description("Link where the user can confirm its registration").attributes(docsAttribute("confirmRegistration.html"))
             )
         ));
     }

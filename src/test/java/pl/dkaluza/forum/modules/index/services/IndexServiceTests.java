@@ -15,6 +15,6 @@ public class IndexServiceTests {
         IndexModel model = indexService.getIndex();
 
         //Then
-        assertEquals(model.getMessage(), "Welcome on discussion forum server");
+        assertEquals(model.getMessage(), "Welcome to the discussion forum");
     }
 }

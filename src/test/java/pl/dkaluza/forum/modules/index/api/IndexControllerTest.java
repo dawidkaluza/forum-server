@@ -25,11 +25,11 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static pl.dkaluza.forum.core.restdocs.LinksUtils.*;
+import static pl.dkaluza.forum.utils.restdocs.HateoasUtils.*;
 
 @SpringBootTest
 @ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
-public class IndexControllerIntegrationTest {
+public class IndexControllerTest {
     private MockMvc mockMvc;
 
     @BeforeEach
@@ -67,12 +67,12 @@ public class IndexControllerIntegrationTest {
 
         //Document
         result.andDo(document(
-            "index",
+            "index/success",
             links(
                 selfLinkDescriptor(),
                 curiesLinkDescriptor(),
-                linkWithRel("df:login").description("Logins into account").attributes(docsAttribute("login.html")),
-                linkWithRel("df:register").description("Registers new account").attributes(docsAttribute("register.html")),
+                linkWithRel("df:login").description("Logins into existing user account").attributes(docsAttribute("login.html")),
+                linkWithRel("df:register").description("Registers new user account").attributes(docsAttribute("register.html")),
                 linkWithRel("df:users").description("Lists all registered users").attributes(docsAttribute("users.html")),
                 linkWithRel("df:topics").description("Lists all topics in order from newest to oldest").attributes(docsAttribute("topics.html")),
                 linkWithRel("df:posts").description("Lists all posts in order from newest to oldest").attributes(docsAttribute("posts.html"))

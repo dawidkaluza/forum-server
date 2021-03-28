@@ -21,11 +21,12 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static pl.dkaluza.forum.utils.mockmvc.ErrorResultMatchers.expectError;
+import static pl.dkaluza.forum.utils.mockmvc.ErrorResultMatchers.expectFieldError;
 
 @SpringBootTest
 @ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
-public class ErrorControllerIntegrationTest {
+public class ErrorControllerTest {
     private MockMvc mockMvc;
 
     @BeforeEach
@@ -46,24 +47,18 @@ public class ErrorControllerIntegrationTest {
         );
 
         //Then
-        result
-            .andExpect(status().isIAmATeapot())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.status").value(HttpStatus.I_AM_A_TEAPOT.value()))
-            .andExpect(jsonPath("$.message").exists())
-            .andExpect(jsonPath("$.timestamp").exists())
-            .andExpect(jsonPath("$.fieldErrors[*].field").exists())
-            .andExpect(jsonPath("$.fieldErrors[*].message").exists());
+        expectError(result, HttpStatus.I_AM_A_TEAPOT);
+        expectFieldError(result, "some.field");
 
         //Documentation
         result.andDo(document("error",
             responseFields(
                 fieldWithPath("status").description("Http status"),
-                fieldWithPath("message").description("Message that describes what happened"),
+                fieldWithPath("message").description("Message that describes what happened in general"),
                 fieldWithPath("timestamp").description("Timestamp when error occurs (format: dd-MM-yyyy HH:mm:ss)"),
                 fieldWithPath("fieldErrors").optional().description("Optional array with field errors"),
-                fieldWithPath("fieldErrors[].field").description("Field name of this field error"),
-                fieldWithPath("fieldErrors[].message").description("Message of this field error")
+                fieldWithPath("fieldErrors[].field").description("Field's path where error occurred"),
+                fieldWithPath("fieldErrors[].message").description("Description of the error")
             )
         ));
     }

@@ -6,8 +6,7 @@ import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static pl.dkaluza.forum.core.restdocs.LinksUtils.*;
-import static pl.dkaluza.forum.core.restdocs.RequestsUtils.pageFieldDescriptor;
+import static pl.dkaluza.forum.utils.restdocs.HateoasUtils.*;
 
 abstract class TopicSnippets {
     static ResponseFieldsSnippet topicResponseFields() {

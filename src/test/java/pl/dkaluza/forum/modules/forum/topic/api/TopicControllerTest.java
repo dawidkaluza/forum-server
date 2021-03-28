@@ -36,18 +36,18 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static pl.dkaluza.forum.core.restdocs.RequestsUtils.pageParamDescriptor;
-import static pl.dkaluza.forum.core.restdocs.RequestsUtils.sizeParamDescriptor;
 import static pl.dkaluza.forum.modules.forum.topic.api.TopicResultMatchers.*;
 import static pl.dkaluza.forum.modules.forum.topic.api.TopicSnippets.*;
 import static pl.dkaluza.forum.utils.mockmvc.ErrorResultMatchers.expectError;
 import static pl.dkaluza.forum.utils.mockmvc.ErrorResultMatchers.expectFieldError;
 import static pl.dkaluza.forum.utils.mockmvc.PagedResultMatchers.expectEmptyPage;
+import static pl.dkaluza.forum.utils.restdocs.PaginationUtils.pageParamDescriptor;
+import static pl.dkaluza.forum.utils.restdocs.PaginationUtils.sizeParamDescriptor;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @ExtendWith({SpringExtension.class})
-public class TopicControllerIntegrationTest {
+public class TopicControllerTest {
     @RegisterExtension
     final RestDocumentationExtension restDoc = new RestDocumentationExtension("target/generated-snippets/forum/topic");
 
@@ -55,7 +55,7 @@ public class TopicControllerIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
-    public TopicControllerIntegrationTest(ObjectMapper objectMapper) {
+    public TopicControllerTest(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 

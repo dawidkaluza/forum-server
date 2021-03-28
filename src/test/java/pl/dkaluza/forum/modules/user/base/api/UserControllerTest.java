@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
@@ -21,29 +23,37 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static pl.dkaluza.forum.core.restdocs.LinksUtils.*;
-import static pl.dkaluza.forum.core.restdocs.RequestsUtils.*;
+import static pl.dkaluza.forum.modules.user.base.api.UserResultMatchers.expectUser;
+import static pl.dkaluza.forum.modules.user.base.api.UserResultMatchers.expectUsersPage;
+import static pl.dkaluza.forum.modules.user.base.api.UserSnippets.*;
+import static pl.dkaluza.forum.utils.mockmvc.ErrorResultMatchers.expectError;
+import static pl.dkaluza.forum.utils.mockmvc.ErrorResultMatchers.expectFieldError;
+import static pl.dkaluza.forum.utils.mockmvc.PagedResultMatchers.expectEmptyPage;
+import static pl.dkaluza.forum.utils.restdocs.PaginationUtils.pageParamDescriptor;
+import static pl.dkaluza.forum.utils.restdocs.PaginationUtils.sizeParamDescriptor;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-@ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
-public class UserControllerIntegrationTest {
+@ExtendWith({SpringExtension.class})
+public class UserControllerTest {
+    @RegisterExtension
+    final RestDocumentationExtension restDoc = new RestDocumentationExtension("target/generated-snippets/user/base");
+
     private final ObjectMapper objectMapper;
     private MockMvc mockMvc;
 
     @Autowired
-    public UserControllerIntegrationTest(ObjectMapper objectMapper) {
+    public UserControllerTest(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
@@ -78,14 +88,10 @@ public class UserControllerIntegrationTest {
         );
 
         //Then
-        result
-            .andExpect(status().isConflict())
-            .andExpect(jsonPath("$.status").value(409))
-            .andExpect(jsonPath("$.message").exists())
-            .andExpect(jsonPath("$.timestamp").exists());
+        expectError(result, HttpStatus.CONFLICT);
 
         //Document
-        result.andDo(document("user/register/emailAlreadyExists"));
+        result.andDo(document("register/emailAlreadyExists"));
     }
 
     @Test
@@ -106,16 +112,11 @@ public class UserControllerIntegrationTest {
         );
 
         //Then
-        result
-            .andExpect(status().isUnprocessableEntity())
-            .andExpect(jsonPath("$.status").value(422))
-            .andExpect(jsonPath("$.message").exists())
-            .andExpect(jsonPath("$.timestamp").exists())
-            .andExpect(jsonPath("$.fieldErrors[*].field").value("email"))
-            .andExpect(jsonPath("$.fieldErrors[*].message").exists());
+        expectError(result, HttpStatus.UNPROCESSABLE_ENTITY);
+        expectFieldError(result, "email");
 
         //Document
-        result.andDo(document("user/register/invalidEmail"));
+        result.andDo(document("register/invalidEmail"));
     }
 
     @Test
@@ -136,13 +137,8 @@ public class UserControllerIntegrationTest {
         );
 
         //Then
-        result
-            .andExpect(status().isUnprocessableEntity())
-            .andExpect(jsonPath("$.status").value(422))
-            .andExpect(jsonPath("$.message").exists())
-            .andExpect(jsonPath("$.timestamp").exists())
-            .andExpect(jsonPath("$.fieldErrors[*].field").value("email"))
-            .andExpect(jsonPath("$.fieldErrors[*].message").exists());
+        expectError(result, HttpStatus.UNPROCESSABLE_ENTITY);
+        expectFieldError(result, "email");
     }
 
     @Test
@@ -163,14 +159,10 @@ public class UserControllerIntegrationTest {
         );
 
         //Then
-        result
-            .andExpect(status().isConflict())
-            .andExpect(jsonPath("$.status").value(409))
-            .andExpect(jsonPath("$.message").exists())
-            .andExpect(jsonPath("$.timestamp").exists());
+        expectError(result, HttpStatus.CONFLICT);
 
         //Document
-        result.andDo(document("user/register/nameAlreadyExists"));
+        result.andDo(document("register/nameAlreadyExists"));
     }
 
     @Test
@@ -191,16 +183,11 @@ public class UserControllerIntegrationTest {
         );
 
         //Then
-        result
-            .andExpect(status().isUnprocessableEntity())
-            .andExpect(jsonPath("$.status").value(422))
-            .andExpect(jsonPath("$.message").exists())
-            .andExpect(jsonPath("$.timestamp").exists())
-            .andExpect(jsonPath("$.fieldErrors[*].field").value("name"))
-            .andExpect(jsonPath("$.fieldErrors[*].message").exists());
+        expectError(result, HttpStatus.UNPROCESSABLE_ENTITY);
+        expectFieldError(result, "name");
 
         //Document
-        result.andDo(document("user/register/invalidName"));
+        result.andDo(document("register/invalidName"));
     }
 
     @Test
@@ -221,13 +208,8 @@ public class UserControllerIntegrationTest {
         );
 
         //Then
-        result
-            .andExpect(status().isUnprocessableEntity())
-            .andExpect(jsonPath("$.status").value(422))
-            .andExpect(jsonPath("$.message").exists())
-            .andExpect(jsonPath("$.timestamp").exists())
-            .andExpect(jsonPath("$.fieldErrors[*].field").value("name"))
-            .andExpect(jsonPath("$.fieldErrors[*].message").exists());
+        expectError(result, HttpStatus.UNPROCESSABLE_ENTITY);
+        expectFieldError(result, "name");
     }
 
     @Test
@@ -248,13 +230,8 @@ public class UserControllerIntegrationTest {
         );
 
         //Then
-        result
-            .andExpect(status().isUnprocessableEntity())
-            .andExpect(jsonPath("$.status").value(422))
-            .andExpect(jsonPath("$.message").exists())
-            .andExpect(jsonPath("$.timestamp").exists())
-            .andExpect(jsonPath("$.fieldErrors[*].field").value("name"))
-            .andExpect(jsonPath("$.fieldErrors[*].message").exists());
+        expectError(result, HttpStatus.UNPROCESSABLE_ENTITY);
+        expectFieldError(result, "name");
     }
 
     @Test
@@ -275,16 +252,11 @@ public class UserControllerIntegrationTest {
         );
 
         //Then
-        result
-            .andExpect(status().isUnprocessableEntity())
-            .andExpect(jsonPath("$.status").value(422))
-            .andExpect(jsonPath("$.message").exists())
-            .andExpect(jsonPath("$.timestamp").exists())
-            .andExpect(jsonPath("$.fieldErrors[*].field").value("plainPassword"))
-            .andExpect(jsonPath("$.fieldErrors[*].message").exists());
+        expectError(result, HttpStatus.UNPROCESSABLE_ENTITY);
+        expectFieldError(result, "plainPassword");
 
         //Document
-        result.andDo(document("user/register/invalidPassword"));
+        result.andDo(document("register/invalidPassword"));
     }
 
     @Test
@@ -305,13 +277,8 @@ public class UserControllerIntegrationTest {
         );
 
         //Then
-        result
-            .andExpect(status().isUnprocessableEntity())
-            .andExpect(jsonPath("$.status").value(422))
-            .andExpect(jsonPath("$.message").exists())
-            .andExpect(jsonPath("$.timestamp").exists())
-            .andExpect(jsonPath("$.fieldErrors[*].field").value("plainPassword"))
-            .andExpect(jsonPath("$.fieldErrors[*].message").exists());
+        expectError(result, HttpStatus.UNPROCESSABLE_ENTITY);
+        expectFieldError(result, "plainPassword");
     }
 
     @Test
@@ -332,13 +299,8 @@ public class UserControllerIntegrationTest {
         );
 
         //Then
-        result
-            .andExpect(status().isUnprocessableEntity())
-            .andExpect(jsonPath("$.status").value(422))
-            .andExpect(jsonPath("$.message").exists())
-            .andExpect(jsonPath("$.timestamp").exists())
-            .andExpect(jsonPath("$.fieldErrors[*].field").value("plainPassword"))
-            .andExpect(jsonPath("$.fieldErrors[*].message").exists());
+        expectError(result, HttpStatus.UNPROCESSABLE_ENTITY);
+        expectFieldError(result, "plainPassword");
     }
 
     @Test
@@ -359,18 +321,16 @@ public class UserControllerIntegrationTest {
         );
 
         //Then
+        result.andExpect(status().isAccepted());
+        expectUser(result, 2);
         result
-            .andExpect(status().isAccepted())
-            .andExpect(jsonPath("$.id").exists())
-            .andExpect(jsonPath("$.name").value("adam.kram"))
-            .andExpect(jsonPath("$.email").value("adam@gmail.com"))
             .andExpect(jsonPath("$.enabled").value(false))
             .andExpect(jsonPath("$._links.df:confirmRegistration").exists())
             .andExpect(jsonPath("$._links.df:resendRegistrationToken").exists());
 
         //Document
         result.andDo(document(
-            "user/register/success",
+            "register/success",
             requestFields(
                 fieldWithPath("name").description(
                     "Name that will identify the user on public posts, comments, etc. " +
@@ -381,30 +341,20 @@ public class UserControllerIntegrationTest {
                         "Must be unique and contain from 3 to 128 chars."
                 ),
                 fieldWithPath("plainPassword").description(
-                    "Password used to get access to the account. " +
+                    "Password used to confirm authentication of the account. " +
                         "Must contain from 5 to 32 chars."
                 )
             ),
-            responseFields(
-                fieldWithPath("id").description("Id of newly created user"),
-                fieldWithPath("name").description("Name of newly created user"),
-                fieldWithPath("email").description("Email of newly created user"),
-                fieldWithPath("enabled").description("Boolean that signs if user is enabled (generally via e-mail confirmation)"),
-                linksFieldDescriptor()
-            ),
-            links(
-                curiesLinkDescriptor(),
-                linkWithRel("df:confirmRegistration").description("Link where you can confirm your registration").attributes(docsAttribute("confirmRegistration.html")),
-                linkWithRel("df:resendRegistrationToken").description("Link where you can resend token to your e-mail address").attributes(docsAttribute("resendRegistrationToken.html"))
-            )
+            registeredUserResponseFields(),
+            registeredUserLinks()
         ));
     }
 
     //TODO
     // move pagination tests to some different class
-    // that's not responsibility of UserController to test is pagination works correctly
+    // that's not responsibility of UserController to test whether the pagination works correctly
     // maybe at the moment it should be enough to write a description about paginating request results on the docs index page?
-    // maybe spring utilities shouldn't be tested here? Hard to say.
+    // maybe spring utilities shouldn't be tested here? Hard to say at the moment.
     @Test
     public void findAll_noUsers_responseWithEmptyList() throws Exception {
         //Given, When
@@ -415,13 +365,8 @@ public class UserControllerIntegrationTest {
         );
 
         //Then
-        result
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.page.size").value(10))
-            .andExpect(jsonPath("$.page.totalElements").value(0))
-            .andExpect(jsonPath("$.page.totalPages").value(0))
-            .andExpect(jsonPath("$.page.number").value(0))
-            .andExpect(jsonPath("$._links.self").exists());
+        result.andExpect(status().isOk());
+        expectEmptyPage(result);
     }
 
     @Test
@@ -592,48 +537,18 @@ public class UserControllerIntegrationTest {
         );
 
         //Then
-        result
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$._embedded.df:user").exists())
-            .andExpect(jsonPath("$._embedded.df:user.length()").value(5))
-            .andExpect(jsonPath("$._embedded.df:user[0].id").value(6))
-            .andExpect(jsonPath("$._embedded.df:user[0].name").value("mario.kram"))
-            .andExpect(jsonPath("$._embedded.df:user[0].email").value("mario@gmail.com"))
-            .andExpect(jsonPath("$._embedded.df:user[0].enabled").value(true))
-            .andExpect(jsonPath("$._embedded.df:user[*]._links.self").exists())
-            .andExpect(jsonPath("$._links.first").exists())
-            .andExpect(jsonPath("$._links.prev").exists())
-            .andExpect(jsonPath("$._links.self").exists())
-            .andExpect(jsonPath("$._links.next").exists())
-            .andExpect(jsonPath("$._links.last").exists())
-            .andExpect(jsonPath("$._links.curies").exists())
-            .andExpect(jsonPath("$.page.size").value(5))
-            .andExpect(jsonPath("$.page.totalElements").value(20))
-            .andExpect(jsonPath("$.page.totalPages").value(4))
-            .andExpect(jsonPath("$.page.number").value(1));
+        result.andExpect(status().isOk());
+        expectUsersPage(result, 6, 5);
 
         //Document
         result.andDo(document(
-            "user/users/success",
+            "getAllUsers/success",
             requestParameters(
                 pageParamDescriptor(),
                 sizeParamDescriptor()
             ),
-            responseFields(
-                embeddedFieldDescriptor(),
-                subsectionWithPath("_embedded.df:user").description("List with users on requested page"),
-                linksFieldDescriptor(),
-                pageFieldDescriptor()
-            ),
-            links(
-                curiesLinkDescriptor(),
-                linkWithRel("df:user").optional().description("Link to user with specified id").attributes(docsAttribute("user.html")),
-                firstPageLinkDescriptor(),
-                prevPageLinkDescriptor(),
-                selfPageLinkDescriptor(),
-                nextPageLinkDescriptor(),
-                lastPageLinkDescriptor()
-            )
+            usersPageResponseFields(),
+            usersPageLinks()
         ));
     }
 
@@ -648,14 +563,10 @@ public class UserControllerIntegrationTest {
         );
 
         //Then
-        result
-            .andExpect(status().isNotFound())
-            .andExpect(jsonPath("$.status").value(404))
-            .andExpect(jsonPath("$.message").exists())
-            .andExpect(jsonPath("$.timestamp").exists());
+        expectError(result, HttpStatus.NOT_FOUND);
 
         //Document
-        result.andDo(document("user/user/userNotFound"));
+        result.andDo(document("getUser/userNotFound"));
     }
 
     @Test
@@ -669,30 +580,17 @@ public class UserControllerIntegrationTest {
         );
 
         //Then
-        result
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id").value(1))
-            .andExpect(jsonPath("$.name").value("mark.kram"))
-            .andExpect(jsonPath("$.email").value("mark@gmail.com"))
-            .andExpect(jsonPath("$.enabled").value(false))
-            .andExpect(jsonPath("$._links.self").exists());
+        result.andExpect(status().isOk());
+        expectUser(result, 1);
 
         //Document
         result.andDo(document(
-            "user/user/success",
+            "getUser/success",
             pathParameters(
-                parameterWithName("id").description("Id of user you're looking for")
+                parameterWithName("id").description("Id of the requested user")
             ),
-            responseFields(
-                fieldWithPath("id").description("User id"),
-                fieldWithPath("name").description("User name which is used to identify user on public posts, comments, etc."),
-                fieldWithPath("email").description("User email address"),
-                fieldWithPath("enabled").description("Specifies the account is enabled or not"),
-                linksFieldDescriptor()
-            ),
-            links(
-                selfLinkDescriptor()
-            )
+            userResponseFields(),
+            userLinks()
         ));
     }
 }

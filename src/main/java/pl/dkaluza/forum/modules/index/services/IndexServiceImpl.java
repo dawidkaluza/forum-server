@@ -8,7 +8,7 @@ class IndexServiceImpl implements IndexService {
     @Override
     public IndexModel getIndex() {
         IndexModel model = new IndexModel();
-        model.setMessage("Welcome on discussion forum server");
+        model.setMessage("Welcome to the discussion forum");
         return model;
     }
 }
