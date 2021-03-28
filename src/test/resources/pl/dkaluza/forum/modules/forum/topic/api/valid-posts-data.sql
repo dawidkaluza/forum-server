@@ -1,3 +1,5 @@
+SET TIMEZONE = 'UTC';
+
 -- #1 topic
 INSERT INTO post (content, created_at, topic_id, author_id)
 VALUES ('Second2222', now(), 1, 1);

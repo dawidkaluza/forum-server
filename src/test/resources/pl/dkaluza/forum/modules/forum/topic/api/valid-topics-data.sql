@@ -1,3 +1,5 @@
+SET TIMEZONE = 'UTC';
+
 INSERT INTO topic (title, closed)
 VALUES ('News', false);
 

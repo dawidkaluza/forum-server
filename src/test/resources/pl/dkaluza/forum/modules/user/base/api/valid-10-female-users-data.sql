@@ -1,3 +1,5 @@
+SET TIMEZONE = 'UTC';
+
 INSERT INTO users (email, name, encoded_password, enabled, created_at)
 VALUES ('marie@gmail.com', 'marie.kramma', '$v3ryh4rd3nc0d3dp4ssw0rd#', true, now());
 
