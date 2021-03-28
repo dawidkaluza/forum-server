@@ -24,7 +24,7 @@ public class RemoveExpiredMailsScheduler {
     @Transactional
     @Scheduled(fixedDelay = 24 * 60 * 60 * 1000)
     public void removeExpiredMails() {
-        LocalDateTime time = LocalDateTime.now(ZoneOffset.UTC).minus(propertiesSupplier.getTryExpiration());
+        LocalDateTime time = LocalDateTime.now().minus(propertiesSupplier.getTryExpiration());
         confirmRegistrationMailRepository.deleteAllBySentAtBefore(time);
     }
 }

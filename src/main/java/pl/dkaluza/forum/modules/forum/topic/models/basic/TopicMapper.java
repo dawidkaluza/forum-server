@@ -7,6 +7,9 @@ import pl.dkaluza.forum.core.mappers.ModelMapper;
 import pl.dkaluza.forum.modules.forum.topic.entities.Post;
 import pl.dkaluza.forum.modules.forum.topic.entities.Topic;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
 @Component
 public class TopicMapper implements ModelMapper<Pair<Topic, Post>, TopicModel> {
     private final PostMapper postMapper;
@@ -24,7 +27,7 @@ public class TopicMapper implements ModelMapper<Pair<Topic, Post>, TopicModel> {
         model.setTitle(topic.getTitle());
         model.setClosed(topic.isClosed());
         Post post = topicAndPost.getSecond();
-        model.setCreatedAt(post.getCreatedAt());
+        model.setCreatedAt(ZonedDateTime.of(post.getCreatedAt(), ZoneId.systemDefault()));
         model.setAuthorId(post.getAuthor().getId());
         model.setLastPost(postMapper.toModel(post));
         return model;

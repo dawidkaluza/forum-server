@@ -3,13 +3,13 @@ package pl.dkaluza.forum.modules.forum.topic.models.basic;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Relation(itemRelation = "post", collectionRelation = "post")
 public class PostModel extends RepresentationModel<PostModel> {
     private Long id;
     private String content;
-    private LocalDateTime createdAt;
+    private ZonedDateTime createdAt;
     private Long topicId;
     private Long authorId;
 
@@ -29,11 +29,11 @@ public class PostModel extends RepresentationModel<PostModel> {
         this.content = content;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public ZonedDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(ZonedDateTime createdAt) {
         this.createdAt = createdAt;
     }
 

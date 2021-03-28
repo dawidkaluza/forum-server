@@ -30,7 +30,7 @@ public class CreateTopicMapper implements ObjectMapper<Pair<Topic, Post>, Create
 
         Post post = new Post();
         post.setContent(model.getContent());
-        post.setCreatedAt(LocalDateTime.now(ZoneOffset.UTC));
+        post.setCreatedAt(LocalDateTime.now());
         post.setTopic(topic);
 
         long authorId = model.getAuthorId();

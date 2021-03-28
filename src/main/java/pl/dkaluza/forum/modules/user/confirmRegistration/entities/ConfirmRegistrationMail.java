@@ -17,7 +17,7 @@ public class ConfirmRegistrationMail {
 
     @PrePersist
     protected void prePersist() {
-        sentAt = LocalDateTime.now(ZoneOffset.UTC);
+        sentAt = LocalDateTime.now();
     }
 
     public Long getId() {

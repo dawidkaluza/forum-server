@@ -46,7 +46,8 @@ public class ConfirmRegistrationServiceImpl implements ConfirmRegistrationServic
             .findById(id)
             .orElseThrow(() -> TokenNotFoundException.of(id));
 
-        if (token.getExpiresAt().isBefore(LocalDateTime.now(ZoneOffset.UTC))) {
+        LocalDateTime now = LocalDateTime.now();
+        if (token.getExpiresAt().isBefore(now)) {
             throw new TokenExpiredException("Requested token expired");
         }
 
@@ -74,7 +75,7 @@ public class ConfirmRegistrationServiceImpl implements ConfirmRegistrationServic
             throw TokenNotFoundException.of(id);
         }
 
-        LocalDateTime expiresAt = LocalDateTime.now(ZoneOffset.UTC).minus(propertiesSupplier.getTryExpiration());
+        LocalDateTime expiresAt = LocalDateTime.now().minus(propertiesSupplier.getTryExpiration());
         int triesNum = confirmRegistrationMailRepository.countAllByReceiverEmailAndSentAtAfter(email, expiresAt);
         if (triesNum >= propertiesSupplier.getMaxTries()) {
             throw new TooManyTokenResendsException("Resends limit for requested email has been reached");

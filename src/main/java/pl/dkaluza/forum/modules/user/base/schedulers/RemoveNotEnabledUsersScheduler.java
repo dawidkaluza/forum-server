@@ -30,7 +30,7 @@ public class RemoveNotEnabledUsersScheduler {
     @Scheduled(fixedDelay = 24 * 60 * 60 * 1000)
     public void removeNotEnabledUsers() {
         List<User> users = userRepository.findAllByCreatedAtBeforeAndEnabledIsFalse(
-            LocalDateTime.now(ZoneOffset.UTC).minus(propertiesSupplier.getTimeToActivateAccount())
+            LocalDateTime.now().minus(propertiesSupplier.getTimeToActivateAccount())
         );
 
         for (User user : users) {

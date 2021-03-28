@@ -12,7 +12,6 @@ import pl.dkaluza.forum.modules.user.base.exceptions.UserNotFoundException;
 import pl.dkaluza.forum.modules.user.base.repositories.UserRepository;
 
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 
 @Component
 public class CreatePostMapper implements ObjectMapper<Post, CreatePostModel> {
@@ -29,7 +28,7 @@ public class CreatePostMapper implements ObjectMapper<Post, CreatePostModel> {
     public Post toObject(CreatePostModel model) {
         Post post = new Post();
         post.setContent(model.getContent());
-        post.setCreatedAt(LocalDateTime.now(ZoneOffset.UTC));
+        post.setCreatedAt(LocalDateTime.now());
 
         long topicId = model.getTopicId();
         Topic topic = topicRepository

@@ -27,7 +27,7 @@ public class UserRegisterMapper implements ObjectMapper<User, UserRegisterModel>
             passwordEncoder.encode(model.getPlainPassword())
         );
         user.setEnabled(false);
-        user.setCreatedAt(LocalDateTime.now(ZoneOffset.UTC));
+        user.setCreatedAt(LocalDateTime.now());
         return user;
     }
 }
