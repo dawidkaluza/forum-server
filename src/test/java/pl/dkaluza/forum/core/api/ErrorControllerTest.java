@@ -55,7 +55,7 @@ public class ErrorControllerTest {
             responseFields(
                 fieldWithPath("status").description("Http status"),
                 fieldWithPath("message").description("Message that describes what happened in general"),
-                fieldWithPath("timestamp").description("Timestamp when error occurs (format: dd-MM-yyyy HH:mm:ss)"),
+                fieldWithPath("timestamp").description("Timestamp when error occurs (in link:https://en.wikipedia.org/wiki/ISO_8601[ISO-8601] format with zero UTC offset)"),
                 fieldWithPath("fieldErrors").optional().description("Optional array with field errors"),
                 fieldWithPath("fieldErrors[].field").description("Field's path where error occurred"),
                 fieldWithPath("fieldErrors[].message").description("Description of the error")
