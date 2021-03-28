@@ -65,10 +65,9 @@ public class ConfirmRegistrationMailSender {
                 message.setTo(user.getName() + " <" + email + ">");
                 message.setSubject("Confirm your registration");
                 message.setText(
-                    "To confirm your registration, just click here: http://localhost:8080/user/"
-                        + userId
-                        + "/confirmRegistration/"
-                        + token.getToken()
+                    "It's a naive implementation at the moment, sooo just use data below to send confirmRegistration request: \n" +
+                        "User id: " + userId + "\n" +
+                        "Token: " + token.getToken()
                 );
                 mailSender.send(message);
             } catch (Exception e) {
