@@ -15,7 +15,7 @@ class JwtTokenUtil {
     @Autowired
     public JwtTokenUtil(Environment environment) {
         jwtSecret = environment.getProperty("jwt.secret", "notSoSecret");
-        jwtExpirationDays = environment.getProperty("jwt.expirationDays", Integer.class, 7);
+        jwtExpirationDays = environment.getProperty("jwt.expiration-days", Integer.class, 7);
     }
 
     public String generateToken(long userId, String username) {
