@@ -3,12 +3,12 @@ include::{asciidocBaseDir}/header.adoc[]
 [[overview]]
 == Overview
 
-This link is used to resend e-mail with confirmation token if user didn't receive any message earlier.
+This link is used to resend the message with user's confirmation token if it didn't receive any message earlier.
 
-This link has some constraints:
+Resending has some constraints:
 
-* max tries - user can't resend an e-mail message so many times. Default, he can make 5 tries.
-* try expiration - if user exceeded max tries num in time given in "try expiration" property, he must wait this time, otherwise any next resend token request will be blocked. Default, try expiration is 60 mins.
+* max tries - user can't resend the message too many times. Default, it can make 5 tries.
+* try expiration - if user exceeded max tries num in time given in "try expiration" property, it must wait this time, otherwise any next resend request will be blocked. Default, try expiration is 60 minutes.
 
 [[request]]
 == Request

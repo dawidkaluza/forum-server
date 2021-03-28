@@ -3,7 +3,7 @@ include::{asciidocBaseDir}/header.adoc[]
 [[overview]]
 == Overview
 
-On index page, you can find starting links that helps you explore the rest of the api.
+On the index page, you can find starting links that helps you explore the rest of the api.
 
 [[request]]
 == Request
@@ -16,7 +16,7 @@ GET
 [[request_example]]
 === Example
 
-include::{snippets}/index/http-request.adoc[]
+include::{snippets}/index/success/http-request.adoc[]
 
 [[response]]
 == Response
@@ -24,15 +24,15 @@ include::{snippets}/index/http-request.adoc[]
 [[response_fields]]
 === Fields
 
-include::{snippets}/index/response-fields.adoc[]
+include::{snippets}/index/success/response-fields.adoc[]
 
 [[response_links]]
 === Links
 
-include::{snippets}/index/links.adoc[]
+include::{snippets}/index/success/links.adoc[]
 
 [[response_example]]
 === Example
 
-include::{snippets}/index/http-response.adoc[]
+include::{snippets}/index/success/http-response.adoc[]
 

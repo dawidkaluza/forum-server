@@ -3,7 +3,7 @@ include::{asciidocBaseDir}/header.adoc[]
 [[overview]]
 == Overview
 
-This link is used to log in into account. This process is resolved via JWT here. You'll get the token in response header, more details are described below.
+This link is used to log-in into the user's account. This process is resolved via JWT. You'll get the token in a response header, more details are described below.
 
 [[request]]
 == Request

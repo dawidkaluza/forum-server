@@ -3,9 +3,9 @@ include::{asciidocBaseDir}/header.adoc[]
 [[overview]]
 == Overview
 
-This link is used to confirm user registration.
+This link is used to confirm user's registration.
 
-Confirmation process is done via email message. Recently registered user to confirm that given while registration e-mail belongs to him, needs to check his inbox and find a message sent from forum, where he can confirm registration which is equivalent to activating the account. Default, user has 7 days to confirm the registration.
+Confirmation process is done via email message. Recently registered user to confirm that given e-mail (while registration) belongs to him, needs to check his inbox and find the message sent from forum, where can confirm registration which is equivalent to activating the account. Default, user has 7 days to confirm the registration.
 
 [[request]]
 == Request

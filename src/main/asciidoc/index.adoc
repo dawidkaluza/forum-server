@@ -3,7 +3,7 @@ include::{asciidocBaseDir}/header.adoc[]
 [[overview]]
 == Overview
 
-There is short and general description of the API. You can check how to use HTTP headers, methods, how authorization works and what other rules you need to follow.
+There is short and general description of the API. You can check there how to use the headers, methods, authorization workflow and what other rules you need to follow.
 
 [[http_methods]]
 == HTTP methods
@@ -19,8 +19,8 @@ This API tries to follow standard REST conventions as much as possible and below
 |POST
 |Used to create a new resource
 
-|PATCH
-|Used to update an existing resource partially
+|PUT
+|Used to update an existing resource
 
 |DELETE
 |Used to remove an existing resource
@@ -29,7 +29,7 @@ This API tries to follow standard REST conventions as much as possible and below
 [[status_codes]]
 == Status codes
 
-Obviously, depending on the result of a given request, client will get a proper status code in a response. There are a lot of status codes, so here you can check only general usage of them. More specific details are described in requests.
+Obviously, depending on the result of a given request, client will get a proper status code in response. There are a lot of status codes, so here you can check only general usage of them. More specific details are described in the requests.
 
 |===
 |Code range |Description
@@ -41,13 +41,13 @@ Obviously, depending on the result of a given request, client will get a proper 
 |Used when some client error happens. This type of response also returns a specific body in response, which is described above.
 
 |5xx - server error
-|Used when some server error happens. This type of response is generally unexpected, but details are also described in response body, as in 4xx client errors.
+|Used when some server error happens. This type of response is generally unexpected, but details are also described in response body, like in client errors.
 |===
 
 [[errors]]
 == Errors
 
-If you get 4xx or 5xx status code in a response, message will be composed of given fields:
+If you get 4xx or 5xx status code in response, message will be composed of given fields:
 
 include::{snippets}/error/response-fields.adoc[]
 
@@ -63,15 +63,15 @@ Authentication is provided by JSON Web Token. More details about the whole proce
 [[language]]
 == Language
 
-You can use `Accept-Language` header to specify language that you prefer. Unfortunately, only English (en) is available at the moment.
+You can use `Accept-Language` header to specify language that client prefers. Unfortunately, only English (en) is available at the moment.
 
 [[hateoas]]
 == HATEOAS
 
-Responses produced by this api are formatted in HAL format. Links to resources can be found in `_links` object which can exist in a response. More about given format can be found https://github.com/mikekelly/hal_specification/blob/master/hal_specification.md[here].
+Responses produced by the API are formatted in HAL format. Links to resources can be found in `_links` object, which may exist in a response. More about given format can be found https://github.com/mikekelly/hal_specification/blob/master/hal_specification.md[here].
 
 [[getting_started]]
 == Getting started
 
-If you're ready, go to the following link: link:rels/index.html[index]
+If you're ready, go to the link:rels/index.html[index] page.
 

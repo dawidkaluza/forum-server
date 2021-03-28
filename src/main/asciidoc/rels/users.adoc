@@ -3,7 +3,7 @@ include::{asciidocBaseDir}/header.adoc[]
 [[overview]]
 == Overview
 
-This link is used to get list of users.
+This link is used to get list of the existing users.
 
 [[request]]
 == Request
@@ -15,12 +15,12 @@ GET
 [[request_params]]
 === Request params
 
-include::{snippets}/user/users/success/request-parameters.adoc[]
+include::{snippets}/user/base/getAllUsers/success/request-parameters.adoc[]
 
 [[request_example]]
 === Example
 
-include::{snippets}/user/users/success/http-request.adoc[]
+include::{snippets}/user/base/getAllUsers/success/http-request.adoc[]
 
 [[response]]
 == Response
@@ -28,22 +28,24 @@ include::{snippets}/user/users/success/http-request.adoc[]
 [[response_fields]]
 === Fields
 
-include::{snippets}/user/users/success/response-fields.adoc[]
+include::{snippets}/user/base/getAllUsers/success/response-fields.adoc[]
 
 [[response_links]]
 === Links
 
-include::{snippets}/user/users/success/links.adoc[]
+include::{snippets}/user/base/getAllUsers/success/links.adoc[]
 
 [[response_example]]
 === Example
 
-include::{snippets}/user/users/success/http-response.adoc[]
+include::{snippets}/user/base/getAllUsers/success/http-response.adoc[]
 
 [[response_errors]]
 === Errors
 
-No specific errors are returned in this request
+==== Invalid authentication
+
+include::{asciidocBaseDir}/errors/invalidAuthentication/http-response.adoc[]
 
 
 
