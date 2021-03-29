@@ -61,7 +61,7 @@ public class ConfirmRegistrationMailSender {
         mailSenderExecutor.execute(() -> {
             try {
                 SimpleMailMessage message = new SimpleMailMessage();
-                message.setFrom("Discussion forum <>");
+                message.setFrom("Discussion forum <no-reply@discussion-forum.com>");
                 message.setTo(user.getName() + " <" + email + ">");
                 message.setSubject("Confirm your registration");
                 message.setText(
