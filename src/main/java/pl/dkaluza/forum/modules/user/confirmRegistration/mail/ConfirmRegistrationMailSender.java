@@ -61,13 +61,14 @@ public class ConfirmRegistrationMailSender {
         mailSenderExecutor.execute(() -> {
             try {
                 SimpleMailMessage message = new SimpleMailMessage();
-                message.setFrom("Forum");
+                message.setFrom("Discussion forum <>");
                 message.setTo(user.getName() + " <" + email + ">");
                 message.setSubject("Confirm your registration");
                 message.setText(
                     "It's a naive implementation at the moment, sooo just use data below to send confirmRegistration request: \n" +
                         "User id: " + userId + "\n" +
-                        "Token: " + token.getToken()
+                        "Token: " + token.getToken() + "\n" +
+                        "Next steps you'll find in a documentation! ^^"
                 );
                 mailSender.send(message);
             } catch (Exception e) {
