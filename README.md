@@ -31,4 +31,6 @@ Shortlist of used technologies:
 
 # Check it out
 
-To be continued...
+Check working app on heroku:
+- [Rest API index page](https://dk-forum-server.herokuapp.com/)
+- [Documentation](https://dk-forum-server.herokuapp.com/docs/)
